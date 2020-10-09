@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import { Component } from "react";
 import { connect } from "react-redux";
 // Import actions
 import fetchGetData from "../actions/fetchData";
@@ -11,11 +11,12 @@ import {
 } from "../actions/actionsOwner";
 // Import getters state
 import {
-  getOwnerData,
-  getOwnerPending,
-  getOwnerError,
-  getOwnerUpdate,
-} from "../reducers/ownerReducer";
+    getOwnerData,
+    getOwnerPending,
+    getOwnerError,
+    getOwnerUpdate
+} from '../reducers/ownerReducer'
+// import { updateTypesStored } from '../actions/actionsShowcase';
 // Import Constants 
 import {OWNER_KEY} from '../constants';
 // Import functions

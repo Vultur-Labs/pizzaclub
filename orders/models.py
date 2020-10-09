@@ -157,7 +157,7 @@ class Product(models.Model):
     order_n = models.PositiveSmallIntegerField(default=0)
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=100, blank=True)
-    image = models.ImageField(upload_to="products/", storage=storage)
+    image = models.ImageField(upload_to="products/", storage=storage, blank=True, null=True)
     types = models.ForeignKey(TypeProduct, on_delete=models.CASCADE)
     subtype = models.ForeignKey(SubTypeProduct, on_delete=models.SET_NULL, null=True, blank=True)
     presentation = models.ManyToManyField(PresentationProduct, blank=True)
