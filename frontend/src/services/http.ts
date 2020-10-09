@@ -7,6 +7,8 @@ const mapData = (result: AxiosResponse<any>) => result.data;
 export class Http {
   public constructor() {
     axios.defaults.baseURL = "/api";
+    const token = localStorage.getItem("token") ?? "";
+    this.setAuth(token);
   }
 
   public setAuth(token: string) {
@@ -39,4 +41,5 @@ export const apiRoutes = {
   owner_data: "/orders/owner/",
   types_data: "/orders/types/",
   products_data: "/orders/products/",
+  orders: "/orders/",
 };

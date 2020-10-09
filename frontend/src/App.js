@@ -6,7 +6,7 @@ import { Switch, Route, BrowserRouter } from "react-router-dom";
 //Import Constants
 import { DELIVERY_MODE, TAKEAWAY_MODE } from "./constants";
 //Import Routes
-import {apiRoutes} from "./services/http";
+import { apiRoutes } from "./services/http";
 import {
   INDEX,
   MENU,
@@ -86,13 +86,13 @@ class App extends Component {
             />
           </Route>
 
-          <PrivateRoute exact path={DASHBOARD} redirect={DASHBOARD_LOGIN}>
-            <DashboardPage />
-          </PrivateRoute>
-
-          <Route path={DASHBOARD_LOGIN}>
+          <Route exact path={DASHBOARD_LOGIN}>
             <DashboardLoginPage />
           </Route>
+
+          <PrivateRoute path={DASHBOARD} redirect={DASHBOARD_LOGIN}>
+            <DashboardPage />
+          </PrivateRoute>
 
           {/*<Route component={NotFound}/>*/}
         </Switch>
