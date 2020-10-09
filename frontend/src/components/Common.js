@@ -30,19 +30,16 @@ export const GoToButton = (props) => {
 };
 
 export const Image = (props) => {
-    const {className, imgClass} = props;
-    const {src, alt} = props;
-    //Render nothing if not src
-    if (!src) return null;
-    return(
-        <figure className={className}>
-            <img className={imgClass}
-                src={src}
-                alt={alt}
-                />
-        </figure>
-    )
-}
+  const { className, imgClass } = props;
+  const { src, alt } = props;
+  //Render nothing if not src
+  if (!src) return null;
+  return (
+    <figure className={className}>
+      <img className={imgClass} src={src} alt={alt} />
+    </figure>
+  );
+};
 
 export const InfoItem = (props) => {
   const { text, textClass, iconClass, iconContent, className } = props;
@@ -59,45 +56,76 @@ export const InfoItem = (props) => {
 export const SearchProduct = (props) => {
   const { value, handleChange, resetInput } = props;
   return (
-      <div className="field has-addons">
-          <div className="control">
-              <input className="input is-warning is-medium"
-                      type="text"
-                      placeholder="Qué buscas?"
-                      onChange={handleChange}
-                      value={value} />
-          </div>
-          <div className="control">
-              <button className="button is-warning is-medium" onClick={resetInput}>
-                  <span className="icon is-large">
-                      <i className="fas fa-times"></i>
-                  </span>
-              </button>
-          </div>
+    <div className="field has-addons">
+      <div className="control">
+        <input
+          className="input is-warning is-medium"
+          type="text"
+          placeholder="Qué buscas?"
+          onChange={handleChange}
+          value={value}
+        />
       </div>
+      <div className="control">
+        <button className="button is-warning is-medium" onClick={resetInput}>
+          <span className="icon is-large">
+            <i className="fas fa-times"></i>
+          </span>
+        </button>
+      </div>
+    </div>
   );
-}
+};
 
-export const CustomField = ({field, form : {touched, errors }, ...props}) => (
-  <div className='field'>
-      {(props.label)?<label className="label is-large">{props.label}</label>:null}
-      <div className='control'>
-          {(props.type === 'textarea')
-          ?<textarea type="text" className="input is-medium form-comment" {...field} {...props}></textarea>
-          :<input type="text" className="input is-medium" {...field} {...props} />}          
-      </div>
-      {
-          (touched[field.name] && errors[field.name])
-          ?<p className="help is-danger">{errors[field.name]}</p>
-          :null
-      }
+export const CustomField = ({ field, form: { touched, errors }, ...props }) => (
+  <div className="field">
+    {props.label ? (
+      <label className="label is-large">{props.label}</label>
+    ) : null}
+    <div className="control">
+      {props.type === "textarea" ? (
+        <textarea
+          type="text"
+          className="input is-medium form-comment"
+          {...field}
+          {...props}
+        ></textarea>
+      ) : (
+        <input type="text" className="input is-medium" {...field} {...props} />
+      )}
+    </div>
+    {touched[field.name] && errors[field.name] ? (
+      <p className="help is-danger">{errors[field.name]}</p>
+    ) : null}
   </div>
 );
 
-export const SocialNetworkIcon = ({src, className, classIcon, target}) => {
-    return (
-        <a href={src} className={className} target={target}>
-            <i className={classIcon}></i>
-        </a>
-    )
-}
+export const SocialNetworkIcon = ({ src, className, classIcon, target }) => {
+  return (
+    <a href={src} className={className} target={target}>
+      <i className={classIcon}></i>
+    </a>
+  );
+};
+
+export const CustomSelect = ({
+  field,
+  form: { touched, errors },
+  ...props
+}) => (
+  <div className="field">
+    {props.label ? (
+      <label className="label is-large">{props.label}</label>
+    ) : null}
+    <div className="control">
+      <div className="select is-medium fullwidth">
+        <select className="fullwidth" {...field} {...props}>
+          {props.children}
+        </select>
+      </div>
+    </div>
+    {touched[field.name] && errors[field.name] ? (
+      <p className="help is-danger">{errors[field.name]}</p>
+    ) : null}
+  </div>
+);

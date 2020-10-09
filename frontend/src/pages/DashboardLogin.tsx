@@ -5,7 +5,7 @@ import { connect, DispatchProp } from "react-redux";
 import { login } from "../actions/dashboardActions";
 import * as Yup from "yup";
 import { compose } from "redux";
-import { withRouter, RouteComponentProps } from "react-router-dom";
+import { withRouter, RouteComponentProps, Link } from "react-router-dom";
 import { DASHBOARD } from "../routes";
 
 type Values = {
@@ -67,7 +67,7 @@ class DashboardLoginPage extends Component<Props> {
               </div>
 
               <p className="has-text-grey has-text-centered">
-                <a href="/forgot-password">Olvide mi Contraseña</a>
+                <Link to="/forgot-password">Olvide mi Contraseña</Link>
               </p>
             </div>
           </div>

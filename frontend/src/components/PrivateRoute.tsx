@@ -1,9 +1,10 @@
 import React, { FC } from "react";
 import { Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
+import { Account } from "../types/account";
 
 type Props = {
-  account: any;
+  account: Account;
   redirect: string;
 };
 
