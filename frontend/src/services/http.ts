@@ -22,7 +22,11 @@ export class Http {
   }
 
   public setAuth(token: string) {
-    axios.defaults.headers.common["authorization"] = `JWT ${token}`;
+    if (token) {
+      axios.defaults.headers.common["authorization"] = `JWT ${token}`;
+    } else {
+      delete axios.defaults.headers.common["authorization"];
+    }
   }
 
   public get(path: string, options: AxiosRequestConfig = {}) {
