@@ -15,7 +15,7 @@ type Values = {
 type Props = {
   product?: Product;
   types?: ProductType[];
-  onSubmit: (product: any) => void;
+  onOk: (product: any) => void;
 };
 
 const validationSchema = Yup.object({
@@ -27,7 +27,7 @@ const validationSchema = Yup.object({
 export const EditProductModal: FC<Props> = ({
   product,
   types,
-  onSubmit,
+  onOk,
   ...props
 }) => (
   <Formik<Values>
@@ -37,7 +37,7 @@ export const EditProductModal: FC<Props> = ({
       types: String(product?.types ?? ""),
     }}
     validationSchema={validationSchema}
-    onSubmit={onSubmit}
+    onSubmit={(values) => onOk({ ...values, id: product?.id })}
   >
     {({ handleSubmit }) => (
       <Modal

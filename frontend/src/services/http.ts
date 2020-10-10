@@ -1,8 +1,18 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import { logout } from "../actions/dashboardActions";
+import store from "../store";
 
 type Data = Record<string, any>;
 
 const mapData = (result: AxiosResponse<any>) => result.data;
+
+const handleError = (error: Error & { response: AxiosResponse<any> }) => {
+  if (error.response.status === 401) {
+    store.dispatch(logout() as any);
+  }
+
+  throw error;
+};
 
 export class Http {
   public constructor() {
@@ -20,19 +30,23 @@ export class Http {
   }
 
   public get(path: string, options: AxiosRequestConfig = {}) {
-    return axios.get(path, options).then(mapData);
+    return axios.get(path, options).then(mapData).catch(handleError);
   }
 
   public post(path: string, data: Data, options: AxiosRequestConfig = {}) {
-    return axios.post(path, data, options).then(mapData);
+    return axios.post(path, data, options).then(mapData).catch(handleError);
   }
 
   public put(path: string, data: Data, options: AxiosRequestConfig = {}) {
-    return axios.put(path, data, options).then(mapData);
+    return axios.put(path, data, options).then(mapData).catch(handleError);
+  }
+
+  public patch(path: string, data: Data, options: AxiosRequestConfig = {}) {
+    return axios.patch(path, data, options).then(mapData).catch(handleError);
   }
 
   public delete(path: string, options: AxiosRequestConfig = {}) {
-    return axios.delete(path, options).then(mapData);
+    return axios.delete(path, options).then(mapData).catch(handleError);
   }
 }
 

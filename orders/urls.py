@@ -1,30 +1,43 @@
 from django.urls import path
 
-from .views import OrderViewSet
+from .views import OrderViewSet, ProductViewSet
 
 from . import views
 
-app_name = 'orders'
+app_name = "orders"
 
 
-order_list = OrderViewSet.as_view({
-    'get': 'list',
-    'post': 'create'
-})
+order_list = OrderViewSet.as_view({"get": "list", "post": "create"})
 
-order_detail = OrderViewSet.as_view({
-    'get': 'retrieve',
-    'put': 'update',
-    'patch': 'partial_update',
-    'delete': 'destroy',
-})
+order_detail = OrderViewSet.as_view(
+    {
+        "get": "retrieve",
+        "put": "update",
+        "patch": "partial_update",
+        "delete": "destroy",
+    }
+)
 
-order_whatsapp = OrderViewSet.as_view({
-    'post': 'make_order',
-})
+order_whatsapp = OrderViewSet.as_view(
+    {
+        "post": "make_order",
+    }
+)
+
+product_list = ProductViewSet.as_view({"get": "list", "post": "create"})
+
+product_detail = ProductViewSet.as_view(
+    {
+        "get": "retrieve",
+        "put": "update",
+        "patch": "partial_update",
+        "delete": "destroy",
+    }
+)
 
 urlpatterns = [
-    path("products/", views.get_products),
+    path("products/", product_list),
+    path("products/<int:pk>/", product_detail),
     path("types/", views.get_types),
     path("owner/", views.get_owner),
     # path("orders/new_order/", views.make_order),

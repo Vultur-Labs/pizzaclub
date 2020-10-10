@@ -5,11 +5,17 @@ import DashboardHomePage from "./DashboardHome";
 import DashboardProductsPage from "./DashboardProduct";
 import DashboardOrdersPage from "./DashboardOrder";
 import { Navbar } from "../components/Navbar";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchPlace } from "../actions/dashboardActions";
 
 const DashboardPage: FC = () => {
+  const dispatch = useDispatch();
   const account = useSelector((state: any) => state.dashboard.account);
   const router = useHistory();
+
+  useEffect(() => {
+    dispatch(fetchPlace());
+  }, []);
 
   useEffect(() => {
     if (!account?.id) {

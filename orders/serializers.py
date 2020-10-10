@@ -126,7 +126,7 @@ class ProductSerializer(ExtraFieldsSerializer):
     presentation = PresentationSerializer(many=True, read_only=True)
     feature = FeatureSerializer(many=True, read_only=True)
     prices = PriceSerializer(many=True, read_only=True)
-    place = OwnerSerializer()
+    # place = OwnerSerializer()
 
     class Meta:
         model = Product
@@ -147,6 +147,8 @@ class OrderItemSerializer(ModelSerializer):
 
 class OrderSerializer(ModelSerializer):
     items = OrderItemSerializer(many=True)
+    delivery_address = AddressSerializer()
+
     class Meta:
         model = Order
         fields = '__all__'

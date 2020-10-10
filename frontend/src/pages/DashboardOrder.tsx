@@ -1,18 +1,10 @@
 import React, { Component } from "react";
 import { connect, DispatchProp } from "react-redux";
 import { Align, Table, Column } from "../components/Table";
-import { ModalTrigger } from "../components/ModalTrigger";
 import { Confirm } from "../components/Confirm";
 import { Toolbar } from "../components/Toolbar";
-import { EditProductModal } from "../components/modals/EditProduct";
-import {
-  createProduct,
-  deleteProduct,
-  editProduct,
-  fetchOrders,
-} from "../actions/dashboardActions";
-import { Product } from "../types/product";
-import { Order } from "../types/order";
+import { fetchOrders, updateOrder } from "../actions/dashboardActions";
+import { Order, statusMap } from "../types/order";
 import dayjs from "dayjs";
 
 type Props = DispatchProp<any> & {
@@ -52,30 +44,45 @@ class DashboardOrdersPage extends Component<Props> {
     {
       key: "delivery_address",
       title: "Direccion",
+      render: (order: Order) => {
+        const address = order["delivery_address"];
+
+        return address?.id && <div>{address.address}</div>;
+      },
     },
     {
       key: "status",
       title: "Estado",
       align: Align.center,
       width: 150,
+      render: (order: Order) =>
+        !!order.status && (statusMap[order.status] ?? ""),
     },
     {
       key: "actions",
       title: "Acciones",
       align: Align.center,
       width: 120,
-      render: () => (
+      render: (order: Order) => (
         <div>
-          <Confirm title="Esta seguro?" okLabel="Si" onClick={() => {}}>
-            <button className="button is-info mr-2">
+          <Confirm
+            title="El pedido fue entregado?"
+            okLabel="Si"
+            onClick={this.handleDelivered(order.order)}
+          >
+            <button title="Entregado" className="button is-info mr-2">
               <span className="icon">
                 <i className="fas fa-check" />
               </span>
             </button>
           </Confirm>
 
-          <Confirm title="Esta seguro?" okLabel="Si" onClick={() => {}}>
-            <button className="button is-danger">
+          <Confirm
+            title="El pedido fue cancelado?"
+            okLabel="Si"
+            onClick={this.handleCancel(order.order)}
+          >
+            <button title="Rechazado" className="button is-danger">
               <span className="icon">
                 <i className="fas fa-times" />
               </span>
@@ -90,28 +97,22 @@ class DashboardOrdersPage extends Component<Props> {
     this.props.dispatch(fetchOrders());
   }
 
-  private handleEditProduct = (product: Product) => {
-    this.props.dispatch(editProduct(product.id, product));
+  private handleCancel = (id: number) => () => {
+    this.props.dispatch(updateOrder(id, { status: "cancel" }));
   };
 
-  private handleSaveProduct = (product: Product) => {
-    this.props.dispatch(createProduct(product));
-  };
-
-  private handleDeleteProduct = (product: Product) => () => {
-    this.props.dispatch(deleteProduct(product.id));
+  private handleDelivered = (id: number) => () => {
+    this.props.dispatch(updateOrder(id, { status: "delivering" }));
   };
 
   public render() {
     const { orders } = this.props;
 
-    console.log({ orders });
-
     return (
       <div>
         <Toolbar title="Ordenes"></Toolbar>
 
-        <Table columns={this.columns} data={orders} />
+        <Table columns={this.columns} data={orders} dataKey="order" />
       </div>
     );
   }
