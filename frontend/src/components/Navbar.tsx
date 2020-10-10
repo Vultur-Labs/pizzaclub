@@ -32,9 +32,13 @@ export const Navbar = () => {
             <a className="navbar-item">
               <div className="field">
                 <p className="control">
-                  <a className="button is-danger" onClick={handleLogout}>
+                  <button
+                    type="button"
+                    className="button is-danger"
+                    onClick={handleLogout}
+                  >
                     <strong>Salir</strong>
-                  </a>
+                  </button>
                 </p>
               </div>
             </a>

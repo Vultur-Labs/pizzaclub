@@ -1,5 +1,6 @@
 import { Base } from "./base";
 import { Feature } from "./feature";
+import { Place } from "./place";
 import { Presentation } from "./presentation";
 import { Price } from "./price";
 import { Size } from "./size";
@@ -14,6 +15,7 @@ export interface Product extends Base {
   description: string;
   image: string;
   is_active: boolean;
-  types: number|string;
+  types: number | string;
   subtype: string;
+  place?: number | Partial<Place>;
 }

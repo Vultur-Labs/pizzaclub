@@ -6,10 +6,12 @@ import {
   FETCH_PRODUCT,
   FETCH_PRODUCTS,
   CREATE_PRODUCT,
-  EDIT_PRODUCT,
+  UPDATE_PRODUCT,
   DELETE_PRODUCT,
   DASHBOARD_LOGOUT,
   FETCH_ORDERS,
+  UPDATE_ORDER,
+  FETCH_PLACE,
 } from "../reducers/dashboardReducer";
 import { apiRoutes, http } from "../services/http";
 import { Credentials } from "../types/credentials";
@@ -31,6 +33,14 @@ export const logout = () => async (dispatch: Dispatch) => {
   try {
     http.setAuth("");
     return dispatch({ type: DASHBOARD_LOGOUT });
+  } catch (error) {}
+};
+
+export const fetchPlace = () => async (dispatch: Dispatch) => {
+  try {
+    const place = await http.get(apiRoutes.owner_data);
+
+    return dispatch({ type: FETCH_PLACE, payload: place });
   } catch (error) {}
 };
 
@@ -62,19 +72,22 @@ export const createProduct = (product: Product) => async (
   dispatch: Dispatch
 ) => {
   try {
-    await http.post(apiRoutes.products_data, product);
+    const result = await http.post(apiRoutes.products_data, product);
 
-    return dispatch({ type: CREATE_PRODUCT });
+    return dispatch({ type: CREATE_PRODUCT, payload: result });
   } catch (error) {}
 };
 
-export const editProduct = (id: number, product: Product) => async (
+export const updateProduct = (id: number, product: Product) => async (
   dispatch: Dispatch
 ) => {
   try {
-    await http.put(`${apiRoutes.products_data}${id}/`, product);
+    const result = await http.patch(
+      `${apiRoutes.products_data}${id}/`,
+      product
+    );
 
-    return dispatch({ type: EDIT_PRODUCT });
+    return dispatch({ type: UPDATE_PRODUCT, payload: result });
   } catch (error) {}
 };
 
@@ -91,5 +104,15 @@ export const fetchOrders = () => async (dispatch: Dispatch) => {
     const orders = await http.get(apiRoutes.orders);
 
     return dispatch({ type: FETCH_ORDERS, payload: orders });
+  } catch (error) {}
+};
+
+export const updateOrder = (id: number, change: Record<string, any>) => async (
+  dispatch: Dispatch
+) => {
+  try {
+    const order = await http.patch(`${apiRoutes.orders}${id}/`, change);
+
+    return dispatch({ type: UPDATE_ORDER, payload: order });
   } catch (error) {}
 };

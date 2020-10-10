@@ -8,14 +8,16 @@ import { EditProductModal } from "../components/modals/EditProduct";
 import {
   createProduct,
   deleteProduct,
-  editProduct,
+  updateProduct,
   fetchProducts,
   fetchTypes,
 } from "../actions/dashboardActions";
 import { Product } from "../types/product";
 import { ProductType } from "../types/product-type";
+import { Place } from "../types/place";
 
 type Props = DispatchProp<any> & {
+  place: Place;
   products: Product[];
   types: ProductType[];
 };
@@ -62,7 +64,7 @@ class DashboardProductsPage extends Component<Props> {
               <EditProductModal
                 product={product}
                 types={this.props.types}
-                onSubmit={this.handleEditProduct}
+                onOk={this.handleEditProduct}
               />
             }
           />
@@ -89,10 +91,12 @@ class DashboardProductsPage extends Component<Props> {
   }
 
   private handleEditProduct = (product: Product) => {
-    this.props.dispatch(editProduct(product.id, product));
+    product.place = this.props.place.id;
+    this.props.dispatch(updateProduct(product.id, product));
   };
 
   private handleSaveProduct = (product: Product) => {
+    product.place = this.props.place.id;
     this.props.dispatch(createProduct(product));
   };
 
@@ -116,10 +120,7 @@ class DashboardProductsPage extends Component<Props> {
               </button>
             }
             modal={
-              <EditProductModal
-                types={types}
-                onSubmit={this.handleSaveProduct}
-              />
+              <EditProductModal types={types} onOk={this.handleSaveProduct} />
             }
           />
         </Toolbar>
@@ -131,6 +132,7 @@ class DashboardProductsPage extends Component<Props> {
 }
 
 const mapStateToProps = (state: any) => ({
+  place: state.dashboard.place,
   products: state.dashboard.products,
   types: state.dashboard.types,
 });
