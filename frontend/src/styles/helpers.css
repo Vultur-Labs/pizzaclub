@@ -1,0 +1,12 @@
+.fullwidth {
+  width: 100%;
+}
+
+.justify-end {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.has-background-transparent {
+  background: transparent;
+}

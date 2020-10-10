@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import React, { Component } from "react";
+import { connect } from "react-redux";
 
 // Import Actions
-import {setDeliveryMode} from '../actions/actionsCart';
+import { setDeliveryMode } from "../actions/actionsCart";
 // Import Containers
 import Menu from '../containers/Menu';
 // Import Components
@@ -11,14 +11,10 @@ import {GoToCart} from '../components/Cart';
 import {PlaceHeader} from '../components/Place';
 
 class DeliveryPage extends Component {
-    componentWillUnmount(){
-        const {setDeliveryMode} = this.props;
-        setDeliveryMode(null, 0.0);
-    }
     
-    componentDidMount(){
-        const {mode, shipping, setDeliveryMode} = this.props;
-        setDeliveryMode(mode, shipping);
+    componentDidMount() {
+        const { mode, setDelivery } = this.props;
+        setDelivery(mode, {id: 0, cost: 0.0});
     }
 
     render() {
@@ -39,10 +35,11 @@ class DeliveryPage extends Component {
     }
 }
 
-const mapDispatchToProps = dispatch =>{
-    return {
-        setDeliveryMode: (mode, shipping) => dispatch(setDeliveryMode(mode, shipping))
-    }
-}
+const mapDispatchToProps = (dispatch) => {
+  return {
+    setDelivery: (mode, shipping) =>
+      dispatch(setDeliveryMode(mode, shipping)),
+  };
+};
 
 export default connect(null, mapDispatchToProps)(DeliveryPage);

@@ -1,12 +1,12 @@
 import os
 from .settings import BASE_DIR
 
-ALLOWED_HOSTS = ['thepizzaclub.herokuapp.com']
+
+ALLOWED_HOSTS = ['thepizzaclub.herokuapp.com', '.tustore.app']
 
 # Application definition
 
 INSTALLED_APPS = [
-    'frontend.apps.FrontendConfig',
     'registration.apps.RegistrationConfig',
     'orders.apps.OrdersConfig',
     'django.contrib.admin',
@@ -16,15 +16,17 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'gdstorage',
+    'minio_storage',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -41,11 +43,6 @@ DATABASES = {
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
-
-# Google Drive Storage Settings
-GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE = None
-GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE_CONTENTS = os.getenv('GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE_CONTENTS')
-GOOGLE_DRIVE_STORAGE_MEDIA_ROOT = 'pizzaclub/media'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
@@ -77,5 +74,8 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticatedOrReadOnly'
-    ]
+    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_jwt.authentication.JSONWebTokenAuthentication",
+    ],
 }

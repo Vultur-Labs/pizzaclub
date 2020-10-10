@@ -131,6 +131,7 @@ dmypy.json
 
 # dependencies
 *.json
+!tsconfig.json
 !package.json
 !package-lock.json
 **/node_modules
@@ -153,3 +154,4 @@ dmypy.json
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.idea

@@ -1,23 +1,20 @@
-import React, { Component } from 'react';
-import {Formik, Field, Form, ErrorMessage} from 'formik';
+import React from "react";
+import { Formik, Field, Form } from "formik";
 
 //Import Constants
-import {
-    DELIVERY_MODE,
-    URL_API_MAKE_ORDERS
-} from '../constants';
+import { DELIVERY_MODE} from "../constants";
 //Import Components
-import {CustomField, CSRFToken} from '../components/Common';
-import axios from 'axios';
+import { CustomField } from "../components/Common";
+import {http, apiRoutes} from '../services/http';
 
-//Set CSRF Token configuration
-axios.defaults.xsrfCookieName = 'csrftoken';
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-
-
-export const FormCart = ({subtotal, total, shipping, mode, items, emptyCart}) => {
+export const FormCart = ({
+  shipping,
+  mode,
+  items,
+  emptyCart,
+  owner_id
+}) => {
     // Define initial fields values
-    console.log(items.length)
     let initialFieldsValues = {
         name: '',
         email: '',
@@ -25,10 +22,10 @@ export const FormCart = ({subtotal, total, shipping, mode, items, emptyCart}) =>
         comment: ''
     };
     // If mode is "delivery" add address field
-    if (mode == DELIVERY_MODE) initialFieldsValues = {...initialFieldsValues, address: ''};
+    if (mode === DELIVERY_MODE) initialFieldsValues = {...initialFieldsValues, address: ''};
     // Define Required Fields
     const REQUIRED_FIELDS = ['name', 'email', 'phone'];
-    if (mode == DELIVERY_MODE) REQUIRED_FIELDS.push('address');
+    if (mode === DELIVERY_MODE) REQUIRED_FIELDS.push('address');
     // A custom validation function. This must return an object
     // which keys are symmetrical to our values/initialValues
     const validate = values => {
@@ -45,34 +42,41 @@ export const FormCart = ({subtotal, total, shipping, mode, items, emptyCart}) =>
             errors.email = 'Correo electrónico inválido.';
         }
 
-        if (!/^\d{7,12}$/.test(values.phone)) errors.phone = "Debe tener entre 7 y 12 digitos.";
+    if (!/^\d{8,12}$/.test(values.phone))
+      errors.phone = "Debe tener entre 8 y 12 digitos.";
 
-        return errors;
+    return errors;
+  };
+
+  const handleSubmit = (values, actions) => {
+    const {comment, address, ...client} = values;
+    const cart = {
+      owner_id,
+      order_type: "whatsapp",
+      delivery_mode: mode,
+      client,
+      shipping: (mode === DELIVERY_MODE)?shipping.id:null,
+      items: items.map(({quantity, size, presentation, product: {id}}) => (
+        {product: id,size, presentation, quantity})
+      ),
+      delivery_address: address,
+      comment
     };
 
-    const handleSubmit = (values,actions) => {
-        const cart = {subtotal, total, shipping, mode, items, order_type: 'whatsapp'};
-        axios({
-            method: 'POST',
-            url: URL_API_MAKE_ORDERS,
-            data: {client: values, cart}
-        })
-        .then(res => {
-            if(res.data.success) {
-                emptyCart();
-                actions.setSubmitting(false);
-                location.replace(res.data.url)
-            } else {
-                console.error(res.data.error);
-            }
-        })
-        .catch(error => {
-            console.log(error);
-            actions.setSubmitting(false);
-        });
-    }
+    http.post(apiRoutes.order_whatsapp, cart)
+    .then(data => {
+      console.log(data);
+      emptyCart();
+      actions.setSubmitting(false);
+      window.location.replace(data.url);
+    })
+    .catch(error => {
+      console.log(error);
+      actions.setSubmitting(false);
+    });
+  };
 
-    return (
+  return (
     <Formik
         initialValues={initialFieldsValues}
         validate={validate}
@@ -100,7 +104,7 @@ export const FormCart = ({subtotal, total, shipping, mode, items, emptyCart}) =>
                     required/>
                 {/* Only show address for DELIVERY */}
                 {
-                    (mode == DELIVERY_MODE)
+                    (mode === DELIVERY_MODE)
                     ?<Field
                     name="address"
                     label="Dirección"
@@ -125,5 +129,5 @@ export const FormCart = ({subtotal, total, shipping, mode, items, emptyCart}) =>
             </Form>
             )}
     </Formik>
-    );
+  );
 };

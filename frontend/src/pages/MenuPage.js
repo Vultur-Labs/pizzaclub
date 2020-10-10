@@ -1,10 +1,10 @@
-import React, {Component} from 'react';
+import React, { Component } from "react";
 
 // Import Containers
-import Menu from '../containers/Menu';
+import Menu from "../containers/Menu";
 // Import Components
-import {GoToButton} from '../components/Common';
-import {PlaceHeader} from '../components/Place';
+import { GoToButton } from "../components/Common";
+import { PlaceHeader } from "../components/Place";
 // Import Routes
 import {INDEX} from "../routes";
 
@@ -24,4 +24,3 @@ class MenuPage extends Component {
 }
 
 export default MenuPage;
-

@@ -1,31 +1,39 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {Switch, Route} from 'react-router-dom';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Switch, Route } from "react-router-dom";
 
 // Import Actions
-import {setDeliveryMode, emptyCart} from '../actions/actionsCart';
+import {
+  setDeliveryMode,
+  emptyCart
+} from "../actions/actionsCart";
 // Import Components
-import {GoToButton} from '../components/Common';
-import {CartShower} from '../components/Cart';
-import {PlaceHeader} from '../components/Place';
-import {FormCart} from "../components/Forms";
+import { GoToButton } from "../components/Common";
+import { CartShower } from "../components/Cart";
+import { PlaceHeader } from "../components/Place";
+import { FormCart } from "../components/Forms";
 // Import getters
 import {
-    getCartItems,
-    getDeliveryMode,
-    getSubtotalCart,
-    getTotalCart,
-    getShippingCost
-} from '../reducers/cartReducer';
+  getCartItems,
+  getDeliveryMode,
+  getSubtotalCart,
+  getTotalCart,
+  getShippingCost,
+} from "../reducers/cartReducer";
+import {getOwnerData} from '../reducers/ownerReducer';
+import { DELIVERY_MODE } from "../constants";
 
 class CartPage extends Component {
-    componentDidMount(){
-        const {mode, shipping, setDeliveryMode} = this.props;
-        setDeliveryMode(mode, shipping);
-    }
+  componentDidMount() {
+    const { mode, setDelivery, owner } = this.props;
+    if (mode === DELIVERY_MODE) setDelivery(mode, {
+      id: owner.shipping[0].id,
+      cost: owner.shipping[0].cost
+    });
+  }
 
     render() {
-        const {goBack, goConfirm, path} = this.props;
+        const {goBack, goConfirm, path, owner} = this.props;
         const {subtotal, total, shipping, mode, items, emptyCart} = this.props;
         return (
             <div className='menupage'>
@@ -34,7 +42,7 @@ class CartPage extends Component {
                     <Switch>
                         <Route path={path + goConfirm} render={()=> {
                             return [
-                            <FormCart key='form' {...{subtotal, total, shipping, mode, items, emptyCart}} />,
+                            <FormCart key='form' {...{shipping, mode, items, emptyCart, owner_id: owner.id}} />,
                             <GoToButton
                                 key='btn'
                                 path={path}
@@ -81,21 +89,22 @@ class CartPage extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        items: getCartItems(state),
-        subtotal: getSubtotalCart(state),
-        total: getTotalCart(state),
-        mode: getDeliveryMode(state),
-        shipping: getShippingCost(state)
-    }
-}
+const mapStateToProps = (state) => {
+  return {
+    items: getCartItems(state),
+    subtotal: getSubtotalCart(state),
+    total: getTotalCart(state),
+    mode: getDeliveryMode(state),
+    shipping: getShippingCost(state),
+    owner: getOwnerData(state),
+  };
+};
 
-const mapDispatchToProps = (dispatch, ownProps) =>{
-    return {
-        setDeliveryMode: (mode, shipping) => dispatch(setDeliveryMode(mode, shipping)),
-        emptyCart: () => dispatch(emptyCart())
-    }
-}
+const mapDispatchToProps = (dispatch, ownProps) => {
+  return {
+    emptyCart: () => dispatch(emptyCart()),
+    setDelivery: (mode, shipping) => dispatch(setDeliveryMode(mode, shipping))
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(CartPage);
