@@ -8,13 +8,13 @@ type Props = {
 export const ModalTrigger: FC<Props> = ({ button, modal }) => {
   const [open, setOpen] = useState(false);
 
-  const openModal = useCallback(() => setOpen(true), [open, setOpen]);
+  const openModal = useCallback(() => setOpen(true), [setOpen]);
   const handleOk = useCallback(async (...args: any[]) => {
     if (typeof modal.props.onOk === "function") {
       await modal.props.onOk(...args);
       setOpen(false);
     }
-  }, []);
+  }, [setOpen, modal.props]);
 
   return (
     <>
