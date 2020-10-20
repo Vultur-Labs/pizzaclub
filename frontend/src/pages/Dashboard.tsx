@@ -15,13 +15,13 @@ const DashboardPage: FC = () => {
 
   useEffect(() => {
     dispatch(fetchPlace());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (!account?.id) {
       router.push(DASHBOARD);
     }
-  }, [account]);
+  }, [account, router]);
 
   return (
     <div>

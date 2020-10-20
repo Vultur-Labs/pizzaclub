@@ -57,7 +57,7 @@ export const SearchProduct = (props) => {
   const { value, handleChange, resetInput } = props;
   return (
     <div className="field has-addons">
-      <div className="control">
+      <div className="control" style={{ width: "100%" }}>
         <input
           className="input is-warning is-medium"
           type="text"
