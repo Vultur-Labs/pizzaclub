@@ -1,11 +1,10 @@
 from django.urls import path
 
-from .views import OrderViewSet, ProductViewSet
+from .views import OrderViewSet, OrderWhatsAppViewSet, ProductViewSet
 
 from . import views
 
 app_name = "orders"
-
 
 order_list = OrderViewSet.as_view({"get": "list", "post": "create"})
 
@@ -18,9 +17,9 @@ order_detail = OrderViewSet.as_view(
     }
 )
 
-order_whatsapp = OrderViewSet.as_view(
+order_whatsapp = OrderWhatsAppViewSet.as_view(
     {
-        "post": "make_order",
+        "post": "create",
     }
 )
 

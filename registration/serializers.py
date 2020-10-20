@@ -10,4 +10,3 @@ class ClientSerializer(ModelSerializer):
     class Meta:
         model = Client
         fields = ['name', 'phone', 'email', 'address']
-

@@ -18,7 +18,6 @@ const PriceItem = ({
   text,
   decimalPlaces = 2,
 }) => {
-  console.log(typeof price);
   return (
     <div className={className}>
       <span className={classItem}>{text}</span>
@@ -31,6 +30,7 @@ const PriceItem = ({
 
 export const CartItem = (props) => {
   const { typeName, size, presentation, quantity, subtotal, product } = props;
+  console.log(size);
   return (
     <div className="cart-item">
       <PriceItem
@@ -115,6 +115,7 @@ const CartTitle = ({ className, text }) => {
 
 export function CartShower(props) {
   const { mode, shipping, items, subtotal, total } = props;
+  console.log(items)
   return (
     <div className="cart-shower">
       {/* Show Cart Title */}
@@ -124,9 +125,9 @@ export function CartShower(props) {
       />
       {/* Show Cart Items */}
       {items.map((i) => {
-        const size = i.product.size.filter((s) => s.id === i.size)[0];
+        const size = i.product.size.filter(s => s.id === parseInt(i.size))[0];
         const presentation = i.product.presentation.filter(
-          (p) => p.id === i.presentation
+          p => p.id === parseInt(i.presentation)
         )[0];
         return (
           <CartItem
