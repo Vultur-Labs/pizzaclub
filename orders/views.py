@@ -14,11 +14,13 @@ from .models import Order, OrderItem, Place, PriceList, Product, TypeProduct
 from .serializers import (
     OrderItemSerializer,
     OrderSerializer,
+    OrderWhatsAppSerializer,
     OwnerSerializer,
     PriceListSerializer,
     PriceSerializer,
     ProductSerializer,
     TypeSerializer,
+    AddressSerializer
 )
 
 DELIVERY_MODE = "delivery"
@@ -84,25 +86,35 @@ class OrderViewSet(ModelViewSet):
 
     @action(detail=True, methods=["post"])
     def make_order(self, request):
-        place_id = request.data.pop("owner_id")
-        items = request.data.pop("items")
-        request.data["items"] = []
+        print(request.data)
+        data = request.data.copy()
+        # place_id = request.data.pop("owner_id")
+        # items = request.data.pop("items")
+        place_id = data.pop("owner_id")
+        items = data.pop("items")
+        data["items"] = []
+        # request.data["items"] = []
         # Find the price list and pass the serialize data
         for item in items:
             quantity = item.pop("quantity")
             price_list = PriceList.objects.get(**item)
             # price_serializer = PriceListSerializer(instance=price_list)
-            request.data["items"].append(
+            data["items"].append(
                 {"product": price_list.pk, "quantity": quantity}
             )
+            # request.data["items"].append(
+            #     {"product": price_list.pk, "quantity": quantity}
+            # )
         # Get the delivery address if there is
-        delivery_address = request.data.pop("delivery_address", None)
+        # delivery_address = request.data.pop("delivery_address", None)
+        delivery_address = data.pop("delivery_address", None)
         if delivery_address:
             try:
                 address = Address.objects.create(address=delivery_address)
             except:
                 address = Address.objects.get(address=delivery_address)
-            request.data["delivery_address"] = address.id
+            data["delivery_address"] = AddressSerializer(address).data
+            # request.data["delivery_address"] = address.id
         else:
             address = None
         # Get the client
@@ -114,10 +126,14 @@ class OrderViewSet(ModelViewSet):
         if address:
             client.address.add(address)
         # Save Client id in request.data
-        request.data["client"] = client.id
+        data["client"] = client.id
+        # request.data["client"] = client.id
         # Create the order
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        # serializer = self.get_serializer(data=request.data)
+        print(data)
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=False)
+        print(serializer.errors)
         order = self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         # Create URL
@@ -165,6 +181,98 @@ class OrderViewSet(ModelViewSet):
         )
         return iri_to_uri(url)
 
+class OrderWhatsAppViewSet(ModelViewSet):
+    """
+    A simple ViewSet for viewing and editing accounts.
+    """
+    queryset = Order.objects.all()
+    serializer_class = OrderWhatsAppSerializer
+    permission_classes = [AllowAny]
+
+    def perform_create(self, serializer):
+        return serializer.save()
+
+    def create(self, request):
+        data = request.data.copy()
+        place_id = data.pop("owner_id")
+        items = data.pop("items")
+        data["items"] = []
+        # Find the price list and pass the serialize data
+        for item in items:
+            quantity = item.pop("quantity")
+            price_list = PriceList.objects.get(**item)
+            data["items"].append(
+                {"product": price_list.pk, "quantity": quantity}
+            )
+        # Get the delivery address if there is
+        delivery_address = data.pop("delivery_address", None)
+        if delivery_address:
+            try:
+                address = Address.objects.create(address=delivery_address)
+            except:
+                address = Address.objects.get(address=delivery_address)
+            data["delivery_address"] = address.id
+        else:
+            address = None
+        # Get the client
+        client_data = request.data.get("client")
+        try:
+            client = Client.objects.get(**client_data)
+        except Client.DoesNotExist:
+            client = Client.objects.create(**client_data)
+        if address:
+            client.address.add(address)
+        # Save Client id in request.data
+        data["client"] = client.id
+        # Create the order
+        serializer = self.get_serializer(data=data)
+        serializer.is_valid(raise_exception=True)
+        order = self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        # Create URL
+        place = Place.objects.get(id=place_id)
+        url = self.create_url_whatsapp(client, order, place)
+        return Response({"url": url}, status=status.HTTP_201_CREATED, headers=headers)
+
+    def create_url_whatsapp(self, client, order, place):
+        # Cart Data
+        data_item = ""
+        for item in order.items.select_related():
+            item_size = f", {item.product.size} " if item.product.size else ""
+            item_presentation = (
+                f", {item.product.presentation} " if item.product.presentation else ""
+            )
+            data_item += (
+                f"- {item.quantity} x {item.product.product.types.name} {item.product.product.name}"
+                f"{item_size}{item_presentation} (${item.total})\n"
+            )
+        # Delivery and Intro Data
+        if order.delivery_mode == DELIVERY_MODE:
+            data_delivery = (
+                f"- {order.delivery_mode.title()} ($ {order.shipping.cost})\n"
+            )
+            data_intro = (
+                f"Soy *{client.name.title()}* y quiero hacer el siguiente pedido hacia"
+                f" *{order.delivery_address.address.title()}*:\n"
+            )
+        else:
+            data_delivery = ""
+            data_intro = (
+                f"Soy *{client.name.title()}* y quiero hacer el siguiente pedido para retirar por el local "
+                f"en {place.address.address.title()}:\n"
+            )
+        # Get the url
+        url = (
+            f"{place.whatsapp}?text=Hola 🍕*{place.name.title()}*🍕!\n"
+            f"{data_intro}"
+            f"{data_item}"
+            f"{data_delivery}"
+            f"*Total: ${order.total}*\n"
+            f"Comentario: {order.comment.strip()}\n"
+            f"Muchas gracias!\n"
+            f"Orden N°: {order.order}"
+        )
+        return iri_to_uri(url)
 
 class ProductViewSet(ModelViewSet):
     queryset = Product.objects.all()

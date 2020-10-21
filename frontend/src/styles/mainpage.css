@@ -15,12 +15,11 @@
 .main-logo {
     background-color: var(--secondary-color);
     border-radius: 50%;
-}
-
-.main-logo img {
-    max-width: 80vw;
-    max-height: 80vw;
-    padding: 20px;
+    width: 80vmin;
+    height: 80vmin;
+    max-width: 300px;
+    max-height: 300px;
+    padding: 10px;
 }
 
 .main-menu {

@@ -147,8 +147,7 @@ class OrderItemSerializer(ModelSerializer):
 
 class OrderSerializer(ModelSerializer):
     items = OrderItemSerializer(many=True)
-    delivery_address = AddressSerializer()
-
+    delivery_address = AddressSerializer(allow_null=True)
     class Meta:
         model = Order
         fields = '__all__'
@@ -157,10 +156,9 @@ class OrderSerializer(ModelSerializer):
         """
         Create and return a new `OrderItem` instance, given the validated data.
         """
-        client = validated_data.pop('client', None)
-        items_data = validated_data.pop('items', [])
+        items_data = validated_data.pop("items", [])
         # Create the Order
-        order = Order.objects.create(client=client, **validated_data)
+        order = Order.objects.create(**validated_data)
         # Create and add items
         for item in items_data:
             OrderItem.objects.create(order=order, **item)
@@ -168,3 +166,23 @@ class OrderSerializer(ModelSerializer):
         order.save()
         return order
 
+class OrderWhatsAppSerializer(ModelSerializer):
+    items = OrderItemSerializer(many=True)
+    class Meta:
+        model = Order
+        fields = '__all__'
+
+    def create(self, validated_data):
+        """
+        Create and return a new `OrderItem` instance, given the validated data.
+        """
+        # client = validated_data.pop("client", None)
+        items_data = validated_data.pop("items", [])
+        # Create the Order
+        order = Order.objects.create(**validated_data)
+        # Create and add items
+        for item in items_data:
+            OrderItem.objects.create(order=order, **item)
+        # Save order for calculated Total
+        order.save()
+        return order
