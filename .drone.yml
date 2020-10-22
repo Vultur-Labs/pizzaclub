@@ -8,7 +8,7 @@ steps:
 - name: Prepare
   image: node:12
   commands:
-  - npm ci
+  - npm run ci
 
 - name: Build app
   image: node:12
