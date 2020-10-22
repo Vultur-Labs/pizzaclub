@@ -1,0 +1,36 @@
+---
+kind: pipeline
+type: docker
+name: default
+
+steps:
+
+- name: Prepare
+  image: node:12
+  commands:
+  - npm ci
+
+- name: Build app
+  image: node:12
+  commands:
+  - npm run build
+  - tar -cvf ./ui.tar ./app.definition ./app.dockerfile ./frontend/build/*
+
+- name: Build server
+  image: python:3.8.5
+  commands:
+  - python3 -m venv .venv
+  - source ./venv/bin/activate
+  - pip install -r requirements.txt
+  - tar -cvf ./server.tar ./*
+
+- name: Deploy app
+  image: node:12
+  commands:
+  - npx caprover deploy -h $SERVER -p $PASSWORD -a thepizzaclub -t ./ui.tar
+  - npx caprover deploy -h $SERVER -p $PASSWORD -a thepizzaclub-server -t ./server.tar
+  environment:
+    SERVER:
+      from_secret: SERVER
+    PASSWORD:
+      from_secret: PASSWORD
