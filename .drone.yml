@@ -5,24 +5,17 @@ name: default
 
 steps:
 
-- name: Build app
+- name: Build App
   image: node:12
   commands:
   - npm run ci
   - npm run build
-  - tar -cvf ./ui.tar ./app.definition ./app.dockerfile ./nginx/* ./frontend/build/*
 
-- name: Build server
-  image: python:3.8.5
-  commands:
-  - export PATH="$PATH:./venv/bin"
-  - python -m venv ./venv
-  - pip install -r requirements.txt
-  - tar --exclude='./frontend' -cvf ./server.tar ./*
-
-- name: Deploy app
+- name: Deploy Production
   image: node:12
   commands:
+  - tar -cvf ./ui.tar ./app.definition ./app.dockerfile ./nginx/* ./frontend/build/*
+  - tar --exclude='./frontend' -cvf ./server.tar ./*
   - npx caprover deploy -h $SERVER -p $PASSWORD -a thepizzaclub -t ./ui.tar
   - npx caprover deploy -h $SERVER -p $PASSWORD -a thepizzaclub-server -t ./server.tar
   environment:
@@ -30,3 +23,11 @@ steps:
       from_secret: SERVER
     PASSWORD:
       from_secret: PASSWORD
+  when:
+    branch:
+    - master
+
+trigger:
+  branch:
+  - master
+  - development

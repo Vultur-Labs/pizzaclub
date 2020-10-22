@@ -3,7 +3,6 @@ FROM python:3.8.5
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-ENV PATH="$PATH:/app/venv/bin"
 ARG DEBUG=${DEBUG}
 ARG DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
 ARG DATABASE_URL=${DATABASE_URL}
@@ -11,10 +10,14 @@ ARG MINIO_STORAGE_ACCESS_KEY=${MINIO_STORAGE_ACCESS_KEY}
 ARG MINIO_STORAGE_SECRET_KEY=${MINIO_STORAGE_SECRET_KEY}
 ARG MINIO_STORAGE_BUCKET_NAME=${MINIO_STORAGE_BUCKET_NAME}
 
-RUN mkdir /app
-WORKDIR /app
-COPY . /app/
-RUN chmod -R 777 /app
+RUN mkdir -p /src
+RUN mkdir -p /src/staticfiles
+RUN touch /src/.env
+WORKDIR /src
+
+COPY ./requirements.txt /src/
+RUN pip install --no-cache-dir -r requirements.txt
+COPY ./ /src
 
 EXPOSE 80
 
