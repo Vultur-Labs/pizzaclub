@@ -356,7 +356,7 @@ export class Product extends Component {
     presentation = !presentation ? null : presentation;
     // Get the price for size and presentation
     let price = data.prices.filter(
-      (i) => i.size == size && i.presentation == presentation
+      (i) => i.size === size && i.presentation === presentation
     )[0];
 
     return {
