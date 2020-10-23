@@ -1,11 +1,16 @@
 import React, { Component } from "react";
 import { connect, DispatchProp } from "react-redux";
 import { Align, Table, Column } from "../components/Table";
-import { Confirm } from "../components/Confirm";
+// import { Confirm } from "../components/Confirm";
 import { Toolbar } from "../components/Toolbar";
+import { SelectOption } from "../components/SelectOption";
+import { EditData } from "../components/EditData";
+import { CheckEdit, CancelEdit, AllowEdit} from "../components/Common";
 import { fetchOrders, updateOrder } from "../actions/dashboardActions";
-import { Order, statusMap } from "../types/order";
+import { Order, statusMap, statusStyleMap } from "../types/order";
+import { Item } from "../types/item";
 import dayjs from "dayjs";
+import lodash from "lodash";
 
 type Props = DispatchProp<any> & {
   orders: Order[];
@@ -24,10 +29,6 @@ class DashboardOrdersPage extends Component<Props> {
       width: 50,
     },
     {
-      key: "comment",
-      title: "Comentario",
-    },
-    {
       key: "date",
       title: "Fecha",
       align: Align.center,
@@ -36,18 +37,39 @@ class DashboardOrdersPage extends Component<Props> {
         order.date ? dayjs(order.date).format("hh:mm DD/MM/YYYY") : "",
     },
     {
+      key: "items",
+      title: "Productos",
+      align: Align.left,
+      width: 200,
+      render: (order: Order) => (
+        <ul>
+          {order.items.map((i: Item)=>{
+            const {total, quantity,product: { get_product_name, size, presentation}} = i;
+            let name = (size) ? ` - ${size}`: ""
+                      + presentation ? ` - ${presentation}`:"";
+            name = get_product_name + name
+            return (
+              <li key={i.id}>{`${quantity} x ${name} ($${total})`}</li>
+            )
+            })
+          }
+        </ul>
+      )
+    },
+    {
       key: "delivery_mode",
-      title: "Tipo Envio",
+      title: "Tipo Envío",
       align: Align.center,
       width: 150,
     },
     {
       key: "delivery_address",
-      title: "Direccion",
+      title: "Dirección",
+      align: Align.center,
       render: (order: Order) => {
         const address = order["delivery_address"];
 
-        return address?.id && <div>{address.address}</div>;
+        return (address?.id && <div>{address.address}</div>) || "-------------";
       },
     },
     {
@@ -56,40 +78,34 @@ class DashboardOrdersPage extends Component<Props> {
       align: Align.center,
       width: 150,
       render: (order: Order) =>
-        !!order.status && (statusMap[order.status] ?? ""),
+        <SelectOption
+          dataKey="status"
+          options={Object.entries(statusMap)} 
+          value={order.status}
+          stylesClass={statusStyleMap}
+          onChange={this.handleUpdate(order.order)}
+        />
     },
     {
-      key: "actions",
-      title: "Acciones",
+      key: "comment",
+      title: "Comentario",
+      render: (order: Order) => 
+        <EditData 
+          data={order.comment}
+          dataKey="comment"
+          onOk={this.handleUpdate(order.order)}
+          input={<textarea className="textarea" />}
+          btnEdit={<AllowEdit />}
+          btnCheck={<CheckEdit />}
+          btnCancel={<CancelEdit />}
+          />
+    },
+    {
+      key: "total",
+      title: "Total",
       align: Align.center,
       width: 120,
-      render: (order: Order) => (
-        <div>
-          <Confirm
-            title="El pedido fue entregado?"
-            okLabel="Si"
-            onClick={this.handleDelivered(order.order)}
-          >
-            <button title="Entregado" className="button is-info mr-2">
-              <span className="icon">
-                <i className="fas fa-check" />
-              </span>
-            </button>
-          </Confirm>
-
-          <Confirm
-            title="El pedido fue cancelado?"
-            okLabel="Si"
-            onClick={this.handleCancel(order.order)}
-          >
-            <button title="Rechazado" className="button is-danger">
-              <span className="icon">
-                <i className="fas fa-times" />
-              </span>
-            </button>
-          </Confirm>
-        </div>
-      ),
+      render: (order: Order) => `$${order.total}`
     },
   ];
 
@@ -97,13 +113,15 @@ class DashboardOrdersPage extends Component<Props> {
     this.props.dispatch(fetchOrders());
   }
 
-  private handleCancel = (id: number) => () => {
-    this.props.dispatch(updateOrder(id, { status: "cancel" }));
+  private handleUpdate = (id: number) => async (data: any) => {
+    const res = await this.props.dispatch(updateOrder(id, data));
+    return lodash.isEmpty(res);
   };
-
-  private handleDelivered = (id: number) => () => {
-    this.props.dispatch(updateOrder(id, { status: "delivering" }));
-  };
+  
+  // private handleComment = (id: number) => async (status: (string | number)) => {
+  //   const res = await this.props.dispatch(updateOrder(id, { status }));
+  //   return lodash.isEmpty(res);
+  // };
 
   public render() {
     const { orders } = this.props;
@@ -111,7 +129,6 @@ class DashboardOrdersPage extends Component<Props> {
     return (
       <div>
         <Toolbar title="Ordenes"></Toolbar>
-
         <Table columns={this.columns} data={orders} dataKey="order" />
       </div>
     );

@@ -40,7 +40,7 @@ export const Modal: FC<Props> = ({
         )}
         <footer className="modal-card-foot justify-end">
           {!!cancelLabel && (
-            <button className="button" onClick={handleClose}>
+            <button className="button is-danger" onClick={handleClose}>
               {cancelLabel}
             </button>
           )}

@@ -129,3 +129,34 @@ export const CustomSelect = ({
     ) : null}
   </div>
 );
+
+export const CheckEdit = (props) => (
+  <span 
+    className="icon is-small has-text-success"
+    onClick={props.onClick}>
+    <i className="fa fa-check"></i>
+  </span>
+)
+
+export const CancelEdit = (props) => (
+  <span 
+    className="icon is-small has-text-danger"
+    onClick={props.onClick}>
+    <i className="fa fa-times"></i>
+  </span>
+)
+
+export const AllowEdit = (props) => (
+  <span 
+    className="icon is-small has-text-info"
+    onClick={props.onClick}>
+    <i className="fas fa-edit"></i>
+  </span>
+)
+
+export const LoadingIcon = (props) => (
+  <span 
+    className="icon is-small has-text-info">
+    <i className="fas fa-spinner fa-pulse"></i>
+  </span>
+)

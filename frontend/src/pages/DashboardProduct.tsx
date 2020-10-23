@@ -46,6 +46,11 @@ class DashboardProductsPage extends Component<Props> {
       title: "Descripcion",
     },
     {
+      key: "order_n",
+      title: "N° Orden",
+      align: Align.center,
+    },
+    {
       key: "actions",
       title: "Acciones",
       align: Align.center,

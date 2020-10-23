@@ -32,6 +32,7 @@ export const login = (credentials: Credentials) => async (
 export const logout = () => async (dispatch: Dispatch) => {
   try {
     http.setAuth("");
+    localStorage.removeItem("token");
     return dispatch({ type: DASHBOARD_LOGOUT });
   } catch (error) {}
 };

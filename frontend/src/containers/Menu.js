@@ -53,9 +53,9 @@ class Menu extends Component {
                 subtype={t.subtype}
               >
                 {/* Pass the product as children */}
-                {prod.map((p) => {
+                {prod.map(p => {
                   //Pass the item of product if there is in the cart
-                  let item = cartItems.filter((i) => i.product.id === p.id);
+                  let item = cartItems.filter(i => i.product.id === p.id);
                   return (
                     <Product
                       key={p.id}

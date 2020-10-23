@@ -6,9 +6,9 @@ from django.utils import timezone
 from pizzaclub.settings import MAX_CUIL_LENGTH, MIN_CUIL_LENGTH
 from pizzaclub.settings import MAX_PHONE_LENGTH, MIN_PHONE_LENGTH
 from registration.models import Employee, Client, Address
-from minio_storage.storage import MinioMediaStorage
+# from minio_storage.storage import MinioMediaStorage
 
-storage = MinioMediaStorage()
+# storage = MinioMediaStorage()
 # Create your models here.
 
 class SizeProductError(Exception):
@@ -157,7 +157,7 @@ class Product(models.Model):
     order_n = models.PositiveSmallIntegerField(default=0)
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=100, blank=True)
-    image = models.ImageField(upload_to="products/", storage=storage, blank=True, null=True)
+    image = models.ImageField(upload_to="products/", blank=True, null=True)
     types = models.ForeignKey(TypeProduct, on_delete=models.CASCADE)
     subtype = models.ForeignKey(SubTypeProduct, on_delete=models.SET_NULL, null=True, blank=True)
     presentation = models.ManyToManyField(PresentationProduct, blank=True)
@@ -225,6 +225,9 @@ class PriceList(models.Model):
 
     def __str__(self):
         return str(self.product)
+    
+    def get_product_name(self):
+        return self.product.name
 
     def check_price_gte_zero(self):
         if self.price < 0:

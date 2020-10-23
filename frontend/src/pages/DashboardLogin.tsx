@@ -45,6 +45,7 @@ class DashboardLoginPage extends Component<Props> {
                   validationSchema={validationSchema}
                   onSubmit={this.handleSubmit}
                 >
+                  {({isSubmitting})=> (
                   <Form>
                     <Field
                       name="username"
@@ -59,10 +60,11 @@ class DashboardLoginPage extends Component<Props> {
                       component={CustomField}
                     />
 
-                    <button className="button is-block is-info is-fullwidth">
+                    <button className={`button is-block is-info is-fullwidth ${isSubmitting ? "is-loading":""}`}>
                       Ingresar
                     </button>
                   </Form>
+                  )}
                 </Formik>
               </div>
 

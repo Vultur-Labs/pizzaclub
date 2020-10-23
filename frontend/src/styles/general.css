@@ -37,3 +37,10 @@
   left: 0px;
   color: var(--primary-color);
 }
+
+.btn-dashboard {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  color: var(--secondary-color);
+}

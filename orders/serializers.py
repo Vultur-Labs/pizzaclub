@@ -1,4 +1,8 @@
-from rest_framework.serializers import ModelSerializer, RelatedField, PrimaryKeyRelatedField
+from rest_framework.serializers import (
+    ModelSerializer, 
+    RelatedField, 
+    CharField
+)
 from .models import (
     Product,
     PriceList,
@@ -136,11 +140,15 @@ class PriceListSerializer(ExtraFieldsSerializer):
     '''
         Serialize the data of price list.
     '''
+    size = CharField()
+    presentation = CharField()
     class Meta:
         model = PriceList
-        fields = '__all__'
+        fields = "__all__"
+        extra_fields = ["get_product_name"]
 
 class OrderItemSerializer(ModelSerializer):
+    product = PriceListSerializer()
     class Meta:
         model = OrderItem
         exclude = ['order']
@@ -151,20 +159,6 @@ class OrderSerializer(ModelSerializer):
     class Meta:
         model = Order
         fields = '__all__'
-
-    def create(self, validated_data):
-        """
-        Create and return a new `OrderItem` instance, given the validated data.
-        """
-        items_data = validated_data.pop("items", [])
-        # Create the Order
-        order = Order.objects.create(**validated_data)
-        # Create and add items
-        for item in items_data:
-            OrderItem.objects.create(order=order, **item)
-        # Save order for calculated Total
-        order.save()
-        return order
 
 class OrderWhatsAppSerializer(ModelSerializer):
     items = OrderItemSerializer(many=True)
