@@ -90,26 +90,6 @@ class FeatureProduct(models.Model):
     def __str__(self):
         return f'{self.name} ({self.symbol})'
 
-"""
-class ProductImages(models.Model):
-
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to="products/", storage=storage)
-    uploaded_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.image.url}"
-    
-    def save(self, *args, **kwargs):
-        '''
-            Change the name of file to uuid.
-        '''
-        # Get the file extension
-        extension = '.' + self.image.name.split('.')[-1]
-        # Change the name of image
-        self.image.name = '/'.join([str(self.product.id), str(uuid.uuid4().hex + extension)])
-        super(ProductImages, self).save(*args, **kwargs)
-"""
 class Shipping(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)

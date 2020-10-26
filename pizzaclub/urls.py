@@ -22,6 +22,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("registration.urls")),
     path("orders/", include("orders.urls")),
+    path("tables/", include("tables.urls")),
     url(r"^api-token-auth/", obtain_jwt_token),
     url(r"^api-token-refresh/", refresh_jwt_token),
 ]

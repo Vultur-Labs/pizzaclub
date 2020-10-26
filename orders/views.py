@@ -15,13 +15,13 @@ from .serializers import (
     OrderItemSerializer,
     OrderSerializer,
     OrderWhatsAppSerializer,
-    OwnerSerializer,
     PriceListSerializer,
     PriceSerializer,
     ProductSerializer,
     TypeSerializer,
-    AddressSerializer
+    OwnerSerializer
 )
+from registration.serializers import AddressSerializer
 
 DELIVERY_MODE = "delivery"
 

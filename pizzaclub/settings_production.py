@@ -9,6 +9,7 @@ ALLOWED_HOSTS = ['thepizzaclub.herokuapp.com', '.tustore.app']
 INSTALLED_APPS = [
     'registration.apps.RegistrationConfig',
     'orders.apps.OrdersConfig',
+    'tables.apps.TablesConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

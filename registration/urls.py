@@ -3,6 +3,16 @@ from django.urls import path
 from . import views
 
 app_name = "registration"
+
+employee_list = views.EmployeeViewSet.as_view({"get": "list"})
+employee_detail = views.EmployeeViewSet.as_view(
+    {
+        "get": "retrieve",
+        "patch": "partial_update",
+        "delete": "destroy",
+    }
+)
+
 urlpatterns = [
     #path("login", views.login_view, name="login"),
     #path("direct-login", views.direct_login, name="direct_login"),
@@ -14,6 +24,9 @@ urlpatterns = [
     #path("password_reset/confirm", views.password_reset_complete, name="password_reset_complete"),
     #path("password_reset/success", views.password_reset_success, name="password_reset_success"),
     #path("password_reset/error", views.password_reset_failed, name="password_reset_error"),
-    path("me", views.me, name="me"),
-    path("register", views.register, name="register"),
+    path("me/", views.me, name="me"),
+    path("new_employee/", views.register_employee),
+    path("employees/<int:pk>/", employee_detail),
+    path("employees/", employee_list),
+    path("validate_username/", views.validate_username)
 ]

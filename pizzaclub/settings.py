@@ -99,7 +99,7 @@ MAX_PHONE_LENGTH = 11
 DEFAULT_FILE_STORAGE =  ("django.core.files.storage.FileSystemStorage" 
 if DEBUG else "minio_storage.storage.MinioMediaStorage")
 
-MINIO_STORAGE_ENDPOINT = "minio.prod.deployhub.xyz:443"
+MINIO_STORAGE_ENDPOINT = "minio.deployhub.xyz:443"
 MINIO_STORAGE_ACCESS_KEY = os.getenv("MINIO_STORAGE_ACCESS_KEY")
 MINIO_STORAGE_SECRET_KEY = os.getenv("MINIO_STORAGE_SECRET_KEY")
 MINIO_STORAGE_MEDIA_BUCKET_NAME = os.getenv("MINIO_STORAGE_BUCKET_NAME", "tustore")

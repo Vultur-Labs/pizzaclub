@@ -3,6 +3,7 @@ import { Account } from "../types/account";
 import { ProductType } from "../types/product-type";
 import { Product } from "../types/product";
 import { Place } from "../types/place";
+import { Employee } from "../types/employee";
 
 export const DASHBOARD_LOGIN = "DASHBOARD_LOGIN";
 export const DASHBOARD_LOGOUT = "DASHBOARD_LOGOUT";
@@ -15,6 +16,10 @@ export const UPDATE_PRODUCT = "UPDATE_PRODUCT";
 export const DELETE_PRODUCT = "DELETE_PRODUCT";
 export const FETCH_ORDERS = "FETCH_ORDERS";
 export const UPDATE_ORDER = "UPDATE_ORDER";
+export const FETCH_EMPLOYEES = "FETCH_EMPLOYEES";
+export const CREATE_EMPLOYEE = "CREATE_EMPLOYEE";
+export const UPDATE_EMPLOYEE = "UPDATE_EMPLOYEE";
+export const DELETE_EMPLOYEE = "DELETE_EMPLOYEE";
 
 type State = {
   account: Partial<Account>;
@@ -23,6 +28,7 @@ type State = {
   product: Partial<Product>;
   orders: any[];
   place: Partial<Place>;
+  employees: Employee[];
 };
 
 const initialState: State = {
@@ -32,6 +38,7 @@ const initialState: State = {
   product: {},
   orders: [],
   place: {},
+  employees: [],
 };
 
 export const dashboardReducer: Reducer<State> = (
@@ -119,6 +126,38 @@ export const dashboardReducer: Reducer<State> = (
         ...state,
         orders,
       };
+    
+      case FETCH_EMPLOYEES:
+        return {
+          ...state,
+          employees: payload ?? [],
+        };
+  
+      case CREATE_EMPLOYEE:
+        return {
+          ...state,
+          employees: [...state.employees, payload],
+        };
+  
+      case UPDATE_EMPLOYEE:
+        const employeeIndex = state.employees.findIndex(
+          e => e.user.id === payload.user.id
+        );
+        const employees = [...state.employees];
+  
+        employees[employeeIndex] = payload;
+  
+        return {
+          ...state,
+          employees,
+        };
+  
+      case DELETE_EMPLOYEE:
+        return {
+          ...state,
+          employees:
+            state.employees.filter(e => e.user.id !== payload) ?? [],
+        };
 
     default:
       return state;

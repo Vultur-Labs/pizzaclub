@@ -1,5 +1,6 @@
 import { Dispatch } from "redux";
 import { Product } from "../types/product";
+import { Employee } from "../types/employee";
 import {
   DASHBOARD_LOGIN,
   FETCH_TYPES,
@@ -12,10 +13,16 @@ import {
   FETCH_ORDERS,
   UPDATE_ORDER,
   FETCH_PLACE,
+  FETCH_EMPLOYEES,
+  CREATE_EMPLOYEE,
+  UPDATE_EMPLOYEE,
+  DELETE_EMPLOYEE
 } from "../reducers/dashboardReducer";
 import { apiRoutes, http } from "../services/http";
 import { Credentials } from "../types/credentials";
 
+
+// LOGIN ACTIONS
 export const login = (credentials: Credentials) => async (
   dispatch: Dispatch
 ) => {
@@ -37,6 +44,7 @@ export const logout = () => async (dispatch: Dispatch) => {
   } catch (error) {}
 };
 
+// PLACE ACTIONS
 export const fetchPlace = () => async (dispatch: Dispatch) => {
   try {
     const place = await http.get(apiRoutes.owner_data);
@@ -45,6 +53,7 @@ export const fetchPlace = () => async (dispatch: Dispatch) => {
   } catch (error) {}
 };
 
+// TYPES ACTIONS
 export const fetchTypes = () => async (dispatch: Dispatch) => {
   try {
     const types = await http.get(apiRoutes.types_data);
@@ -53,6 +62,7 @@ export const fetchTypes = () => async (dispatch: Dispatch) => {
   } catch (error) {}
 };
 
+// PRODUCT ACTIONS
 export const fetchProducts = () => async (dispatch: Dispatch) => {
   try {
     const products = await http.get(apiRoutes.products_data);
@@ -100,6 +110,7 @@ export const deleteProduct = (id: number) => async (dispatch: Dispatch) => {
   } catch (error) {}
 };
 
+// ORDER ACTIONS
 export const fetchOrders = () => async (dispatch: Dispatch) => {
   try {
     const orders = await http.get(apiRoutes.orders);
@@ -115,5 +126,85 @@ export const updateOrder = (id: number, change: Record<string, any>) => async (
     const order = await http.patch(`${apiRoutes.orders}${id}/`, change);
 
     return dispatch({ type: UPDATE_ORDER, payload: order });
+  } catch (error) {}
+};
+
+// EMPLOYEE ACTIONS
+export const fetchEmployees = () => async (dispatch: Dispatch) => {
+  try {
+    const employees = await http.get(apiRoutes.employee_data);
+
+    return dispatch({ type: FETCH_EMPLOYEES, payload: employees });
+  } catch (error) {}
+};
+
+export const createEmployee = (employee: Record<string, any>) => async (
+  dispatch: Dispatch
+) => {
+  try {
+    const result = await http.post(apiRoutes.new_employee, employee);
+
+    return dispatch({ type: CREATE_EMPLOYEE, payload: result });
+  } catch (error) {}
+};
+
+export const updateEmployee = (id: number, employee: Record<string, any>) => async (
+  dispatch: Dispatch
+) => {
+  try {
+    const result = await http.patch(
+      `${apiRoutes.employee_data}${id}/`,
+      employee
+    );
+
+    return dispatch({ type: UPDATE_EMPLOYEE, payload: result });
+  } catch (error) {}
+};
+
+export const deleteEmployee = (id: number) => async (dispatch: Dispatch) => {
+  try {
+    await http.delete(`${apiRoutes.employee_data}${id}/`);
+
+    return dispatch({ type: DELETE_EMPLOYEE, payload: id });
+  } catch (error) {}
+};
+
+// TABLE ACTIONS
+export const fetchEmployees = () => async (dispatch: Dispatch) => {
+  try {
+    const employees = await http.get(apiRoutes.employee_data);
+
+    return dispatch({ type: FETCH_EMPLOYEES, payload: employees });
+  } catch (error) {}
+};
+
+export const createEmployee = (employee: Record<string, any>) => async (
+  dispatch: Dispatch
+) => {
+  try {
+    const result = await http.post(apiRoutes.new_employee, employee);
+
+    return dispatch({ type: CREATE_EMPLOYEE, payload: result });
+  } catch (error) {}
+};
+
+export const updateEmployee = (id: number, employee: Record<string, any>) => async (
+  dispatch: Dispatch
+) => {
+  try {
+    const result = await http.patch(
+      `${apiRoutes.employee_data}${id}/`,
+      employee
+    );
+
+    return dispatch({ type: UPDATE_EMPLOYEE, payload: result });
+  } catch (error) {}
+};
+
+export const deleteEmployee = (id: number) => async (dispatch: Dispatch) => {
+  try {
+    await http.delete(`${apiRoutes.employee_data}${id}/`);
+
+    return dispatch({ type: DELETE_EMPLOYEE, payload: id });
   } catch (error) {}
 };

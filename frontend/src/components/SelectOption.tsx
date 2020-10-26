@@ -1,7 +1,8 @@
 import React, { ChangeEvent, Component} from "react";
 
 type Props = {
-    dataKey: any;
+    dataKey?: any;
+    title?: string;
     value: (string | number);
     options: (string | number)[][];
     stylesClass?: Record<string, string>; 
@@ -9,9 +10,6 @@ type Props = {
 };
 
 export class SelectOption extends Component<Props> {
-    static defaultProps = {
-      orders: [],
-    };
 
     public state: Record<string, any> = {
         loading: false
@@ -20,16 +18,19 @@ export class SelectOption extends Component<Props> {
     private handleChange = async (e: ChangeEvent<HTMLSelectElement>) => {
         this.setState({loading: true});
         const { dataKey } = this.props;
-        const data = dataKey?{dataKey: e.target.value}:e.target.value;
+        const data = dataKey ? {dataKey: e.target.value} : e.target.value;
         await this.props.onChange(data);
         this.setState({loading: false});
     }
 
     public render() {
-        const { options, value, stylesClass} = this.props;
+        const { title, options, value, stylesClass} = this.props;
         const { loading } = this.state;
         return (
             <div className={`select ${loading?"is-loading":""}`}>
+                {title ? (
+                    <label className="label is-medium">{title}</label>
+                ) : null}
                 <select onChange={this.handleChange}
                     defaultValue={value}
                     className={stylesClass && stylesClass[value]}>

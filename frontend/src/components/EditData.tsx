@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Component, ReactElement, useCallback } from "react";
+import React, { ChangeEvent, Component, ReactElement } from "react";
 import {AllowEdit, CancelEdit, CheckEdit, LoadingIcon} from "./Common";
 
 type Props = {
@@ -56,8 +56,7 @@ export class EditData extends Component<Props> {
 
     public render() {
         const { edit, inputValue, loading } = this.state;
-        const { input, data, onOk } = this.props;
-        const { btnCancel, btnCheck, btnEdit, loader} = this.props;
+        const { input, btnCancel, btnCheck, btnEdit, loader} = this.props;
 
         return (
             <div className="field is-grouped">

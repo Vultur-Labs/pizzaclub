@@ -2,7 +2,12 @@ import React, { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { logout } from "../actions/dashboardActions";
-import { DASHBOARD, DASHBOARD_ORDERS, DASHBOARD_PRODUCTS } from "../routes";
+import { 
+  DASHBOARD,
+  DASHBOARD_ORDERS,
+  DASHBOARD_PRODUCTS,
+  DASHBOARD_EMPLOYEES
+} from "../routes";
 
 export const Navbar = () => {
   const dispatch = useDispatch();
@@ -25,6 +30,10 @@ export const Navbar = () => {
 
             <Link className="navbar-item" to={DASHBOARD_PRODUCTS}>
               Productos
+            </Link>
+
+            <Link className="navbar-item" to={DASHBOARD_EMPLOYEES}>
+              Empleados
             </Link>
           </div>
 

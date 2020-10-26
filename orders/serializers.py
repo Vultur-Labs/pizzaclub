@@ -12,60 +12,14 @@ from .models import (
     PresentationProduct,
     FeatureProduct,
     Place,
+    Shipping,
     Order,
     OrderItem,
-    Shipping
     )
-from registration.models import Client, Address
-from registration.serializers import ClientSerializer
-
-class ExtraFieldsSerializer(ModelSerializer):
-    '''
-     This class override th get_field_names to add extra field defined in Meta class
-     as extra_fields
-    '''
-    def get_field_names(self, declared_fields, info):
-        expanded_fields = super(ExtraFieldsSerializer, self).get_field_names(declared_fields, info)
-
-        if getattr(self.Meta, 'extra_fields', None):
-            return expanded_fields + self.Meta.extra_fields
-        else:
-            return expanded_fields
-
-# class LogoPlaceSerializer(RelatedField):
-#     '''
-#         Serialize only the url of each image.
-#     '''
-#     def to_representation(self, value):
-#         return value.logo.url
-
-class ShippingSerializer(ExtraFieldsSerializer):
-    class Meta:
-        model = Shipping
-        fields = '__all__'
-
-class AddressSerializer(ExtraFieldsSerializer):
-    class Meta:
-        model = Address
-        fields = '__all__'
-
-class OwnerSerializer(ExtraFieldsSerializer):
-    '''
-        Serializer of Place Class.
-    '''
-    address = AddressSerializer()
-    shipping = ShippingSerializer(many=True)
-    class Meta:
-        model = Place
-        fields = (
-            'id',
-            'name',
-            'instagram',
-            'whatsapp',
-            'phone',
-            'address',
-            'shipping'
-        )
+from registration.serializers import (
+    AddressSerializer,
+    ExtraFieldsSerializer
+    )
 
 class SubTypeSerializer(ExtraFieldsSerializer):
     '''
@@ -100,6 +54,29 @@ class PresentationSerializer(ExtraFieldsSerializer):
         model = PresentationProduct
         fields = '__all__'
 
+class ShippingSerializer(ExtraFieldsSerializer):
+    class Meta:
+        model = Shipping
+        fields = '__all__'
+
+class OwnerSerializer(ExtraFieldsSerializer):
+    '''
+        Serializer of Place Class.
+    '''
+    address = AddressSerializer()
+    shipping = ShippingSerializer(many=True)
+    class Meta:
+        model = Place
+        fields = (
+            'id',
+            'name',
+            'instagram',
+            'whatsapp',
+            'phone',
+            'address',
+            'shipping'
+        )
+
 class FeatureSerializer(ExtraFieldsSerializer):
     '''
         Serializer of Category Class.
@@ -130,7 +107,6 @@ class ProductSerializer(ExtraFieldsSerializer):
     presentation = PresentationSerializer(many=True, read_only=True)
     feature = FeatureSerializer(many=True, read_only=True)
     prices = PriceSerializer(many=True, read_only=True)
-    # place = OwnerSerializer()
 
     class Meta:
         model = Product
@@ -170,7 +146,6 @@ class OrderWhatsAppSerializer(ModelSerializer):
         """
         Create and return a new `OrderItem` instance, given the validated data.
         """
-        # client = validated_data.pop("client", None)
         items_data = validated_data.pop("items", [])
         # Create the Order
         order = Order.objects.create(**validated_data)

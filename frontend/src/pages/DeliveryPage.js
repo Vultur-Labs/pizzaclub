@@ -18,7 +18,7 @@ class DeliveryPage extends Component {
     }
 
     render() {
-        const {goBack, goCart, interactive} = this.props;
+        const {goBack, goCart} = this.props;
         return (
             <div className='menupage'>
                 <GoToButton path={goBack} className="back-btn">
@@ -27,7 +27,7 @@ class DeliveryPage extends Component {
                     </span>
                 </GoToButton>
                 <PlaceHeader />
-                <Menu interactive={interactive}/>
+                <Menu interactive={true}/>
                 <GoToCart path={goCart}
                         className="gotocart"
                         classBtn='button is-primary is-large gotocart-btn'/>

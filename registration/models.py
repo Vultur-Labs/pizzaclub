@@ -89,15 +89,19 @@ class Employee(models.Model):
         null=True,
         blank=True,
         validators=[
-            MinLengthValidator(MIN_DNI_LENGTH),
-            MaxLengthValidator(MAX_DNI_LENGTH),
+            MinLengthValidator(MIN_PHONE_LENGTH),
+            MaxLengthValidator(MAX_PHONE_LENGTH),
             RegexValidator(regex=r'^\d+$')
         ])
-    address = models.ManyToManyField(Address)
+    address = models.ForeignKey(Address, null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.user.get_full_name()
     
+    def perform_delete(self):
+        if not (self.user.is_staff or self.user.is_superuser):
+            self.user.delete()
+
     def save(self, *args, **kwargs):
         # Check user is employee
         if not self.user.is_employee:

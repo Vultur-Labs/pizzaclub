@@ -1,9 +1,16 @@
 import React, { FC, useEffect } from "react";
 import { Route, Switch, useHistory } from "react-router-dom";
-import { DASHBOARD, DASHBOARD_ORDERS, DASHBOARD_PRODUCTS } from "../routes";
+import { 
+  DASHBOARD,
+  DASHBOARD_ORDERS,
+  DASHBOARD_PRODUCTS,
+  DASHBOARD_EMPLOYEES,
+  STAFF
+} from "../routes";
 import DashboardHomePage from "./DashboardHome";
 import DashboardProductsPage from "./DashboardProduct";
 import DashboardOrdersPage from "./DashboardOrder";
+import DashboardEmployeesPage from "./DashboardEmployees";
 import { Navbar } from "../components/Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPlace } from "../actions/dashboardActions";
@@ -18,9 +25,8 @@ const DashboardPage: FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (!account?.id) {
-      router.push(DASHBOARD);
-    }
+    if (account?.is_staff || account?.is_superuser) {router.push(DASHBOARD) }
+    else if (account?.is_order_manager) router.push(STAFF);
   }, [account, router]);
 
   return (
@@ -39,6 +45,9 @@ const DashboardPage: FC = () => {
               </Route>
               <Route path={DASHBOARD_ORDERS}>
                 <DashboardOrdersPage />
+              </Route>
+              <Route path={DASHBOARD_EMPLOYEES}>
+                <DashboardEmployeesPage />
               </Route>
             </Switch>
           </div>

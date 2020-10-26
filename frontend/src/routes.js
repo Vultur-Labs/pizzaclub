@@ -9,3 +9,5 @@ export const DASHBOARD = "/dashboard";
 export const DASHBOARD_LOGIN = "/dashboard/login";
 export const DASHBOARD_PRODUCTS = "/dashboard/products";
 export const DASHBOARD_ORDERS = "/dashboard/orders";
+export const DASHBOARD_EMPLOYEES = "/dashboard/empleados";
+export const STAFF = "/staff";

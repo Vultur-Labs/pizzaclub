@@ -118,11 +118,6 @@ class DashboardOrdersPage extends Component<Props> {
     return lodash.isEmpty(res);
   };
   
-  // private handleComment = (id: number) => async (status: (string | number)) => {
-  //   const res = await this.props.dispatch(updateOrder(id, { status }));
-  //   return lodash.isEmpty(res);
-  // };
-
   public render() {
     const { orders } = this.props;
 
