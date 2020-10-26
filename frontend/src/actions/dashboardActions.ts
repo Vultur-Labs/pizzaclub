@@ -1,6 +1,5 @@
 import { Dispatch } from "redux";
 import { Product } from "../types/product";
-import { Employee } from "../types/employee";
 import {
   DASHBOARD_LOGIN,
   FETCH_TYPES,
