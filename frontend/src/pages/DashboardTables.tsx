@@ -4,65 +4,52 @@ import { Align, Table, Column } from "../components/Table";
 import { Confirm } from "../components/Confirm";
 import { Toolbar } from "../components/Toolbar";
 import { ModalTrigger } from "../components/ModalTrigger";
-import { EditEmployeeModal } from "../components/modals/EditEmployee";
+import { EditTableModal } from "../components/modals/EditTable";
 import { 
-    fetchEmployees,
-    createEmployee,
-    updateEmployee,
-    deleteEmployee
+    fetchTables,
+    createTable,
+    updateTable,
+    deleteTable
 } from "../actions/dashboardActions";
-import { Employee } from "../types/employee";
+import { Table as TableLocal } from "../types/table";
 
 type Props = DispatchProp<any> & {
-  employees: Employee[];
+  tables: TableLocal[];
   owner_id: number;
 };
 
-class DashboardEmployeesPage extends Component<Props> {
+class DashboardTables extends Component<Props> {
   static defaultProps = {
-    employees: [],
+    tables: [],
   };
 
   private columns: Column[] = [
     {
-      key: "user.id",
+      key: "id",
       title: "#",
       align: Align.right,
       width: 50,
     },
     {
-      key: "user.username",
-      title: "Usuario",
+      key: "number",
+      title: "Mesa",
       align: Align.center,
       width: 150,
+      render: (table: TableLocal) => (`Mesa ${table.number}`)
     },
     {
-        key: "full_name",
-        title: "Nombre y Apellido",
-        align: Align.center,
-        width: 150,
-        render: (employee: Employee) => (
-            employee.user.first_name ?? "" + employee.user.last_name ?? ""
-        )
-      },
-    {
-      key: "phone",
-      title: "Telefono",
+      key: "is_open",
+      title: "Estado",
       align: Align.center,
       width: 150,
-    },
-    {
-      key: "dni",
-      title: "DNI",
-      align: Align.center,
-      width: 100,
+      render: (table: TableLocal) => (table.is_open?"Abierta":"Cerrada")
     },
     {
         key: "actions",
         title: "Acciones",
         align: Align.center,
         width: 120,
-        render: (employee: Employee) => (
+        render: (table: TableLocal) => (
           <div>
             <ModalTrigger
               button={
@@ -73,17 +60,17 @@ class DashboardEmployeesPage extends Component<Props> {
                 </button>
               }
               modal={
-                <EditEmployeeModal
-                  employee={employee}
-                  onOk={this.handleUpdateEmployee(employee.user.id)}
+                <EditTableModal
+                  table={table}
+                  onOk={this.handleUpdateTable(table.id)}
                 />
               }
             />
   
             <Confirm
-              title="Está seguro?"
+              title={`Está seguro que quiere eliminar la Mesa ${table.number}?`}
               okLabel="Sí"
-              onClick={this.handleDeleteEmployee(employee)}
+              onClick={this.handleDeleteTable(table)}
             >
               <button className="button is-danger">
                 <span className="icon">
@@ -97,23 +84,24 @@ class DashboardEmployeesPage extends Component<Props> {
   ];
 
   public componentDidMount() {
-    this.props.dispatch(fetchEmployees());
+    this.props.dispatch(fetchTables());
   }
 
-  private handleSaveTable = (data: any) => {
-      this.props.dispatch(createEmployee(data));
+  private handleSaveTable = (owner: number) => (data: any) => {
+    console.log(data);
+    this.props.dispatch(createTable({owner, ...data}));
   }
 
   private handleUpdateTable = (id: number) => (data: any) => {
-      this.props.dispatch(updateEmployee(id, data));
+      this.props.dispatch(updateTable(id, data));
   }
 
-  private handleDeleteTable = (employee: Employee) => async () => {
-    this.props.dispatch(deleteEmployee(employee.user.id));
+  private handleDeleteTable = (table: TableLocal) => async () => {
+    this.props.dispatch(deleteTable(table.id));
   }
 
   public render() {
-    const { employees } = this.props;
+    const { tables, owner_id } = this.props;
 
     return (
       <div>
@@ -127,17 +115,18 @@ class DashboardEmployeesPage extends Component<Props> {
                   <span>Nueva Mesa</span>
                 </button>
               }
-              modal={<EditEmployeeModal onOk={this.handleSaveTable} />}
+              modal={<EditTableModal onOk={this.handleSaveTable(owner_id)} />}
             />
         </Toolbar>
-        <Table columns={this.columns} data={employees} dataKey="employees" />
+        <Table columns={this.columns} data={tables} dataKey="tables" />
       </div>
     );
   }
 }
 
 const mapStateToProps = (state: any) => ({
-  employees: state.dashboard.employees,
+  tables: state.dashboard.tables,
+  owner_id: state.dashboard.place.id
 });
 
-export default connect(mapStateToProps)(DashboardEmployeesPage);
+export default connect(mapStateToProps)(DashboardTables);

@@ -50,3 +50,23 @@ class EmployeeSerializer(ModelSerializer):
     class Meta:
         model = Employee
         fields = "__all__"
+
+    def update(self, instance, validated_data):
+        # Extract Data
+        user = validated_data.pop('user', None)
+        address = validated_data.pop('address', True)
+        # Update User
+        if user: 
+            [setattr(instance.user, k, v) for k, v in user.items()]
+            instance.user.save()      
+        #Update Address
+        if isinstance(address, dict):
+            if not instance.address: instance.address = Address.objects.create(**address)
+            else: 
+                [setattr(instance.address, k, v) for k, v in address.items()]
+                instance.address.save()
+        if address == None: instance.address = None
+        # Update Client
+        [setattr(instance, k, v) for k, v in validated_data.items()]
+        instance.save()
+        return instance

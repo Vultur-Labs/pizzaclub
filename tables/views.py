@@ -14,7 +14,16 @@ from .serializers import (
 class TableViewSet(ModelViewSet):
     queryset = Table.objects.all()
     serializer_class = TableSerializer
-    permission_classes= [AllowAny]
+    
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        if self.action in ("retrieve", "list"):
+            permission_classes = [AllowAny]
+        else:
+            permission_classes = [IsAdminUser]
+        return [permission() for permission in permission_classes]
 
 class OrderTableViewSet(ModelViewSet):
     queryset = OrderTable.objects.all()

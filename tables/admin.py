@@ -1,3 +1,11 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Table
+
+# Register your models here
+
+class TableAdmin(admin.ModelAdmin):
+    list_display = ['id', 'number', 'is_open', 'owner']
+
+# Re-register UserAdmin
+admin.site.register(Table, TableAdmin)

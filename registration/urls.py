@@ -26,7 +26,7 @@ urlpatterns = [
     #path("password_reset/error", views.password_reset_failed, name="password_reset_error"),
     path("me/", views.me, name="me"),
     path("new_employee/", views.register_employee),
-    path("employees/<int:pk>/", employee_detail),
     path("employees/", employee_list),
+    path("employees/<int:pk>/", employee_detail),
     path("validate_username/", views.validate_username)
 ]

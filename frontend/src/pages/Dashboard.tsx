@@ -5,12 +5,14 @@ import {
   DASHBOARD_ORDERS,
   DASHBOARD_PRODUCTS,
   DASHBOARD_EMPLOYEES,
+  DASHBOARD_TABLES,
   STAFF
 } from "../routes";
 import DashboardHomePage from "./DashboardHome";
 import DashboardProductsPage from "./DashboardProduct";
 import DashboardOrdersPage from "./DashboardOrder";
 import DashboardEmployeesPage from "./DashboardEmployees";
+import DashboardTablesPage from "./DashboardTables";
 import { Navbar } from "../components/Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPlace } from "../actions/dashboardActions";
@@ -48,6 +50,9 @@ const DashboardPage: FC = () => {
               </Route>
               <Route path={DASHBOARD_EMPLOYEES}>
                 <DashboardEmployeesPage />
+              </Route>
+              <Route path={DASHBOARD_TABLES}>
+                <DashboardTablesPage />
               </Route>
             </Switch>
           </div>

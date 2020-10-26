@@ -63,4 +63,5 @@ export const apiRoutes = {
   types_data: "/orders/types/",
   products_data: "/orders/products/",
   orders: "/orders/",
+  tables_data: "/tables/",
 };

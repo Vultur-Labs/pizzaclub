@@ -4,6 +4,7 @@ import { ProductType } from "../types/product-type";
 import { Product } from "../types/product";
 import { Place } from "../types/place";
 import { Employee } from "../types/employee";
+import { Table } from "../types/table";
 
 export const DASHBOARD_LOGIN = "DASHBOARD_LOGIN";
 export const DASHBOARD_LOGOUT = "DASHBOARD_LOGOUT";
@@ -20,6 +21,10 @@ export const FETCH_EMPLOYEES = "FETCH_EMPLOYEES";
 export const CREATE_EMPLOYEE = "CREATE_EMPLOYEE";
 export const UPDATE_EMPLOYEE = "UPDATE_EMPLOYEE";
 export const DELETE_EMPLOYEE = "DELETE_EMPLOYEE";
+export const FETCH_TABLES = "FETCH_TABLES";
+export const CREATE_TABLE = "CREATE_TABLE";
+export const UPDATE_TABLE = "UPDATE_TABLE";
+export const DELETE_TABLE = "DELETE_TABLE";
 
 type State = {
   account: Partial<Account>;
@@ -29,6 +34,7 @@ type State = {
   orders: any[];
   place: Partial<Place>;
   employees: Employee[];
+  tables: Table[];
 };
 
 const initialState: State = {
@@ -39,6 +45,7 @@ const initialState: State = {
   orders: [],
   place: {},
   employees: [],
+  tables: [],
 };
 
 export const dashboardReducer: Reducer<State> = (
@@ -158,7 +165,38 @@ export const dashboardReducer: Reducer<State> = (
           employees:
             state.employees.filter(e => e.user.id !== payload) ?? [],
         };
-
+      
+      case FETCH_TABLES:
+        return {
+          ...state,
+          tables: payload ?? [],
+        };
+  
+      case CREATE_TABLE:
+        return {
+          ...state,
+          tables: [...state.tables, payload],
+        };
+  
+      case UPDATE_TABLE:
+        const tableIndex = state.tables.findIndex(
+          t => t.id === payload.id
+        );
+        const tables = [...state.tables];
+  
+        tables[tableIndex] = payload;
+  
+        return {
+          ...state,
+          tables,
+        };
+  
+      case DELETE_TABLE:
+        return {
+          ...state,
+          tables:
+            state.tables.filter(t => t.id !== payload) ?? [],
+        };
     default:
       return state;
   }

@@ -75,8 +75,8 @@ class DashboardProductsPage extends Component<Props> {
           />
 
           <Confirm
-            title="Esta seguro?"
-            okLabel="Si"
+            title={`Está seguro que quiere eliminar ${product.name}?`}
+            okLabel="Sí"
             onClick={this.handleDeleteProduct(product)}
           >
             <button className="button is-danger">

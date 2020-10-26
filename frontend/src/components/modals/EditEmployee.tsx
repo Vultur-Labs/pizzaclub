@@ -47,7 +47,6 @@ export const EditEmployeeModal: FC<Props> = ({
   onOk,
   ...props
 }) => {
-
     const validateUsername = async (value: string) => {
         let error;
         if (!value) return error;
@@ -57,7 +56,6 @@ export const EditEmployeeModal: FC<Props> = ({
         if (!validation.ok) error = "El Usuario ya existe. Elija otro por favor."
         return error;
     }
-  
     return (
     <Formik<Values>
         initialValues={{
@@ -72,8 +70,6 @@ export const EditEmployeeModal: FC<Props> = ({
             address: employee?.address?.address ?? "",
             }}
         validationSchema={validationSchema}
-        validateOnBlur={false}
-        validateOnChange={false}
         onSubmit={values => {
             const { username, email, first_name, last_name, password } = values;
             const { dni, cuil, phone, address} = values;
@@ -84,17 +80,18 @@ export const EditEmployeeModal: FC<Props> = ({
                 email,
                 password
             }
-
+            console.log(values);
             onOk({ 
                 user,
                 dni,
                 cuil,
                 phone,
-                address
+                address: address?{address: address}:null,
+                id: employee?.user.id,
             });
         }}
     >
-        {({ handleSubmit}) => (
+        {({ handleSubmit }) => (
         <Modal
             {...props}
             title={employee ? "Editar Empleado" : "Crear Empleado"}
@@ -108,11 +105,11 @@ export const EditEmployeeModal: FC<Props> = ({
                 validate={validateUsername}
                 component={CustomField} />
             
-            <Field 
+            {!employee ? (<Field 
                 name="password"
                 label="Password"
                 type="password"
-                component={CustomField} />
+                component={CustomField} />):null}
 
             <Field name="email" label="Correo Electrónico" component={CustomField} />
             <Field name="first_name" label="Nombre" component={CustomField} />
@@ -125,5 +122,4 @@ export const EditEmployeeModal: FC<Props> = ({
         </Modal>
         )}
     </Formik>
-    )
-};
+)};

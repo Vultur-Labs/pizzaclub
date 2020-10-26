@@ -8,7 +8,7 @@ from orders.serializers import PriceListSerializer
 
 class TableSerializer(ModelSerializer):
 
-    class Mete:
+    class Meta:
         model = Table
         fields = "__all__"
 

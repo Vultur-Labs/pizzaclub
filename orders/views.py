@@ -69,7 +69,7 @@ class OrderViewSet(ModelViewSet):
         Instantiates and returns the list of permissions that this view requires.
         """
         if self.action == "delete":
-            permission_classes = [IsAdmin]
+            permission_classes = [IsAdminUser]
         elif self.action == "make_order":
             permission_classes = [AllowAny]
         else:
@@ -110,10 +110,7 @@ class OrderWhatsAppViewSet(ModelViewSet):
         # Get the delivery address if there is
         delivery_address = data.pop("delivery_address", None)
         if delivery_address:
-            try:
-                address = Address.objects.create(address=delivery_address)
-            except:
-                address = Address.objects.get(address=delivery_address)
+            address = Address.objects.get(address=delivery_address)
             data["delivery_address"] = address.id
         else:
             address = None

@@ -37,14 +37,20 @@ class DashboardEmployeesPage extends Component<Props> {
       width: 150,
     },
     {
-        key: "full_name",
-        title: "Nombre y Apellido",
-        align: Align.center,
-        width: 150,
-        render: (employee: Employee) => (
-            employee.user.first_name ?? "" + employee.user.last_name ?? ""
-        )
-      },
+      key: "full_name",
+      title: "Nombre y Apellido",
+      align: Align.center,
+      width: 150,
+      render: (employee: Employee) => (
+          (employee.user.first_name ?? "") + " " + (employee.user.last_name ?? "")
+      )
+    },
+    {
+      key: "user.email",
+      title: "Correo Electrónico",
+      align: Align.center,
+      width: 150,
+    },
     {
       key: "phone",
       title: "Telefono",
@@ -75,13 +81,13 @@ class DashboardEmployeesPage extends Component<Props> {
               modal={
                 <EditEmployeeModal
                   employee={employee}
-                  onOk={this.handleUpdateEmployee(employee.user.id)}
+                  onOk={this.handleEditEmployee} 
                 />
               }
             />
   
             <Confirm
-              title="Está seguro?"
+              title={`Está seguro que quiere eliminar a ${employee.user.username}?`}
               okLabel="Sí"
               onClick={this.handleDeleteEmployee(employee)}
             >
@@ -101,14 +107,16 @@ class DashboardEmployeesPage extends Component<Props> {
   }
 
   private handleSaveEmployee = (data: any) => {
-      this.props.dispatch(createEmployee(data));
+    this.props.dispatch(createEmployee(data));
   }
 
-  private handleUpdateEmployee = (id: number) => (data: any) => {
-      this.props.dispatch(updateEmployee(id, data));
+  private handleEditEmployee = (employee: Employee) => {
+    console.log("handleEdit")
+    console.log(employee)
+    // this.props.dispatch(updateEmployee(employee.id, employee));
   }
 
-  private handleDeleteEmployee = (employee: Employee) => async () => {
+  private handleDeleteEmployee = (employee: Employee) => () => {
     this.props.dispatch(deleteEmployee(employee.user.id));
   }
 

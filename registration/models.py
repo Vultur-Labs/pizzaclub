@@ -10,7 +10,7 @@ import secrets
 import datetime
 # Create your models here.
 class Address(models.Model):
-    address = models.CharField(max_length=100, unique=True)
+    address = models.CharField(max_length=100)
     lat = models.DecimalField(max_digits=9, decimal_places=7, default=0)
     lon= models.DecimalField(max_digits=9, decimal_places=7, default=0)
     elev = models.DecimalField(max_digits=9, decimal_places=2, default=0)

@@ -6,7 +6,8 @@ import {
   DASHBOARD,
   DASHBOARD_ORDERS,
   DASHBOARD_PRODUCTS,
-  DASHBOARD_EMPLOYEES
+  DASHBOARD_EMPLOYEES,
+  DASHBOARD_TABLES
 } from "../routes";
 
 export const Navbar = () => {
@@ -34,6 +35,10 @@ export const Navbar = () => {
 
             <Link className="navbar-item" to={DASHBOARD_EMPLOYEES}>
               Empleados
+            </Link>
+
+            <Link className="navbar-item" to={DASHBOARD_TABLES}>
+              Mesas
             </Link>
           </div>
 

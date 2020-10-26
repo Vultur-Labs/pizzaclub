@@ -16,7 +16,11 @@ import {
   FETCH_EMPLOYEES,
   CREATE_EMPLOYEE,
   UPDATE_EMPLOYEE,
-  DELETE_EMPLOYEE
+  DELETE_EMPLOYEE,
+  FETCH_TABLES,
+  CREATE_TABLE,
+  UPDATE_TABLE,
+  DELETE_TABLE
 } from "../reducers/dashboardReducer";
 import { apiRoutes, http } from "../services/http";
 import { Credentials } from "../types/credentials";
@@ -170,41 +174,41 @@ export const deleteEmployee = (id: number) => async (dispatch: Dispatch) => {
 };
 
 // TABLE ACTIONS
-export const fetchEmployees = () => async (dispatch: Dispatch) => {
+export const fetchTables = () => async (dispatch: Dispatch) => {
   try {
-    const employees = await http.get(apiRoutes.employee_data);
+    const tables = await http.get(apiRoutes.tables_data);
 
-    return dispatch({ type: FETCH_EMPLOYEES, payload: employees });
+    return dispatch({ type: FETCH_TABLES, payload: tables });
   } catch (error) {}
 };
 
-export const createEmployee = (employee: Record<string, any>) => async (
+export const createTable = (table: Record<string, any>) => async (
   dispatch: Dispatch
 ) => {
   try {
-    const result = await http.post(apiRoutes.new_employee, employee);
+    const result = await http.post(apiRoutes.tables_data, table);
 
-    return dispatch({ type: CREATE_EMPLOYEE, payload: result });
+    return dispatch({ type: CREATE_TABLE, payload: result });
   } catch (error) {}
 };
 
-export const updateEmployee = (id: number, employee: Record<string, any>) => async (
+export const updateTable = (id: number, table: Record<string, any>) => async (
   dispatch: Dispatch
 ) => {
   try {
     const result = await http.patch(
-      `${apiRoutes.employee_data}${id}/`,
-      employee
+      `${apiRoutes.tables_data}${id}/`,
+      table
     );
 
-    return dispatch({ type: UPDATE_EMPLOYEE, payload: result });
+    return dispatch({ type: UPDATE_TABLE, payload: result });
   } catch (error) {}
 };
 
-export const deleteEmployee = (id: number) => async (dispatch: Dispatch) => {
+export const deleteTable = (id: number) => async (dispatch: Dispatch) => {
   try {
-    await http.delete(`${apiRoutes.employee_data}${id}/`);
+    await http.delete(`${apiRoutes.tables_data}${id}/`);
 
-    return dispatch({ type: DELETE_EMPLOYEE, payload: id });
+    return dispatch({ type: DELETE_TABLE, payload: id });
   } catch (error) {}
 };
