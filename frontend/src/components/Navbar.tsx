@@ -43,7 +43,7 @@ export const Navbar = () => {
           </div>
 
           <div className="navbar-end">
-            <a className="navbar-item">
+            <span className="navbar-item">
               <div className="field">
                 <p className="control">
                   <button
@@ -55,7 +55,7 @@ export const Navbar = () => {
                   </button>
                 </p>
               </div>
-            </a>
+            </span>
           </div>
         </div>
       </div>

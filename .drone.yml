@@ -1,0 +1,33 @@
+---
+kind: pipeline
+type: docker
+name: default
+
+steps:
+
+- name: Build App
+  image: node:12
+  commands:
+  - npm run ci
+  - npm run build
+
+- name: Deploy Production
+  image: node:12
+  commands:
+  - tar -cvf ./ui.tar ./app.definition ./app.dockerfile ./nginx/* ./frontend/build/*
+  - tar --exclude='./frontend' -cvf ./server.tar ./*
+  - npx caprover deploy -h $SERVER -p $PASSWORD -a thepizzaclub -t ./ui.tar
+  - npx caprover deploy -h $SERVER -p $PASSWORD -a thepizzaclub-server -t ./server.tar
+  environment:
+    SERVER:
+      from_secret: SERVER
+    PASSWORD:
+      from_secret: PASSWORD
+  when:
+    branch:
+    - master
+
+trigger:
+  branch:
+  - master
+  - development
