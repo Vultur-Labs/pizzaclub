@@ -11,6 +11,7 @@ import {
     updateEmployee,
     deleteEmployee
 } from "../actions/dashboardActions";
+import { getEmployees } from "../reducers/dashboardReducer";
 import { Employee } from "../types/employee";
 
 type Props = DispatchProp<any> & {
@@ -145,7 +146,7 @@ class DashboardEmployeesPage extends Component<Props> {
 }
 
 const mapStateToProps = (state: any) => ({
-  employees: state.dashboard.employees,
+  employees: getEmployees(state),
   owner_id: state.dashboard.place.id
 });
 

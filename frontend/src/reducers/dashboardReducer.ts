@@ -201,3 +201,6 @@ export const dashboardReducer: Reducer<State> = (
       return state;
   }
 };
+
+export const getTables = (state: any) => state.dashboard.tables;
+export const getEmployees = (state: any) => state.dashboard.employees;

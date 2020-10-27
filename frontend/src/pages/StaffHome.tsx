@@ -3,29 +3,39 @@ import { connect, DispatchProp } from "react-redux";
 
 // Import Types or Interfaces
 import { Place } from "../types/place";
+import { Table } from "../types/table";
 // Import Components
 import { Image } from "../components/Common";
 import { SelectOption } from "../components/SelectOption";
 import Menu from "../containers/Menu";
 //Import Actions
-import { logout } from "../actions/dashboardActions";
+import { 
+  logout,
+  fetchTables
+} from "../actions/dashboardActions";
 // Import Getters
 import { getOwnerData } from "../reducers/ownerReducer";
+import { getTables } from "../reducers/dashboardReducer";
 
 type Props = DispatchProp<any> & {
   ownerData: Place;
+  tables: Table[];
 }
 
-
 class StaffHomePage extends Component<Props> {
-  
+  static defaultProps = {
+    tables: [],
+  }
+
+  public componentDidMount() {
+    this.props.dispatch(fetchTables());
+  }
+
   private handleLogout = () => this.props.dispatch(logout());
 
   public render() {
-    const { ownerData } = this.props;
-    const options = Array
-      .from(Array(ownerData.tables).keys())
-      .map(x => [++x, `Mesa ${x}`]);
+    const { ownerData, tables } = this.props;
+    const options = tables.map(t => [t.id, `Mesa ${t.number}`]);
       
     return (
       <div>
@@ -57,9 +67,9 @@ class StaffHomePage extends Component<Props> {
   }
 }
 
-
 const mapStateToProps = (state: object) => ({
   ownerData: getOwnerData(state),
+  tables: getTables(state)
 });
 
 export default connect(mapStateToProps, null)(StaffHomePage);

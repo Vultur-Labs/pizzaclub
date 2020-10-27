@@ -20,7 +20,7 @@ class TableViewSet(ModelViewSet):
         Instantiates and returns the list of permissions that this view requires.
         """
         if self.action in ("retrieve", "list"):
-            permission_classes = [AllowAny]
+            permission_classes = [IsAuthenticated]
         else:
             permission_classes = [IsAdminUser]
         return [permission() for permission in permission_classes]
