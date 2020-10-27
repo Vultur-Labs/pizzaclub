@@ -175,5 +175,5 @@ class OrderWhatsAppViewSet(ModelViewSet):
         return iri_to_uri(url)
 
 class ProductViewSet(ModelViewSet):
-    queryset = Product.objects.all()
+    queryset = Product.objects.filter(is_active=True)
     serializer_class = ProductSerializer
