@@ -44,3 +44,9 @@
   right: 0px;
   color: var(--secondary-color);
 }
+
+.btn-logout {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}

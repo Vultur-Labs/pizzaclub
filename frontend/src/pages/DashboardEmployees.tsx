@@ -8,6 +8,7 @@ import { EditEmployeeModal } from "../components/modals/EditEmployee";
 import {
   fetchEmployees,
   createEmployee,
+  updateEmployee,
   deleteEmployee,
 } from "../actions/dashboardActions";
 import { getEmployees } from "../reducers/dashboardReducer";
@@ -112,9 +113,7 @@ class DashboardEmployeesPage extends Component<Props> {
   };
 
   private handleEditEmployee = (employee: Employee) => {
-    console.log("handleEdit");
-    console.log(employee);
-    // this.props.dispatch(updateEmployee(employee.id, employee));
+    this.props.dispatch(updateEmployee(employee.user.id, employee));
   };
 
   private handleDeleteEmployee = (employee: Employee) => () => {

@@ -51,6 +51,16 @@ class EmployeeSerializer(ModelSerializer):
         model = Employee
         fields = "__all__"
 
+    def create(self, validated_data):
+        # Get the User data and create
+        user_data = validated_data.pop("user")
+        user = User.objects.create_user(is_employee=True, **user_data)
+        # Get the address data and create
+        address = Address.objects.create(**validated_data.pop("address"))
+        # Create the employee instance
+        employee = Employee.objects.create(user=user, address=address, **validated_data)
+        return employee
+
     def update(self, instance, validated_data):
         # Extract Data
         user = validated_data.pop('user', None)

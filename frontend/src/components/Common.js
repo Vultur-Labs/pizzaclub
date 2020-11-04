@@ -160,3 +160,25 @@ export const LoadingIcon = (props) => (
     <i className="fas fa-spinner fa-pulse"></i>
   </span>
 )
+
+export const LogoutButton = ({className="", onClick}) => (
+  <div className={`field ${className}`}>
+    <p className="control">
+      <button
+        type="button"
+        className="button is-danger"
+        onClick={onClick}
+      >
+        <strong>Salir</strong>
+      </button>
+    </p>
+  </div>
+)
+
+export const Loader = () => {
+  return (
+    <figure className="image is-128x128">
+      <img src="/images/pizza-loading.gif" alt="Loading ..."/>
+    </figure>
+  )
+}

@@ -88,7 +88,6 @@ class DashboardTables extends Component<Props> {
   }
 
   private handleSaveTable = (owner: number) => (data: any) => {
-    console.log(data);
     this.props.dispatch(createTable({owner, ...data}));
   }
 

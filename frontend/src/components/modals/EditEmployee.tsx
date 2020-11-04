@@ -93,20 +93,20 @@ export const EditEmployeeModal: FC<Props> = ({ employee, onOk, ...props }) => {
         const { username, email, first_name, last_name, password } = values;
         const { dni, cuil, phone, address } = values;
         const user: Record<string, any> = {
+          id: employee?.user.id,
           username,
           first_name,
           last_name,
           email,
           password,
         };
-        console.log(values);
+
         onOk({
           user,
           dni,
           cuil,
           phone,
           address: address ? { address: address } : null,
-          id: employee?.user.id,
         });
       }}
     >

@@ -6,7 +6,7 @@ import {
   DASHBOARD_PRODUCTS,
   DASHBOARD_EMPLOYEES,
   DASHBOARD_TABLES,
-  STAFF
+  STAFF_HOME
 } from "../routes";
 import DashboardHomePage from "./DashboardHome";
 import DashboardProductsPage from "./DashboardProduct";
@@ -28,7 +28,7 @@ const DashboardPage: FC = () => {
 
   useEffect(() => {
     if (account?.is_staff || account?.is_superuser) {router.push(DASHBOARD) }
-    else if (account?.is_order_manager) router.push(STAFF);
+    else if (account?.is_order_manager) router.push(STAFF_HOME);
   }, [account, router]);
 
   return (

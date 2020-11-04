@@ -41,7 +41,7 @@ class Menu extends Component {
           {types.map((t) => {
             let prod = products.filter(
               (p) =>
-                p.types === t.id &&
+                p.types.id === t.id &&
                 p.name.includes(inputSearch.trimEnd().toLowerCase())
             );
 
@@ -62,7 +62,6 @@ class Menu extends Component {
                       interactive={interactive}
                       data={p}
                       item={item}
-                      typeName={t.name}
                       {...{
                         addToCart,
                         removeToCart,

@@ -5,6 +5,8 @@ import { Product } from "../types/product";
 import { Place } from "../types/place";
 import { Employee } from "../types/employee";
 import { Table } from "../types/table";
+import { OPEN_TABLE, CLOSE_TABLE } from "./staffReducer";
+
 
 export const DASHBOARD_LOGIN = "DASHBOARD_LOGIN";
 export const DASHBOARD_LOGOUT = "DASHBOARD_LOGOUT";
@@ -179,10 +181,10 @@ export const dashboardReducer: Reducer<State> = (
         };
   
       case UPDATE_TABLE:
-        const tableIndex = state.tables.findIndex(
+        let tableIndex = state.tables.findIndex(
           t => t.id === payload.id
         );
-        const tables = [...state.tables];
+        let tables = [...state.tables];
   
         tables[tableIndex] = payload;
   
@@ -197,6 +199,21 @@ export const dashboardReducer: Reducer<State> = (
           tables:
             state.tables.filter(t => t.id !== payload) ?? [],
         };
+
+      case OPEN_TABLE:
+      case CLOSE_TABLE:
+        tableIndex = state.tables.findIndex(
+          t => t.id === payload.table.id
+        );
+        tables = [...state.tables];
+  
+        tables[tableIndex] = payload.table;
+  
+        return {
+          ...state,
+          tables,
+        };
+
     default:
       return state;
   }
@@ -204,3 +221,4 @@ export const dashboardReducer: Reducer<State> = (
 
 export const getTables = (state: any) => state.dashboard.tables;
 export const getEmployees = (state: any) => state.dashboard.employees;
+export const getAccount = (state: any) => state.dashboard.account;

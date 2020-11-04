@@ -46,4 +46,3 @@ export class SelectOption extends Component<Props> {
             </div>
         )};
 }
-

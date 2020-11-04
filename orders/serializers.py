@@ -107,6 +107,7 @@ class ProductSerializer(ExtraFieldsSerializer):
     presentation = PresentationSerializer(many=True, read_only=True)
     feature = FeatureSerializer(many=True, read_only=True)
     prices = PriceSerializer(many=True, read_only=True)
+    types = TypeSerializer()
 
     class Meta:
         model = Product
@@ -116,8 +117,10 @@ class PriceListSerializer(ExtraFieldsSerializer):
     '''
         Serialize the data of price list.
     '''
-    size = CharField()
-    presentation = CharField()
+    size = CharField(allow_null=True)
+    presentation = CharField(allow_null=True)
+    product = ProductSerializer()
+    
     class Meta:
         model = PriceList
         fields = "__all__"

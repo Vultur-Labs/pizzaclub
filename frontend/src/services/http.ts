@@ -55,7 +55,6 @@ export const http = new Http();
 export const apiRoutes = {
   login: "/api-token-auth/",
   me: "/accounts/me/",
-  new_employee: "/accounts/new_employee/",
   validate_username: "/accounts/validate_username/",
   order_whatsapp: "/orders/whatsapp/",
   owner_data: "/orders/owner/",
@@ -64,4 +63,8 @@ export const apiRoutes = {
   products_data: "/orders/products/",
   orders: "/orders/",
   tables_data: "/tables/",
+  tableorder: "/tables/tableorder/",
+  // add_tableitem: "/tables/new_item/",
+  // remove_tableitem: "/tables/remove_item/",
+  staff_table: "/tables/staff/",
 };

@@ -16,6 +16,6 @@ export interface Product extends Base {
   image: string;
   is_active: boolean;
   types: number | string;
-  subtype: string;
+  subtype?: string;
   place?: number | Partial<Place>;
 }

@@ -1,17 +1,16 @@
 from django.urls import path
 
-from .views import TableViewSet, OrderTableViewSet
+from .views import TableViewSet, OrderTableViewSet, TableItemView
 from . import views
 
 app_name = "tables"
 
-tableorder_list = OrderTableViewSet.as_view({"get": "list", "post": "create"})
+tableorder_list = OrderTableViewSet.as_view({"get": "list", "post": "open"})
 tableorder_detail = OrderTableViewSet.as_view(
     {
         "get": "retrieve",
-        "put": "update",
-        "patch": "partial_update",
         "delete": "destroy",
+        "post": "close"
     }
 )
 
@@ -25,10 +24,27 @@ table_detail = TableViewSet.as_view(
     }
 )
 
+staff_table_list = TableItemView.as_view(
+    {
+        "get": "list",
+        "post": "create"
+    }
+)
+staff_table_detail = TableItemView.as_view(
+    {
+        "patch": "partial_update",
+        "delete": "destroy"
+    }
+)
+
 urlpatterns = [
+    #path("items/<int:owner>/<int:order_id>/", views.get_tableitems),
+    # path("new_item/", views.new_item),
+    # path("remove_item/<int:pk>/", views.remove_item),
+    path("tableorder/<int:pk>/", tableorder_detail),
+    path("tableorder/", tableorder_list),
+    path("staff/<int:pk>/", staff_table_detail),
+    path("staff/", staff_table_list),
     path("<int:pk>/", table_detail),
     path("", table_list),
-    path("items/<int:owner>/<int:order_id>/", views.get_tableitems),
-    path("new_items/", views.new_item),
-    # path("", order_list),
 ]

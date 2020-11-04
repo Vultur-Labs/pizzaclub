@@ -145,7 +145,7 @@ export const createEmployee = (employee: Record<string, any>) => async (
   dispatch: Dispatch
 ) => {
   try {
-    const result = await http.post(apiRoutes.new_employee, employee);
+    const result = await http.post(apiRoutes.employee_data, employee);
 
     return dispatch({ type: CREATE_EMPLOYEE, payload: result });
   } catch (error) {}

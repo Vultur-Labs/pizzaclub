@@ -21,29 +21,6 @@ def me(request):
     serializer = UserSerializer(request.user)
     return Response(serializer.data)
 
-
-@api_view(["POST"])
-@permission_classes([IsAdminUser])
-def register_employee(request):
-    """
-        Register a new employee passing the user data, password, address,
-        dni, cuil and phone.
-    """
-    # Get the User data and create
-    try:
-        user_data = request.data.pop("user")
-        user = User.objects.create_user(is_employee=True, **user_data)
-    except Exception as error:
-        return Response({"error": "User data is incorrect"}, status=status.HTTP_400_BAD_REQUEST)
-    # Get the address data and create
-    # address_data = request.data.pop("address")
-    address = Address.objects.create(**request.data.pop("address"))
-    # Create the employee instance
-    employee = Employee.objects.create(user=user, address=address, **request.data)
-    # Serialize the employee data
-    serializer = EmployeeSerializer(employee)
-    return Response(serializer.data, status=status.HTTP_200_OK)
-
 class EmployeeViewSet(ModelViewSet):
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
@@ -57,7 +34,7 @@ class EmployeeViewSet(ModelViewSet):
         user.pop("password") #Remove the password
         address = request.data.pop('address', None)
         # Only collect the data change
-        # Client Data
+        # Employee Data
         data = {k:v for k, v in request.data.items() if v != getattr(instance, k)}
         # User Data
         if user: data['user'] = {
@@ -71,7 +48,7 @@ class EmployeeViewSet(ModelViewSet):
                 if not (instance.address and v == getattr(instance.address, k))
                 }
         if not address and instance.address: data['address'] = None
-        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer = self.get_serializer(instance, data=data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
         return Response(serializer.data)
