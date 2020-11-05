@@ -39,7 +39,7 @@ class DashboardProductsPage extends Component<Props> {
       title: "Tipo",
       width: 200,
       render: (product: Product) =>
-        this.props.types.find((type) => type.id === product.types)?.name,
+        this.props.types.find((type) => type.id === product.types.id)?.name,
     },
     {
       key: "description",
@@ -101,8 +101,8 @@ class DashboardProductsPage extends Component<Props> {
   };
 
   private handleSaveProduct = (product: Product) => {
-    product.place = this.props.place.id;
-    this.props.dispatch(createProduct(product));
+    const place_id = this.props.place.id;
+    this.props.dispatch(createProduct(product, place_id));
   };
 
   private handleDeleteProduct = (product: Product) => () => {

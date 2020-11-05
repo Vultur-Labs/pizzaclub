@@ -2,20 +2,26 @@ import { Base } from "./base";
 import { Feature } from "./feature";
 import { Place } from "./place";
 import { Presentation } from "./presentation";
-import { Price } from "./price";
+import { ProductType } from "./product-type";
 import { Size } from "./size";
+
+interface PriceData {
+  size: number | null;
+  presentation: number | null;
+  price: number;
+}
 
 export interface Product extends Base {
   size: Size;
   presentation: Presentation;
   feature: Feature;
-  prices: Price[];
+  prices: PriceData[];
   order_n: number;
   name: string;
   description: string;
   image: string;
   is_active: boolean;
-  types: number | string;
+  types: ProductType;
   subtype?: string;
   place?: number | Partial<Place>;
 }

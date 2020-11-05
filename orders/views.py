@@ -61,7 +61,7 @@ class OrderViewSet(ModelViewSet):
     A simple ViewSet for viewing and editing accounts.
     """
 
-    queryset = Order.objects.all()
+    queryset = Order.objects.all().order_by('-date')
     serializer_class = OrderSerializer
 
     def get_permissions(self):
@@ -177,3 +177,4 @@ class OrderWhatsAppViewSet(ModelViewSet):
 class ProductViewSet(ModelViewSet):
     queryset = Product.objects.filter(is_active=True)
     serializer_class = ProductSerializer
+

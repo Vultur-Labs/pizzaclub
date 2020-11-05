@@ -16,9 +16,10 @@ import { STAFF_TABLE } from "../routes";
 
 type Props = {
   order: OrderTable;
+  path?: string;
 };
 
-const StaffTableMenu: FC<Props> = ({ order }) => {
+const StaffTableMenu: FC<Props> = ({ order, path = "" }) => {
     
     const dispatch = useDispatch();
     const [loading, setLoading] = useState(false);
@@ -80,7 +81,7 @@ const StaffTableMenu: FC<Props> = ({ order }) => {
             </div>
 
             <GoToButton 
-                path={`${STAFF_TABLE}/${order.id}`}
+                path={`${path + STAFF_TABLE}/${order.id}`}
                 className="button is-warning is-fullwidth is-size-5 has-text-weight-bold"
             >
                 <span className="icon">

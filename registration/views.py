@@ -22,7 +22,7 @@ def me(request):
     return Response(serializer.data)
 
 class EmployeeViewSet(ModelViewSet):
-    queryset = Employee.objects.all()
+    queryset = Employee.objects.filter(user__is_superuser=False)
     serializer_class = EmployeeSerializer
     permission_classes = [IsAdminUser]
 

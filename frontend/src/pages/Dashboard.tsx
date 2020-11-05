@@ -3,13 +3,13 @@ import { Route, Switch, useHistory } from "react-router-dom";
 import { 
   DASHBOARD,
   DASHBOARD_ORDERS,
-  DASHBOARD_PRODUCTS,
+  // DASHBOARD_PRODUCTS,
   DASHBOARD_EMPLOYEES,
   DASHBOARD_TABLES,
   STAFF_HOME
 } from "../routes";
 import DashboardHomePage from "./DashboardHome";
-import DashboardProductsPage from "./DashboardProduct";
+// import DashboardProductsPage from "./DashboardProduct";
 import DashboardOrdersPage from "./DashboardOrder";
 import DashboardEmployeesPage from "./DashboardEmployees";
 import DashboardTablesPage from "./DashboardTables";
@@ -27,8 +27,8 @@ const DashboardPage: FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (account?.is_staff || account?.is_superuser) {router.push(DASHBOARD) }
-    else if (account?.is_order_manager) router.push(STAFF_HOME);
+    if (account?.is_staff) { router.push(DASHBOARD) }
+    else if (account?.is_table_manager) router.push(STAFF_HOME);
   }, [account, router]);
 
   return (
@@ -39,12 +39,9 @@ const DashboardPage: FC = () => {
         <div className="columns">
           <div className="column">
             <Switch>
-              <Route exact path={DASHBOARD}>
-                <DashboardHomePage />
-              </Route>
-              <Route path={DASHBOARD_PRODUCTS}>
+              {/* <Route path={DASHBOARD_PRODUCTS}>
                 <DashboardProductsPage />
-              </Route>
+              </Route> */}
               <Route path={DASHBOARD_ORDERS}>
                 <DashboardOrdersPage />
               </Route>
@@ -53,6 +50,9 @@ const DashboardPage: FC = () => {
               </Route>
               <Route path={DASHBOARD_TABLES}>
                 <DashboardTablesPage />
+              </Route>
+              <Route path={DASHBOARD}>
+                <DashboardHomePage />
               </Route>
             </Switch>
           </div>

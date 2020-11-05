@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
+import lodash from "lodash";
 
 /* Select Component with Addon */
 interface SelectOptions {
@@ -9,7 +10,6 @@ interface SelectOptions {
 }
 
 type Props ={
-    value: (string | number);
     options: SelectOptions[];
     onOk: (data: any) => void;
 }
@@ -24,13 +24,12 @@ const validationSchema = Yup.object({
   
   
 export const SelectWithAddon: FC<Props> = ({
-    value,
     options,
     onOk,
     ...props
 }) => (
     <Formik<Values>
-        initialValues={{ data: options[0].value }}
+        initialValues={{ data: options[0]?.value ?? "No Disponible"}}
         validationSchema={validationSchema}
         onSubmit={async (values, { setSubmitting }) => {
             await onOk(values);
@@ -42,7 +41,11 @@ export const SelectWithAddon: FC<Props> = ({
             <div className="field has-addons">
                 <div className="control is-expanded">
                     <div className="select is-fullwidth">         
-                        <Field as="select" name="data" disabled={isSubmitting}>
+                        <Field 
+                            as="select"
+                            name="data"
+                            disabled={isSubmitting || lodash.isEmpty(options)}
+                        >
                             {options.map(({value, label}, idx) => (
                                 <option value={value} key={idx}>{label}</option>
                             ))}

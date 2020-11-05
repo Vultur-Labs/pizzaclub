@@ -42,7 +42,7 @@ class UserSerializer(ExtraFieldsSerializer):
             "is_employee",
             "is_staff"
         ]
-        extra_fields = ["is_order_manager"]
+        extra_fields = ["is_table_manager"]
 
 class EmployeeSerializer(ModelSerializer):
     user = UserSerializer()

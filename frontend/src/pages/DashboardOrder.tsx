@@ -44,10 +44,11 @@ class DashboardOrdersPage extends Component<Props> {
       render: (order: Order) => (
         <ul>
           {order.items.map((i: Item)=>{
-            const {total, quantity,product: { get_product_name, size, presentation}} = i;
-            let name = (size) ? ` - ${size}`: ""
-                      + presentation ? ` - ${presentation}`:"";
-            name = get_product_name + name
+            const {total, quantity, product: { product, size, presentation }} = i;
+            const name = `${product.types.name}
+                          ${product.name}
+                          ${size ? ` - ${size}`: ""}
+                          ${presentation ? ` - ${presentation}`:""}`
             return (
               <li key={i.id}>{`${quantity} x ${name} ($${total})`}</li>
             )
@@ -91,7 +92,7 @@ class DashboardOrdersPage extends Component<Props> {
       title: "Comentario",
       render: (order: Order) => 
         <EditData 
-          data={order.comment}
+          data={order.comment ?? ""}
           dataKey="comment"
           onOk={this.handleUpdate(order.order)}
           input={<textarea className="textarea" />}

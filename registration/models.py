@@ -31,8 +31,8 @@ class User(AbstractUser):
     token_date = models.DateTimeField(auto_now=True)
     token_valid = models.BooleanField(default=True)
 
-    def is_order_manager(self):
-        return (self.is_employee and self.is_active) or self.is_superuser
+    def is_table_manager(self):
+        return self.is_employee and self.is_active
 
     def generate_token(self):
         return secrets.token_urlsafe()

@@ -15,18 +15,19 @@ import {
 //Import Types
 import { OrderTable, TableItem } from "../types/table";
 // Import Routes
-import { STAFF_HOME, STAFF_ADD } from "../routes";
+import { STAFF_ADD } from "../routes";
 
 type Props = {
   order: OrderTable;
+  path?: string;
 };
 
-export const StaffTableDetail: FC<Props> = ({ order }) => {
+export const StaffTableDetail: FC<Props> = ({ order, path = "" }) => {
     
     const dispatch = useDispatch();
     const history = useHistory();
 
-    useEffect(() => {order ?? history.push(STAFF_HOME)}, [history ,order]);
+    useEffect(() => {order ?? history.push(path)}, [history ,order, path]);
 
     const handleCloseTable = (order: OrderTable) => () => {
         dispatch(closeTable(order.id));
@@ -53,7 +54,7 @@ export const StaffTableDetail: FC<Props> = ({ order }) => {
                         />
 
                     <GoToButton
-                        path={`${STAFF_ADD}/${order.id}`}
+                        path={`${path + STAFF_ADD}/${order.id}`}
                         className={`button is-success is-fullwidth mt-2
                         is-size-5 has-text-weight-bold`}
                     >
@@ -76,7 +77,7 @@ export const StaffTableDetail: FC<Props> = ({ order }) => {
                     </Confirm>
 
                     <GoToButton
-                        path={STAFF_HOME}
+                        path={path}
                         className={`button is-warning is-fullwidth mt-2
                             is-size-5 has-text-weight-bold`}
                     >

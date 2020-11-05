@@ -115,7 +115,6 @@ const CartTitle = ({ className, text }) => {
 
 export function CartShower(props) {
   const { mode, shipping, items, subtotal, total } = props;
-  console.log(items)
   return (
     <div className="cart-shower">
       {/* Show Cart Title */}

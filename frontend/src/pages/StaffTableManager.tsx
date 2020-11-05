@@ -28,12 +28,14 @@ type Props = DispatchProp<any> & RouteComponentProps & {
   orders: OrderTable[];
   owner: Place;
   employee: Account;
+  path?: string;
 };
 
 class StaffManagerPage extends Component<Props> {
   static defaultProps = {
     tables: [],
-    orders: []
+    orders: [],
+    path: "",
   };
 
   public componentDidMount() {
@@ -52,11 +54,13 @@ class StaffManagerPage extends Component<Props> {
   }
 
   private handleGoToAddItem = (order: OrderTable) => {
-    this.props.history.push(`${STAFF_ADD}/${order.id}`);
+    const { path } = this.props;
+    this.props.history.push(`${path + STAFF_ADD}/${order.id}`);
   }
 
   private handleDetailTable = (order: OrderTable) => {
-    this.props.history.push(`${STAFF_TABLE}/${order.id}`);
+    const { path } = this.props;
+    this.props.history.push(`${path + STAFF_TABLE}/${order.id}`);
   }
 
   public render() {
@@ -64,13 +68,12 @@ class StaffManagerPage extends Component<Props> {
     const options = tables
         .filter(({ is_open }) => !is_open)
         .map(({id, number}) => ({value: id, label: `Mesa ${number}`}));
-        
+
     return (
       <div className="mt-2">
-        <SelectWithAddon 
-            value={1}
-            options={options}
-            onOk={this.handleOpenTable(owner, employee)}
+        <SelectWithAddon
+          options={options}
+          onOk={this.handleOpenTable(owner, employee)}
         />
         <h1>Mesas Abiertas</h1>
         {

@@ -46,9 +46,12 @@ class OrderTableViewSet(ModelViewSet):
     @action(detail=False, methods=["post"])
     def open(self, request):
         # Get the Table, the Place and the Employee from request
-        table = Table.objects.get(pk=request.data.get("table"))
-        owner = Place.objects.get(pk=request.data.get("owner"))
-        employee = Employee.objects.get(pk=request.data.get("employee"))
+        try:
+            table = Table.objects.get(pk=request.data.get("table"))
+            owner = Place.objects.get(pk=request.data.get("owner"))
+            employee = Employee.objects.get(pk=request.data.get("employee"))
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         # Create the order
         order = OrderTable.objects.create(
             owner=owner,

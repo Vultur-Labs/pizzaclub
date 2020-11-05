@@ -82,11 +82,14 @@ export const fetchProduct = (id: number) => async (dispatch: Dispatch) => {
   } catch (error) {}
 };
 
-export const createProduct = (product: Product) => async (
+export const createProduct = (product: Product, place_id: number) => async (
   dispatch: Dispatch
 ) => {
   try {
-    const result = await http.post(apiRoutes.products_data, product);
+    const result = await http.post(
+      apiRoutes.products_data,
+      {...product, place: place_id}
+    );
 
     return dispatch({ type: CREATE_PRODUCT, payload: result });
   } catch (error) {}
