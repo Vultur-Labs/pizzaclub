@@ -1,4 +1,7 @@
 import React, { Component, FC } from "react";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { faCheckSquare, faTimesCircle} from '@fortawesome/free-solid-svg-icons'
 
 // Import Types
 import { OrderTable, TableItem } from "../types/table";
@@ -8,18 +11,18 @@ import { Confirm } from "./Confirm";
 
 type DeliveredIconProps = {
     className: string;
-    classIcon: string;
+    icon: IconProp;
     onClick: () => void;
 }
 
 const IconDelivered: FC<DeliveredIconProps> = ({
     className,
-    classIcon,
+    icon,
     onClick,
     ...props
 }) => (
     <span {...props} className={className} onClick={onClick} >
-        <i className={classIcon}></i>
+        <FontAwesomeIcon icon={icon}/>
     </span>
 )
 
@@ -40,12 +43,12 @@ const TableItemInfo: FC<PropsItem> = ({
     const icon = is_delivered
         ?(<IconDelivered 
             className="icon has-text-success has-tooltip-right"
-            classIcon="fas fa-check-square"
+            icon={faCheckSquare}
             data-tooltip="Entregado"
             onClick={() => changeDelivered && changeDelivered(false)}/>)
         :(<IconDelivered 
             className="icon has-text-danger has-tooltip-right"
-            classIcon="fas fa-times"
+            icon={faTimesCircle}
             data-tooltip="No Entregado"
             onClick={() => changeDelivered && changeDelivered(true)}
         />);
