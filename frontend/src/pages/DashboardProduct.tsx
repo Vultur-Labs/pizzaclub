@@ -39,7 +39,7 @@ class DashboardProductsPage extends Component<Props> {
       title: "Tipo",
       width: 200,
       render: (product: Product) =>
-        this.props.types.find((type) => type.id === product.types.id)?.name,
+        this.props.types.find((type) => type.id === product.types.id)?.name ?? "",
     },
     {
       key: "description",
