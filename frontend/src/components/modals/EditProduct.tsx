@@ -7,6 +7,7 @@ import { CustomField, CustomSelect } from "../Common";
 import { Modal } from "../Modal";
 
 type Values = {
+  order_n: number;
   name: string;
   description: string;
   types: string;
@@ -19,6 +20,7 @@ type Props = {
 };
 
 const validationSchema = Yup.object({
+  order_n: Yup.number(),
   name: Yup.string().required("Campo requerido"),
   description: Yup.string().required("Campo requerido"),
   types: Yup.string(),
@@ -32,6 +34,7 @@ export const EditProductModal: FC<Props> = ({
 }) => (
   <Formik<Values>
     initialValues={{
+      order_n: product?.order_n ?? 1,
       name: product?.name ?? "",
       description: product?.description ?? "",
       types: String(product?.types ?? ""),
@@ -47,6 +50,8 @@ export const EditProductModal: FC<Props> = ({
         onOk={handleSubmit}
       >
         <Form>
+          <Field name="order_n" label="N° Orden" type="number" component={CustomField} />
+          
           <Field name="name" label="Nombre" component={CustomField} />
 
           <Field

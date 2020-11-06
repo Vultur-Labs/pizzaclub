@@ -1,9 +1,18 @@
 import React, { FC, useEffect } from "react";
 import { Route, Switch, useHistory } from "react-router-dom";
-import { DASHBOARD, DASHBOARD_ORDERS, DASHBOARD_PRODUCTS } from "../routes";
+import { 
+  DASHBOARD,
+  DASHBOARD_ORDERS,
+  // DASHBOARD_PRODUCTS,
+  DASHBOARD_EMPLOYEES,
+  DASHBOARD_TABLES,
+  STAFF_HOME
+} from "../routes";
 import DashboardHomePage from "./DashboardHome";
-import DashboardProductsPage from "./DashboardProduct";
+// import DashboardProductsPage from "./DashboardProduct";
 import DashboardOrdersPage from "./DashboardOrder";
+import DashboardEmployeesPage from "./DashboardEmployees";
+import DashboardTablesPage from "./DashboardTables";
 import { Navbar } from "../components/Navbar";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPlace } from "../actions/dashboardActions";
@@ -18,9 +27,8 @@ const DashboardPage: FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (!account?.id) {
-      router.push(DASHBOARD);
-    }
+    if (account?.is_staff) { router.push(DASHBOARD) }
+    else if (account?.is_table_manager) router.push(STAFF_HOME);
   }, [account, router]);
 
   return (
@@ -31,14 +39,20 @@ const DashboardPage: FC = () => {
         <div className="columns">
           <div className="column">
             <Switch>
-              <Route exact path={DASHBOARD}>
-                <DashboardHomePage />
-              </Route>
-              <Route path={DASHBOARD_PRODUCTS}>
+              {/* <Route path={DASHBOARD_PRODUCTS}>
                 <DashboardProductsPage />
-              </Route>
+              </Route> */}
               <Route path={DASHBOARD_ORDERS}>
                 <DashboardOrdersPage />
+              </Route>
+              <Route path={DASHBOARD_EMPLOYEES}>
+                <DashboardEmployeesPage />
+              </Route>
+              <Route path={DASHBOARD_TABLES}>
+                <DashboardTablesPage />
+              </Route>
+              <Route path={DASHBOARD}>
+                <DashboardHomePage />
               </Route>
             </Switch>
           </div>

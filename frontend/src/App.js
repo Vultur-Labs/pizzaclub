@@ -17,6 +17,8 @@ import {
   CONFIRM_CART,
   DASHBOARD,
   DASHBOARD_LOGIN,
+  STAFF_HOME,
+  LOCAL_CLIENT
 } from "./routes";
 import PrivateRoute from "./components/PrivateRoute";
 // Import Containers
@@ -29,6 +31,8 @@ import DeliveryPage from "./pages/DeliveryPage";
 import CartPage from "./pages/CartPage";
 import DashboardPage from "./pages/Dashboard";
 import DashboardLoginPage from "./pages/DashboardLogin";
+import StaffHomePage from "./pages/StaffHome";
+import LocalClientPage from "./pages/LocalClientPage";
 // Import Constants
 import {
   OWNER_KEY,
@@ -71,8 +75,6 @@ class App extends Component {
               goBack={INDEX}
               goCart={DELIVERY_CART}
               mode={DELIVERY_MODE}
-              // shipping={parseFloat(deliveryCost)}
-              interactive={true}
             />
           </Route>
 
@@ -81,8 +83,6 @@ class App extends Component {
               goBack={INDEX}
               goCart={TAKEAWAY_CART}
               mode={TAKEAWAY_MODE}
-              //shipping={0.0}
-              interactive={true}
             />
           </Route>
 
@@ -93,6 +93,18 @@ class App extends Component {
           <PrivateRoute path={DASHBOARD} redirect={DASHBOARD_LOGIN}>
             <DashboardPage />
           </PrivateRoute>
+
+          <PrivateRoute path={STAFF_HOME} redirect={DASHBOARD_LOGIN}>
+            <StaffHomePage />
+          </PrivateRoute>
+
+          <Route path={`${LOCAL_CLIENT}/:tableNumber`} 
+            render={({ match }) => {
+              const table = parseInt(match.params.tableNumber);
+              return (
+                <LocalClientPage table={table}/>
+              )
+            }} />
 
           {/*<Route component={NotFound}/>*/}
         </Switch>

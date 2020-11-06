@@ -57,7 +57,7 @@ export const FormCart = ({
       client,
       shipping: (mode === DELIVERY_MODE)?shipping.id:null,
       items: items.map(({quantity, size, presentation, product: {id}}) => (
-        {product: id,size, presentation, quantity})
+        {product: id, size, presentation, quantity})
       ),
       delivery_address: address,
       comment

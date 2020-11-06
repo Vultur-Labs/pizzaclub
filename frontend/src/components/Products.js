@@ -341,14 +341,13 @@ const FullProductView = (props) => {
 
 export class Product extends Component {
   state = {
-    // show: false,
     selected: null,
   };
 
   _genId = (id, s, p) => [id, s, p].join("-");
 
   _genItem = (item_id) => {
-    const { data, typeName } = this.props;
+    const { data } = this.props;
     // Get size and presentation from id
     let [, size, presentation] = item_id.split("-");
     // COnvert empty string in null value
@@ -364,7 +363,6 @@ export class Product extends Component {
       product: data,
       size,
       presentation,
-      typeName,
       quantity: 1,
       price: price.price,
       subtotal: price.price,

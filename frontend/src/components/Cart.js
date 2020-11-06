@@ -11,9 +11,9 @@ import { DELIVERY_MODE } from "../constants";
 // This component show a text and price y the format "text       $ price"
 // It's a div container with two span (one for text one for price)
 // Can pass the class for div and class for span, and the decimal places for price
-const PriceItem = ({
-  className,
-  classItem,
+export const PriceItem = ({
+  className = "",
+  classItem = "",
   price,
   text,
   decimalPlaces = 2,
@@ -29,12 +29,12 @@ const PriceItem = ({
 };
 
 export const CartItem = (props) => {
-  const { typeName, size, presentation, quantity, subtotal, product } = props;
-  console.log(size);
+  const { size, presentation, quantity, subtotal, product } = props;
+  
   return (
     <div className="cart-item">
       <PriceItem
-        text={`${quantity} x ${typeName} ${product.name}`}
+        text={`${quantity} x ${product.types.name} ${product.name}`}
         price={subtotal}
         decimalPlaces={2}
         className="cart-price-item"
@@ -115,7 +115,6 @@ const CartTitle = ({ className, text }) => {
 
 export function CartShower(props) {
   const { mode, shipping, items, subtotal, total } = props;
-  console.log(items)
   return (
     <div className="cart-shower">
       {/* Show Cart Title */}

@@ -10,7 +10,7 @@ import secrets
 import datetime
 # Create your models here.
 class Address(models.Model):
-    address = models.CharField(max_length=100, unique=True)
+    address = models.CharField(max_length=100)
     lat = models.DecimalField(max_digits=9, decimal_places=7, default=0)
     lon= models.DecimalField(max_digits=9, decimal_places=7, default=0)
     elev = models.DecimalField(max_digits=9, decimal_places=2, default=0)
@@ -31,8 +31,8 @@ class User(AbstractUser):
     token_date = models.DateTimeField(auto_now=True)
     token_valid = models.BooleanField(default=True)
 
-    def is_order_manager(self):
-        return (self.is_employee and self.is_active) or self.is_superuser
+    def is_table_manager(self):
+        return self.is_employee and self.is_active
 
     def generate_token(self):
         return secrets.token_urlsafe()
@@ -89,15 +89,19 @@ class Employee(models.Model):
         null=True,
         blank=True,
         validators=[
-            MinLengthValidator(MIN_DNI_LENGTH),
-            MaxLengthValidator(MAX_DNI_LENGTH),
+            MinLengthValidator(MIN_PHONE_LENGTH),
+            MaxLengthValidator(MAX_PHONE_LENGTH),
             RegexValidator(regex=r'^\d+$')
         ])
-    address = models.ManyToManyField(Address)
+    address = models.ForeignKey(Address, null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.user.get_full_name()
     
+    def perform_delete(self):
+        if not (self.user.is_staff or self.user.is_superuser):
+            self.user.delete()
+
     def save(self, *args, **kwargs):
         # Check user is employee
         if not self.user.is_employee:

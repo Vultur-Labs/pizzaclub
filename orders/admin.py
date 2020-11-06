@@ -18,6 +18,7 @@ class PlaceAdmin(admin.ModelAdmin):
         'last_modified'
     )
     filter_horizontal = ('shipping',)
+
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('name',
                     'description',
@@ -64,6 +65,16 @@ class OrderAdmin(admin.ModelAdmin):
         'status'
     )
 
+class OrderItemAdmin(admin.ModelAdmin):
+    list_display = (
+        'order',
+        'product',
+        'quantity',
+        'unitary_price',
+        'discount',
+        'total',
+    )
+
 admin.site.register(TypeProduct, TypeAdmin)
 admin.site.register(SubTypeProduct)
 admin.site.register(SizeProduct)
@@ -74,5 +85,5 @@ admin.site.register(PriceList, PriceAdmin)
 admin.site.register(Place, PlaceAdmin)
 admin.site.register(Shipping, ShippingAdmin)
 admin.site.register(Order, OrderAdmin)
-admin.site.register(OrderItem)
+admin.site.register(OrderItem, OrderItemAdmin)
 

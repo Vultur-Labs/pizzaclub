@@ -2,28 +2,58 @@ from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 
-from .models import User
+from .models import User, Employee, Address
+from .serializers import UserSerializer, EmployeeSerializer
 
+
+@api_view(["GET"])
+def validate_username(request):
+    user_id = request.GET.get('id', None)
+    username = request.GET.get('username', None)
+    res = User.objects.filter(username=username).exclude(id=user_id).exists()
+    return Response({"ok": not res})
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def me(request):
+    serializer = UserSerializer(request.user)
+    return Response(serializer.data)
 
-    return Response(
-        {
-            "id": request.user.id,
-            "username": request.user.username,
-            "email": request.user.email,
-        }
-    )
+class EmployeeViewSet(ModelViewSet):
+    queryset = Employee.objects.filter(user__is_superuser=False)
+    serializer_class = EmployeeSerializer
+    permission_classes = [IsAdminUser]
 
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        # Extract Main Data
+        user = request.data.pop('user', None)
+        user.pop("password") #Remove the password
+        address = request.data.pop('address', None)
+        # Only collect the data change
+        # Employee Data
+        data = {k:v for k, v in request.data.items() if v != getattr(instance, k)}
+        # User Data
+        if user: data['user'] = {
+            k: v for k, v in user.items() 
+            if v != getattr(instance.user, k)
+            }
+        # Address Data
+        if isinstance(address, dict):
+            data['address'] = {
+                k: v for k, v in address.items() 
+                if not (instance.address and v == getattr(instance.address, k))
+                }
+        if not address and instance.address: data['address'] = None
+        serializer = self.get_serializer(instance, data=data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        return Response(serializer.data)
 
-@api_view(["POST"])
-@permission_classes([IsAdminUser])
-def register(request):
-    user = User(**request.data)
-    user.set_password(request.data["password"])
-    res = user.save()
-
-    return Response({"ok": True})
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.perform_delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
