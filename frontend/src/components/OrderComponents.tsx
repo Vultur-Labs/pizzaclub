@@ -1,7 +1,7 @@
 import React, { Component, FC } from "react";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
-import { faCheckSquare, faTimesCircle} from '@fortawesome/free-solid-svg-icons'
+import { faCheckSquare, faClock} from '@fortawesome/free-solid-svg-icons'
 
 // Import Types
 import { OrderTable, TableItem } from "../types/table";
@@ -48,7 +48,7 @@ const TableItemInfo: FC<PropsItem> = ({
             onClick={() => changeDelivered && changeDelivered(false)}/>)
         :(<IconDelivered 
             className="icon has-text-danger has-tooltip-right"
-            icon={faTimesCircle}
+            icon={faClock}
             data-tooltip="No Entregado"
             onClick={() => changeDelivered && changeDelivered(true)}
         />);

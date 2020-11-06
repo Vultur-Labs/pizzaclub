@@ -36,7 +36,7 @@ urlpatterns = [
     path("products/<int:pk>/", product_detail),
     path("types/", views.get_types),
     path("owner/", views.get_owner),
-    path("<int:pk>/", order_detail),
     path("whatsapp/", order_whatsapp),
+    path("<int:pk>/", order_detail),
     path("", order_list),
 ]

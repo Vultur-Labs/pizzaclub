@@ -148,7 +148,8 @@ export const CancelEdit = (props) => (
 
 export const AllowEdit = (props) => (
   <span 
-    className="icon is-small has-text-info"
+    className="icon is-small has-text-info has-tooltip-top"
+    data-tooltip="Editar"
     onClick={props.onClick}>
     <i className="fas fa-edit"></i>
   </span>
@@ -175,10 +176,14 @@ export const LogoutButton = ({className="", onClick}) => (
   </div>
 )
 
-export const Loader = () => {
+export const Loader = ({ 
+  className="image is-128x128",
+  src="/images/pizza-loading.gif",
+  alt="Loading ..."
+}) => {
   return (
-    <figure className="image is-128x128">
-      <img src="/images/pizza-loading.gif" alt="Loading ..."/>
+    <figure className={className}>
+      <img src={src} alt={alt}/>
     </figure>
   )
 }

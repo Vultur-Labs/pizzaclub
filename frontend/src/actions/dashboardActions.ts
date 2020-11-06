@@ -117,9 +117,9 @@ export const deleteProduct = (id: number) => async (dispatch: Dispatch) => {
 };
 
 // ORDER ACTIONS
-export const fetchOrders = () => async (dispatch: Dispatch) => {
+export const fetchOrders = (page?: number) => async (dispatch: Dispatch) => {
   try {
-    const orders = await http.get(apiRoutes.orders);
+    const orders = await http.get(`${apiRoutes.orders}?page=${page ?? 1}`);
 
     return dispatch({ type: FETCH_ORDERS, payload: orders });
   } catch (error) {}

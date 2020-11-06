@@ -22,6 +22,7 @@ from .serializers import (
     OwnerSerializer
 )
 from registration.serializers import AddressSerializer
+from .pagination import OrdersPagination
 
 DELIVERY_MODE = "delivery"
 
@@ -61,8 +62,9 @@ class OrderViewSet(ModelViewSet):
     A simple ViewSet for viewing and editing accounts.
     """
 
-    queryset = Order.objects.all().order_by('-date')
+    queryset = Order.objects.filter(is_delete=False).order_by('-date')
     serializer_class = OrderSerializer
+    pagination_class = OrdersPagination
 
     def get_permissions(self):
         """
@@ -70,8 +72,8 @@ class OrderViewSet(ModelViewSet):
         """
         if self.action == "delete":
             permission_classes = [IsAdminUser]
-        elif self.action == "make_order":
-            permission_classes = [AllowAny]
+        # elif self.action in ("list", "retrieve"):
+        #     permission_classes = [AllowAny]
         else:
             permission_classes = [IsAuthenticated]
         return [permission() for permission in permission_classes]

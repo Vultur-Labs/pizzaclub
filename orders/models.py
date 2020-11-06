@@ -232,8 +232,8 @@ class PriceList(models.Model):
 
 class Order(models.Model):
     STATUS_CHOICES = [
-        ('shipping', 'shipping'),
-        ('open', 'open'),
+        # ('shipping', 'shipping'),
+        # ('open', 'open'),
         ('cancel', 'cancel'),
         ('pending', 'pending'),
         ('processing', 'processing'),

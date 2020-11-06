@@ -2,10 +2,11 @@ import React, { useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { logout } from "../actions/dashboardActions";
+import { Logo } from "./Common";
 import { 
   DASHBOARD,
   DASHBOARD_ORDERS,
-  DASHBOARD_PRODUCTS,
+  // DASHBOARD_PRODUCTS,
   DASHBOARD_EMPLOYEES,
   DASHBOARD_TABLES
 } from "../routes";
@@ -16,22 +17,27 @@ export const Navbar = () => {
   const handleLogout = useCallback(() => dispatch(logout()), [dispatch]);
 
   return (
-    <nav className="navbar is-spaced has-shadow mb-4">
-      <div className="container">
-        <div className="navbar-brand">
-          <Link className="navbar-item brand-text" to={DASHBOARD}>
-            The Pizza Club
-          </Link>
+    <nav className="navbar has-shadow mb-4 px-3 is-warning">
+        <div className="navbar-brand navbar-start">
+            <Logo 
+              className="image is-64x64"
+              image="/images/logo.png"
+              alt=""/>
         </div>
-        <div id="navMenu" className="navbar-menu">
+
+        <div id="navMenu" className="navbar-menu has-text-weight-bold">
           <div className="navbar-start">
+            <Link className="navbar-item brand-text" to={DASHBOARD}>
+              The Pizza Club
+            </Link>
+            
             <Link className="navbar-item" to={DASHBOARD_ORDERS}>
               Ordenes
             </Link>
 
-            <Link className="navbar-item" to={DASHBOARD_PRODUCTS}>
+            {/* <Link className="navbar-item" to={DASHBOARD_PRODUCTS}>
               Productos
-            </Link>
+            </Link> */}
 
             <Link className="navbar-item" to={DASHBOARD_EMPLOYEES}>
               Empleados
@@ -58,7 +64,6 @@ export const Navbar = () => {
             </span>
           </div>
         </div>
-      </div>
     </nav>
   );
 };

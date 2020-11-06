@@ -12,20 +12,22 @@ type Props = {
 export class SelectOption extends Component<Props> {
 
     public state: Record<string, any> = {
-        loading: false
+        loading: false,
+        value: this.props.value,
     }
 
     private handleChange = async (e: ChangeEvent<HTMLSelectElement>) => {
-        this.setState({loading: true});
+        this.setState({loading: true, value: e.target.value});
         const { dataKey } = this.props;
-        const data = dataKey ? {dataKey: e.target.value} : e.target.value;
+        const data = dataKey ? {[dataKey]: e.target.value} : e.target.value;
         await this.props.onChange(data);
         this.setState({loading: false});
     }
 
     public render() {
-        const { title, options, value, stylesClass} = this.props;
-        const { loading } = this.state;
+        const { title, options, stylesClass} = this.props;
+        const { loading, value } = this.state;
+
         return (
             <div className={`select ${loading?"is-loading":""}`}>
                 {title ? (

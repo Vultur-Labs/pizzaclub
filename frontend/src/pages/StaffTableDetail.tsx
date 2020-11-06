@@ -72,7 +72,7 @@ export const StaffTableDetail: FC<Props> = ({ order, path = "" }) => {
                     >
                         <button className={`button is-danger is-fullwidth mt-2
                             is-size-5 has-text-weight-bold`}>
-                            Cerrar
+                            Cerrar Mesa
                         </button>
                     </Confirm>
 
