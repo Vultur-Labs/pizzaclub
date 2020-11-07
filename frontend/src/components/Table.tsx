@@ -6,7 +6,7 @@ type Item = Record<string, any>;
 export enum Align {
   center = "center",
   right = "right",
-  left = "left"
+  left = "left",
 }
 
 export interface Column {

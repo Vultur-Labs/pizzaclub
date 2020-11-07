@@ -8,18 +8,18 @@ import { Align, Table, Column } from "../components/Table";
 import { Toolbar } from "../components/Toolbar";
 import { SelectOption } from "../components/SelectOption";
 import { EditData } from "../components/EditData";
-import { CheckEdit, CancelEdit, AllowEdit} from "../components/Common";
+import { CheckEdit, CancelEdit, AllowEdit } from "../components/Common";
 import { Pagination } from "../components/Pagination";
 import { Loader } from "../components/Common";
 // Import Actions
 import { fetchOrders, updateOrder } from "../actions/dashboardActions";
 // Import Getters
-import { 
+import {
   getOrders,
   getOrdersPages,
   getOrdersCurrent,
   getOrdersNext,
-  getOrdersPrevious
+  getOrdersPrevious,
 } from "../reducers/dashboardReducer";
 // Import Types
 import { Order, statusMap, statusStyleMap } from "../types/order";
@@ -40,7 +40,7 @@ class DashboardOrdersPage extends Component<Props> {
 
   public state = {
     loading: false,
-  }
+  };
 
   private columns: Column[] = [
     {
@@ -64,19 +64,20 @@ class DashboardOrdersPage extends Component<Props> {
       width: 200,
       render: (order: Order) => (
         <ul>
-          {order.items.map((i: Item)=>{
-            const {total, quantity, product: { product, size, presentation }} = i;
+          {order.items.map((i: Item) => {
+            const {
+              total,
+              quantity,
+              product: { product, size, presentation },
+            } = i;
             const name = `${product.types.name}
                           ${product.name}
-                          ${size ? ` - ${size}`: ""}
-                          ${presentation ? ` - ${presentation}`:""}`
-            return (
-              <li key={i.id}>{`${quantity} x ${name} ($${total})`}</li>
-            )
-            })
-          }
+                          ${size ? ` - ${size}` : ""}
+                          ${presentation ? ` - ${presentation}` : ""}`;
+            return <li key={i.id}>{`${quantity} x ${name} ($${total})`}</li>;
+          })}
         </ul>
-      )
+      ),
     },
     {
       key: "delivery_mode",
@@ -84,10 +85,10 @@ class DashboardOrdersPage extends Component<Props> {
       align: Align.center,
       width: 150,
       render: (order: Order) => {
-        const mode = order["delivery_mode"]
-        if ( mode === "local") return `${mode}-Mesa ${order.table}`;
+        const mode = order["delivery_mode"];
+        if (mode === "local") return `${mode}-Mesa ${order.table}`;
         return mode;
-      }
+      },
     },
     {
       key: "delivery_address",
@@ -104,20 +105,23 @@ class DashboardOrdersPage extends Component<Props> {
       title: "Estado",
       align: Align.center,
       width: 150,
-      render: (order: Order) =>{
-        return <SelectOption
-          dataKey="status"
-          options={Object.entries(statusMap)} 
-          value={order.status}
-          stylesClass={statusStyleMap}
-          onChange={this.handleUpdate(order.order)}
-        />}
+      render: (order: Order) => {
+        return (
+          <SelectOption
+            dataKey="status"
+            options={Object.entries(statusMap)}
+            value={order.status}
+            stylesClass={statusStyleMap}
+            onChange={this.handleUpdate(order.order)}
+          />
+        );
+      },
     },
     {
       key: "comment",
       title: "Comentario",
-      render: (order: Order) => 
-        <EditData 
+      render: (order: Order) => (
+        <EditData
           data={order.comment ?? ""}
           dataKey="comment"
           onOk={this.handleUpdate(order.order)}
@@ -125,53 +129,54 @@ class DashboardOrdersPage extends Component<Props> {
           btnEdit={<AllowEdit />}
           btnCheck={<CheckEdit />}
           btnCancel={<CancelEdit />}
-          />
+        />
+      ),
     },
     {
       key: "total",
       title: "Total",
       align: Align.center,
       width: 120,
-      render: (order: Order) => `$${order.total}`
+      render: (order: Order) => `$${order.total}`,
     },
   ];
 
   public componentDidMount() {
-    this.props.dispatch(fetchOrders())
+    this.props.dispatch(fetchOrders());
   }
 
   private handleUpdate = (id: number) => async (data: any) => {
     const res = await this.props.dispatch(updateOrder(id, data));
     return lodash.isEmpty(res);
   };
-  
+
   private handleChangePage = async (page: number) => {
     if (page !== this.props.current) {
-      this.setState({loading: true});
+      this.setState({ loading: true });
       await this.props.dispatch(fetchOrders(page));
-      this.setState({loading: false});
+      this.setState({ loading: false });
     }
-  }
+  };
 
   public render() {
     const { orders, current, next, previous, pages } = this.props;
 
-    if (this.state.loading) 
+    if (this.state.loading)
       return (
         <div className="is-flex is-justify-content-center">
-          <Loader className="image is-128x128" alt="Cargando ..."/>
+          <Loader className="image is-128x128" alt="Cargando ..." />
         </div>
       );
 
     return (
       <div>
         <Toolbar title="Ordenes">
-          <Pagination 
-            {...{current, next, previous, pages}} 
+          <Pagination
+            {...{ current, next, previous, pages }}
             changePage={this.handleChangePage}
           />
         </Toolbar>
-        
+
         <Table columns={this.columns} data={orders} dataKey="order" />
       </div>
     );
@@ -183,7 +188,7 @@ const mapStateToProps = (state: any) => ({
   pages: getOrdersPages(state),
   current: getOrdersCurrent(state),
   next: getOrdersNext(state),
-  previous: getOrdersPrevious(state)
+  previous: getOrdersPrevious(state),
 });
 
 export default connect(mapStateToProps)(DashboardOrdersPage);

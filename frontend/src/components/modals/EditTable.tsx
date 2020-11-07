@@ -10,7 +10,7 @@ type Values = {
 };
 
 type Props = {
-  table?: Table; 
+  table?: Table;
   onOk: (table: any) => void;
 };
 
@@ -18,32 +18,28 @@ const validationSchema = Yup.object({
   number: Yup.number().required("Campo requerido"),
 });
 
-
-export const EditTableModal: FC<Props> = ({
-  table,
-  onOk,
-  ...props
-}) => (
+export const EditTableModal: FC<Props> = ({ table, onOk, ...props }) => (
   <Formik<Values>
-      initialValues={{ number: table?.number ?? 1 }}
-      validationSchema={validationSchema}
-      onSubmit={values => onOk(values)}
+    initialValues={{ number: table?.number ?? 1 }}
+    validationSchema={validationSchema}
+    onSubmit={(values) => onOk(values)}
   >
-      {({ handleSubmit}) => (
+    {({ handleSubmit }) => (
       <Modal
-          {...props}
-          title={table ? "Editar Mesa" : "Crear Mesa"}
-          okLabel="Guardar"
-          onOk={handleSubmit}
+        {...props}
+        title={table ? "Editar Mesa" : "Crear Mesa"}
+        okLabel="Guardar"
+        onOk={handleSubmit}
       >
-          <Form>
+        <Form>
           <Field
-              name="number"
-              label="Número de Mesa"
-              type="number"
-              component={CustomField} />
-          </Form>
+            name="number"
+            label="Número de Mesa"
+            type="number"
+            component={CustomField}
+          />
+        </Form>
       </Modal>
-      )}
+    )}
   </Formik>
 );

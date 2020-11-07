@@ -43,7 +43,7 @@ function setDeliveryMode(mode, shipping) {
   return {
     type: SET_DELIVERY_MODE,
     mode,
-    shipping
+    shipping,
   };
 }
 
@@ -53,5 +53,5 @@ export {
   plusOneQuantityItem,
   minusOneQuantityItem,
   emptyCart,
-  setDeliveryMode
+  setDeliveryMode,
 };

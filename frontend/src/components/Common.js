@@ -131,59 +131,51 @@ export const CustomSelect = ({
 );
 
 export const CheckEdit = (props) => (
-  <span 
-    className="icon is-small has-text-success"
-    onClick={props.onClick}>
+  <span className="icon is-small has-text-success" onClick={props.onClick}>
     <i className="fa fa-check"></i>
   </span>
-)
+);
 
 export const CancelEdit = (props) => (
-  <span 
-    className="icon is-small has-text-danger"
-    onClick={props.onClick}>
+  <span className="icon is-small has-text-danger" onClick={props.onClick}>
     <i className="fa fa-times"></i>
   </span>
-)
+);
 
 export const AllowEdit = (props) => (
-  <span 
+  <span
     className="icon is-small has-text-info has-tooltip-top"
     data-tooltip="Editar"
-    onClick={props.onClick}>
+    onClick={props.onClick}
+  >
     <i className="fas fa-edit"></i>
   </span>
-)
+);
 
 export const LoadingIcon = (props) => (
-  <span 
-    className="icon is-small has-text-info">
+  <span className="icon is-small has-text-info">
     <i className="fas fa-spinner fa-pulse"></i>
   </span>
-)
+);
 
-export const LogoutButton = ({className="", onClick}) => (
+export const LogoutButton = ({ className = "", onClick }) => (
   <div className={`field ${className}`}>
     <p className="control">
-      <button
-        type="button"
-        className="button is-danger"
-        onClick={onClick}
-      >
+      <button type="button" className="button is-danger" onClick={onClick}>
         <strong>Salir</strong>
       </button>
     </p>
   </div>
-)
+);
 
-export const Loader = ({ 
-  className="image is-128x128",
-  src="/images/pizza-loading.gif",
-  alt="Loading ..."
+export const Loader = ({
+  className = "image is-128x128",
+  src = "/images/pizza-loading.gif",
+  alt = "Loading ...",
 }) => {
   return (
     <figure className={className}>
-      <img src={src} alt={alt}/>
+      <img src={src} alt={alt} />
     </figure>
-  )
-}
+  );
+};

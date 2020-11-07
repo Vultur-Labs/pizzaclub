@@ -50,25 +50,29 @@ class DashboardLoginPage extends Component<Props> {
                   validationSchema={validationSchema}
                   onSubmit={this.handleSubmit}
                 >
-                  {({isSubmitting})=> (
-                  <Form>
-                    <Field
-                      name="username"
-                      label="Usuario"
-                      component={CustomField}
-                    />
+                  {({ isSubmitting }) => (
+                    <Form>
+                      <Field
+                        name="username"
+                        label="Usuario"
+                        component={CustomField}
+                      />
 
-                    <Field
-                      type="password"
-                      name="password"
-                      label="Contraseña"
-                      component={CustomField}
-                    />
+                      <Field
+                        type="password"
+                        name="password"
+                        label="Contraseña"
+                        component={CustomField}
+                      />
 
-                    <button className={`button is-block is-info is-fullwidth ${isSubmitting ? "is-loading":""}`}>
-                      Ingresar
-                    </button>
-                  </Form>
+                      <button
+                        className={`button is-block is-info is-fullwidth ${
+                          isSubmitting ? "is-loading" : ""
+                        }`}
+                      >
+                        Ingresar
+                      </button>
+                    </Form>
                   )}
                 </Formik>
               </div>

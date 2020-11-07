@@ -26,25 +26,25 @@ export const staffReducer: Reducer<State> = (
     case FETCH_ORDERTABLE:
       return {
         ...state,
-        orders: payload
+        orders: payload,
       };
 
     case OPEN_TABLE:
       orders = [...state.orders, payload];
       return {
         ...state,
-        orders
+        orders,
       };
 
     case ADD_TABLEITEM:
     case REMOVE_TABLEITEM:
-      orders = state.orders.map(o => ((o.id === payload.id)?payload:o))
+      orders = state.orders.map((o) => (o.id === payload.id ? payload : o));
 
       return {
         ...state,
-        orders
+        orders,
       };
-    
+
     // case REMOVE_TABLEITEM:
     //   orders = state.orders.map(o => {
     //     if (o.id === payload.id) return payload;
@@ -55,7 +55,7 @@ export const staffReducer: Reducer<State> = (
     //     ...state,
     //     orders
     //   };
-    
+
     case CLOSE_TABLE:
       orders = state.orders.filter(({ id }) => id !== payload.id);
 
@@ -63,17 +63,15 @@ export const staffReducer: Reducer<State> = (
         ...state,
         orders,
       };
-    
+
     case SET_DELIVERED:
-      orders = state.orders.map(o => {
+      orders = state.orders.map((o) => {
         if (o.id === payload.order) {
-          const itemIndex = o.items.findIndex(
-            i => i.id === payload.id
-          );
+          const itemIndex = o.items.findIndex((i) => i.id === payload.id);
           o.items[itemIndex].is_delivered = payload.is_delivered;
         }
-        return o
-      })
+        return o;
+      });
 
       return {
         ...state,

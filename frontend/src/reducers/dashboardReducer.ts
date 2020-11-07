@@ -8,7 +8,6 @@ import { Table } from "../types/table";
 import { OrderPagination } from "../types/order";
 import { OPEN_TABLE, CLOSE_TABLE } from "./staffReducer";
 
-
 export const DASHBOARD_LOGIN = "DASHBOARD_LOGIN";
 export const DASHBOARD_LOGOUT = "DASHBOARD_LOGOUT";
 export const FETCH_PLACE = "FETCH_PLACE";
@@ -128,92 +127,86 @@ export const dashboardReducer: Reducer<State> = (
       const orderIndex = state.orders.results!.findIndex(
         (order) => order.order === payload.order
       );
-      
-      const orders = {...state.orders}
+
+      const orders = { ...state.orders };
       orders.results![orderIndex] = payload;
 
       return {
         ...state,
         orders,
       };
-    
-      case FETCH_EMPLOYEES:
-        return {
-          ...state,
-          employees: payload ?? [],
-        };
-  
-      case CREATE_EMPLOYEE:
-        return {
-          ...state,
-          employees: [...state.employees, payload],
-        };
-  
-      case UPDATE_EMPLOYEE:
-        const employeeIndex = state.employees.findIndex(
-          e => e.user.id === payload.user.id
-        );
-        const employees = [...state.employees];
-  
-        employees[employeeIndex] = payload;
-  
-        return {
-          ...state,
-          employees,
-        };
-  
-      case DELETE_EMPLOYEE:
-        return {
-          ...state,
-          employees:
-            state.employees.filter(e => e.user.id !== payload) ?? [],
-        };
-      
-      case FETCH_TABLES:
-        return {
-          ...state,
-          tables: payload ?? [],
-        };
-  
-      case CREATE_TABLE:
-        return {
-          ...state,
-          tables: [...state.tables, payload],
-        };
-  
-      case UPDATE_TABLE:
-        let tableIndex = state.tables.findIndex(
-          t => t.id === payload.id
-        );
-        let tables = [...state.tables];
-  
-        tables[tableIndex] = payload;
-  
-        return {
-          ...state,
-          tables,
-        };
-  
-      case DELETE_TABLE:
-        return {
-          ...state,
-          tables:
-            state.tables.filter(t => t.id !== payload) ?? [],
-        };
 
-      case OPEN_TABLE:
-      case CLOSE_TABLE:
-        tableIndex = state.tables.findIndex(
-          t => t.id === payload.table.id
-        );
-        tables = [...state.tables];
-  
-        tables[tableIndex] = payload.table;
-  
-        return {
-          ...state,
-          tables,
-        };
+    case FETCH_EMPLOYEES:
+      return {
+        ...state,
+        employees: payload ?? [],
+      };
+
+    case CREATE_EMPLOYEE:
+      return {
+        ...state,
+        employees: [...state.employees, payload],
+      };
+
+    case UPDATE_EMPLOYEE:
+      const employeeIndex = state.employees.findIndex(
+        (e) => e.user.id === payload.user.id
+      );
+      const employees = [...state.employees];
+
+      employees[employeeIndex] = payload;
+
+      return {
+        ...state,
+        employees,
+      };
+
+    case DELETE_EMPLOYEE:
+      return {
+        ...state,
+        employees: state.employees.filter((e) => e.user.id !== payload) ?? [],
+      };
+
+    case FETCH_TABLES:
+      return {
+        ...state,
+        tables: payload ?? [],
+      };
+
+    case CREATE_TABLE:
+      return {
+        ...state,
+        tables: [...state.tables, payload],
+      };
+
+    case UPDATE_TABLE:
+      let tableIndex = state.tables.findIndex((t) => t.id === payload.id);
+      let tables = [...state.tables];
+
+      tables[tableIndex] = payload;
+
+      return {
+        ...state,
+        tables,
+      };
+
+    case DELETE_TABLE:
+      return {
+        ...state,
+        tables: state.tables.filter((t) => t.id !== payload) ?? [],
+      };
+
+    case OPEN_TABLE:
+    case CLOSE_TABLE:
+      tableIndex = state.tables.findIndex((t) => t.id === payload.table.id);
+      tables = [...state.tables];
+
+      tables[tableIndex] = payload.table;
+
+      return {
+        ...state,
+        tables,
+      };
 
     default:
       return state;
@@ -224,7 +217,9 @@ export const getTables = (state: any) => state.dashboard.tables;
 export const getEmployees = (state: any) => state.dashboard.employees;
 export const getAccount = (state: any) => state.dashboard.account;
 export const getOrders = (state: any) => state.dashboard.orders.results;
-export const getOrdersPages = (state: any) => state.dashboard.orders.total_pages;
+export const getOrdersPages = (state: any) =>
+  state.dashboard.orders.total_pages;
 export const getOrdersCurrent = (state: any) => state.dashboard.orders.current;
 export const getOrdersNext = (state: any) => state.dashboard.orders.next;
-export const getOrdersPrevious = (state: any) => state.dashboard.orders.previous;
+export const getOrdersPrevious = (state: any) =>
+  state.dashboard.orders.previous;

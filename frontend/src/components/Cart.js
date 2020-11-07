@@ -30,7 +30,7 @@ export const PriceItem = ({
 
 export const CartItem = (props) => {
   const { size, presentation, quantity, subtotal, product } = props;
-  
+
   return (
     <div className="cart-item">
       <PriceItem
@@ -124,9 +124,9 @@ export function CartShower(props) {
       />
       {/* Show Cart Items */}
       {items.map((i) => {
-        const size = i.product.size.filter(s => s.id === parseInt(i.size))[0];
+        const size = i.product.size.filter((s) => s.id === parseInt(i.size))[0];
         const presentation = i.product.presentation.filter(
-          p => p.id === parseInt(i.presentation)
+          (p) => p.id === parseInt(i.presentation)
         )[0];
         return (
           <CartItem

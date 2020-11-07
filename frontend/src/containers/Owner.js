@@ -11,22 +11,22 @@ import {
 } from "../actions/actionsOwner";
 // Import getters state
 import {
-    getOwnerData,
-    getOwnerPending,
-    getOwnerError,
-    getOwnerUpdate
-} from '../reducers/ownerReducer'
-// Import Constants 
-import {OWNER_KEY} from '../constants';
+  getOwnerData,
+  getOwnerPending,
+  getOwnerError,
+  getOwnerUpdate,
+} from "../reducers/ownerReducer";
+// Import Constants
+import { OWNER_KEY } from "../constants";
 // Import functions
-import {getStoredState} from '../data';
+import { getStoredState } from "../data";
 
 class OwnerData extends Component {
   componentDidMount() {
     const { pending, error, storedKey } = this.props;
     const { updateInfo, fetchInfo } = this.props;
     // Check if data has to be fetching or updating from localStorage
-    const {update} = getStoredState(OWNER_KEY);
+    const { update } = getStoredState(OWNER_KEY);
     if (update && !error) {
       console.log("Update owner info from localStorage");
       updateInfo(storedKey);

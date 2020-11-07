@@ -1,10 +1,5 @@
 import React, { Component, FC, useEffect } from "react";
-import { 
-  connect, 
-  DispatchProp, 
-  useSelector, 
-  useDispatch
-} from "react-redux";
+import { connect, DispatchProp, useSelector, useDispatch } from "react-redux";
 import { Route, Switch } from "react-router-dom";
 
 // Import Types or Interfaces
@@ -17,97 +12,88 @@ import StaffTableManager from "./StaffTableManager";
 import { StaffTableDetail } from "./StaffTableDetail";
 import StaffTableMenu from "./StaffTableMenu";
 //Import Actions
-import { 
-  logout,
-  fetchTables
-} from "../actions/dashboardActions";
-import {
-  fetchOrderTable
-} from "../actions/staffActions";
+import { logout, fetchTables } from "../actions/dashboardActions";
+import { fetchOrderTable } from "../actions/staffActions";
 // Import Getters
 import { getOwnerData } from "../reducers/ownerReducer";
 import { getOrderTables } from "../reducers/staffReducer";
 // import Routes
-import {
-  STAFF_HOME,
-  STAFF_ADD,
-  STAFF_TABLE,
-  STAFF_MENU
-} from "../routes";
+import { STAFF_HOME, STAFF_ADD, STAFF_TABLE, STAFF_MENU } from "../routes";
 
 type TableManagerProps = {
   path?: string;
-}
+};
 
-export const TableManager: FC<TableManagerProps> = ({ path="" }) => {
-  
+export const TableManager: FC<TableManagerProps> = ({ path = "" }) => {
   const dispatch = useDispatch();
-  const orders: OrderTable[] = useSelector((state: any) => getOrderTables(state));
-  
+  const orders: OrderTable[] = useSelector((state: any) =>
+    getOrderTables(state)
+  );
+
   useEffect(() => {
     dispatch(fetchOrderTable());
     dispatch(fetchTables());
   }, [dispatch]);
-  
+
   return (
     <div className="container px-2">
       <div className="columns is-centered">
         <div className="column">
           <Switch>
-
-            <Route exact path={ path }>
-              <StaffTableManager path={path}/>
+            <Route exact path={path}>
+              <StaffTableManager path={path} />
             </Route>
 
-            <Route path={ path + STAFF_MENU } render={() =>(
+            <Route
+              path={path + STAFF_MENU}
+              render={() => (
                 <>
-                  <Menu interactive={false}/>
+                  <Menu interactive={false} />
                   <GoToButton
                     path={path}
                     className="button is-warning is-fullwidth"
                   >
                     <span className="icon">
-                    <i className="fas fa-undo"></i>
+                      <i className="fas fa-undo"></i>
                     </span>
                     <span>Volver</span>
                   </GoToButton>
                 </>
-              )
-            }/>
-
-            <Route 
-              path={`${ path + STAFF_ADD}/:orderId` }
-              render={({ match }) => {
-              const order = orders.filter(({ id }) => 
-                (match.params.orderId === String(id)))[0];
-              return <StaffTableMenu order={order} path={path}/>
-              }
-            }/>
+              )}
+            />
 
             <Route
-              path={ `${path + STAFF_TABLE }/:orderId`}
+              path={`${path + STAFF_ADD}/:orderId`}
               render={({ match }) => {
-              const order = orders.filter(({ id }) => 
-                (match.params.orderId === String(id)))[0];
-              return <StaffTableDetail order={order} path={path}/>
-              }
-            }/>
+                const order = orders.filter(
+                  ({ id }) => match.params.orderId === String(id)
+                )[0];
+                return <StaffTableMenu order={order} path={path} />;
+              }}
+            />
 
+            <Route
+              path={`${path + STAFF_TABLE}/:orderId`}
+              render={({ match }) => {
+                const order = orders.filter(
+                  ({ id }) => match.params.orderId === String(id)
+                )[0];
+                return <StaffTableDetail order={order} path={path} />;
+              }}
+            />
           </Switch>
         </div>
       </div>
     </div>
-  )
-}
-
+  );
+};
 
 type Props = DispatchProp<any> & {
   ownerData: Place;
   // orders: OrderTable[];
-}
+};
 
 class StaffHomePage extends Component<Props> {
-
   // public componentDidMount() {
   //   this.props.dispatch(fetchTables());
   //   this.props.dispatch(fetchOrderTable());
@@ -123,20 +109,20 @@ class StaffHomePage extends Component<Props> {
         <section className="hero is-warning">
           <div className="hero-body py-0">
             <div className="container has-text-centered">
-              <Image 
+              <Image
                 className="image header-logo"
                 src="/images/logo.png"
                 alt={ownerData.name}
               />
               <LogoutButton
-                className="mt-1 btn-logout" 
+                className="mt-1 btn-logout"
                 onClick={this.handleLogout}
               />
             </div>
           </div>
         </section>
 
-        <TableManager path={STAFF_HOME}/>
+        <TableManager path={STAFF_HOME} />
 
         {/* <div className="container px-2">
           <div className="columns is-centered">

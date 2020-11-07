@@ -5,7 +5,7 @@ import { DASHBOARD } from "../routes";
 
 class DashboardHomePage extends Component {
   public render() {
-    return <TableManager path={DASHBOARD}/>
+    return <TableManager path={DASHBOARD} />;
   }
 }
 

@@ -22,7 +22,7 @@ import { OWNER_KEY } from "../constants";
 
 const INITIAL_OWNER_STATE = {
   update: false,
-  last_modified: 0
+  last_modified: 0,
 };
 
 function ownerStatusReducer(state = INITIAL_OWNER_STATE, action) {

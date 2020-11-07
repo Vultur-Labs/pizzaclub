@@ -1,11 +1,6 @@
 import React, { Component } from "react";
 import { Logo, ButtonLink, GoToButton } from "../components/Common";
-import {
-  MENU,
-  DELIVERY,
-  TAKEAWAY,
-  DASHBOARD
-} from "../routes";
+import { MENU, DELIVERY, TAKEAWAY, DASHBOARD } from "../routes";
 
 class MainPage extends Component {
   render() {
@@ -17,13 +12,10 @@ class MainPage extends Component {
           image="/images/logo.png"
           alt="The Pizza Club"
         />
-        <GoToButton
-            className="has-text-warning btn-dashboard"
-            path={DASHBOARD}
-          >
-            <span className="icon is-medium">
-              <i className="fa fa-cog"></i>
-            </span>
+        <GoToButton className="has-text-warning btn-dashboard" path={DASHBOARD}>
+          <span className="icon is-medium">
+            <i className="fa fa-cog"></i>
+          </span>
         </GoToButton>
         <div className="main-menu">
           <ButtonLink

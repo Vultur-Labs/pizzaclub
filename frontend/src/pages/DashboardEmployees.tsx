@@ -146,7 +146,7 @@ class DashboardEmployeesPage extends Component<Props> {
 
 const mapStateToProps = (state: any) => ({
   employees: getEmployees(state),
-  owner_id: state.dashboard.place.id
+  owner_id: state.dashboard.place.id,
 });
 
 export default connect(mapStateToProps)(DashboardEmployeesPage);

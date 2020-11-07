@@ -10,7 +10,7 @@ import {
   PLUS_ONE_QUANTITY_ITEM,
   MINUS_ONE_QUANTITY_ITEM,
   EMPTY_CART,
-  SET_DELIVERY_MODE
+  SET_DELIVERY_MODE,
 } from "../actions/actionsCart";
 
 const INITIAL_CART_STATE = getData(CART_KEY)
@@ -22,8 +22,8 @@ const INITIAL_CART_STATE = getData(CART_KEY)
       delivery: LOCAL_MODE,
       shipping: {
         id: 0,
-        cost: 0
-      }
+        cost: 0,
+      },
     };
 
 export function cartReducer(state = INITIAL_CART_STATE, action) {
@@ -85,7 +85,7 @@ export function cartReducer(state = INITIAL_CART_STATE, action) {
     case SET_DELIVERY_MODE:
       // Set the delivery mode
       let { mode, shipping } = action;
-      new_state = { ...state, delivery: mode, shipping};
+      new_state = { ...state, delivery: mode, shipping };
       break;
     default:
       new_state = { ...state };

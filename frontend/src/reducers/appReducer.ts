@@ -3,7 +3,7 @@ import { ownerReducer } from "./ownerReducer";
 import { showcaseReducer } from "./showcaseReducer";
 import { cartReducer } from "./cartReducer";
 import { dashboardReducer } from "./dashboardReducer";
-import { staffReducer} from "./staffReducer";
+import { staffReducer } from "./staffReducer";
 
 const appReducer = combineReducers({
   dashboard: dashboardReducer,

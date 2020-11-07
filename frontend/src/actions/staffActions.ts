@@ -5,7 +5,7 @@ import {
   CLOSE_TABLE,
   ADD_TABLEITEM,
   REMOVE_TABLEITEM,
-  SET_DELIVERED
+  SET_DELIVERED,
 } from "../reducers/staffReducer";
 import { apiRoutes, http } from "../services/http";
 
@@ -21,21 +21,19 @@ export const fetchOrderTable = () => async (dispatch: Dispatch) => {
 export const openTable = (
   owner: number,
   table: number,
-  employee: number,
-  ) => async (dispatch: Dispatch) => {
+  employee: number
+) => async (dispatch: Dispatch) => {
   try {
-    const data = {owner, table, employee};
+    const data = { owner, table, employee };
     const payload = await http.post(apiRoutes.tableorder, data);
 
     return dispatch({ type: OPEN_TABLE, payload });
   } catch (error) {}
 };
 
-export const closeTable = (order: number) => async (
-  dispatch: Dispatch
-) => {
+export const closeTable = (order: number) => async (dispatch: Dispatch) => {
   try {
-    const payload = await http.post(`${apiRoutes.tableorder}${order}/`,{});
+    const payload = await http.post(`${apiRoutes.tableorder}${order}/`, {});
 
     return dispatch({ type: CLOSE_TABLE, payload });
   } catch (error) {}
@@ -51,7 +49,9 @@ export const addTableItem = (items: Record<string, any>[]) => async (
   } catch (error) {}
 };
 
-export const removeTableItem = (order: number, id: number) => async (dispatch: Dispatch) => {
+export const removeTableItem = (order: number, id: number) => async (
+  dispatch: Dispatch
+) => {
   try {
     const payload = await http.delete(`${apiRoutes.staff_table}${id}/`);
 
@@ -60,12 +60,14 @@ export const removeTableItem = (order: number, id: number) => async (dispatch: D
 };
 
 export const setDeliveredTableItem = (
-  id: number, 
+  id: number,
   is_delivered: boolean
-  ) => async (dispatch: Dispatch) => {
-    try {
-      const payload = await http.patch(`${apiRoutes.staff_table}${id}/`, { is_delivered });
+) => async (dispatch: Dispatch) => {
+  try {
+    const payload = await http.patch(`${apiRoutes.staff_table}${id}/`, {
+      is_delivered,
+    });
 
-      return dispatch({ type: SET_DELIVERED, payload });
-    } catch (error) {}
+    return dispatch({ type: SET_DELIVERED, payload });
+  } catch (error) {}
 };

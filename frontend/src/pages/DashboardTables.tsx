@@ -5,11 +5,11 @@ import { Confirm } from "../components/Confirm";
 import { Toolbar } from "../components/Toolbar";
 import { ModalTrigger } from "../components/ModalTrigger";
 import { EditTableModal } from "../components/modals/EditTable";
-import { 
-    fetchTables,
-    createTable,
-    updateTable,
-    deleteTable
+import {
+  fetchTables,
+  createTable,
+  updateTable,
+  deleteTable,
 } from "../actions/dashboardActions";
 import { Table as TableLocal } from "../types/table";
 
@@ -35,52 +35,52 @@ class DashboardTables extends Component<Props> {
       title: "Mesa",
       align: Align.center,
       width: 150,
-      render: (table: TableLocal) => (`Mesa ${table.number}`)
+      render: (table: TableLocal) => `Mesa ${table.number}`,
     },
     {
       key: "is_open",
       title: "Estado",
       align: Align.center,
       width: 150,
-      render: (table: TableLocal) => (table.is_open?"Abierta":"Cerrada")
+      render: (table: TableLocal) => (table.is_open ? "Abierta" : "Cerrada"),
     },
     {
-        key: "actions",
-        title: "Acciones",
-        align: Align.center,
-        width: 120,
-        render: (table: TableLocal) => (
-          <div>
-            <ModalTrigger
-              button={
-                <button className="button is-info mr-2">
-                  <span className="icon">
-                    <i className="fas fa-edit" />
-                  </span>
-                </button>
-              }
-              modal={
-                <EditTableModal
-                  table={table}
-                  onOk={this.handleUpdateTable(table.id)}
-                />
-              }
-            />
-  
-            <Confirm
-              title={`Está seguro que quiere eliminar la Mesa ${table.number}?`}
-              okLabel="Sí"
-              onClick={this.handleDeleteTable(table)}
-            >
-              <button className="button is-danger">
+      key: "actions",
+      title: "Acciones",
+      align: Align.center,
+      width: 120,
+      render: (table: TableLocal) => (
+        <div>
+          <ModalTrigger
+            button={
+              <button className="button is-info mr-2">
                 <span className="icon">
-                  <i className="fas fa-trash" />
+                  <i className="fas fa-edit" />
                 </span>
               </button>
-            </Confirm>
-          </div>
-        ),
-      },
+            }
+            modal={
+              <EditTableModal
+                table={table}
+                onOk={this.handleUpdateTable(table.id)}
+              />
+            }
+          />
+
+          <Confirm
+            title={`Está seguro que quiere eliminar la Mesa ${table.number}?`}
+            okLabel="Sí"
+            onClick={this.handleDeleteTable(table)}
+          >
+            <button className="button is-danger">
+              <span className="icon">
+                <i className="fas fa-trash" />
+              </span>
+            </button>
+          </Confirm>
+        </div>
+      ),
+    },
   ];
 
   public componentDidMount() {
@@ -88,16 +88,16 @@ class DashboardTables extends Component<Props> {
   }
 
   private handleSaveTable = (owner: number) => (data: any) => {
-    this.props.dispatch(createTable({owner, ...data}));
-  }
+    this.props.dispatch(createTable({ owner, ...data }));
+  };
 
   private handleUpdateTable = (id: number) => (data: any) => {
-      this.props.dispatch(updateTable(id, data));
-  }
+    this.props.dispatch(updateTable(id, data));
+  };
 
   private handleDeleteTable = (table: TableLocal) => async () => {
     this.props.dispatch(deleteTable(table.id));
-  }
+  };
 
   public render() {
     const { tables, owner_id } = this.props;
@@ -105,17 +105,17 @@ class DashboardTables extends Component<Props> {
     return (
       <div>
         <Toolbar title="Empleados">
-            <ModalTrigger
+          <ModalTrigger
             button={
-                <button className="button is-info">
-                  <span className="icon">
-                    <i className="fas fa-plus" />
-                  </span>
-                  <span>Nueva Mesa</span>
-                </button>
-              }
-              modal={<EditTableModal onOk={this.handleSaveTable(owner_id)} />}
-            />
+              <button className="button is-info">
+                <span className="icon">
+                  <i className="fas fa-plus" />
+                </span>
+                <span>Nueva Mesa</span>
+              </button>
+            }
+            modal={<EditTableModal onOk={this.handleSaveTable(owner_id)} />}
+          />
         </Toolbar>
         <Table columns={this.columns} data={tables} dataKey="tables" />
       </div>
@@ -125,7 +125,7 @@ class DashboardTables extends Component<Props> {
 
 const mapStateToProps = (state: any) => ({
   tables: state.dashboard.tables,
-  owner_id: state.dashboard.place.id
+  owner_id: state.dashboard.place.id,
 });
 
 export default connect(mapStateToProps)(DashboardTables);

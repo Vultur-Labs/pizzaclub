@@ -1,12 +1,12 @@
 import React, { FC, useEffect } from "react";
 import { Route, Switch, useHistory } from "react-router-dom";
-import { 
+import {
   DASHBOARD,
   DASHBOARD_ORDERS,
   // DASHBOARD_PRODUCTS,
   DASHBOARD_EMPLOYEES,
   DASHBOARD_TABLES,
-  STAFF_HOME
+  STAFF_HOME,
 } from "../routes";
 import DashboardHomePage from "./DashboardHome";
 // import DashboardProductsPage from "./DashboardProduct";
@@ -27,8 +27,9 @@ const DashboardPage: FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (account?.is_staff) { router.push(DASHBOARD) }
-    else if (account?.is_table_manager) router.push(STAFF_HOME);
+    if (account?.is_staff) {
+      router.push(DASHBOARD);
+    } else if (account?.is_table_manager) router.push(STAFF_HOME);
   }, [account, router]);
 
   return (

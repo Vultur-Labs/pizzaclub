@@ -18,7 +18,7 @@ import {
   DASHBOARD,
   DASHBOARD_LOGIN,
   STAFF_HOME,
-  LOCAL_CLIENT
+  LOCAL_CLIENT,
 } from "./routes";
 import PrivateRoute from "./components/PrivateRoute";
 // Import Containers
@@ -98,13 +98,13 @@ class App extends Component {
             <StaffHomePage />
           </PrivateRoute>
 
-          <Route path={`${LOCAL_CLIENT}/:tableNumber`} 
+          <Route
+            path={`${LOCAL_CLIENT}/:tableNumber`}
             render={({ match }) => {
               const table = parseInt(match.params.tableNumber);
-              return (
-                <LocalClientPage table={table}/>
-              )
-            }} />
+              return <LocalClientPage table={table} />;
+            }}
+          />
 
           {/*<Route component={NotFound}/>*/}
         </Switch>

@@ -19,11 +19,10 @@ import {
   FETCH_TABLES,
   CREATE_TABLE,
   UPDATE_TABLE,
-  DELETE_TABLE
+  DELETE_TABLE,
 } from "../reducers/dashboardReducer";
 import { apiRoutes, http } from "../services/http";
 import { Credentials } from "../types/credentials";
-
 
 // LOGIN ACTIONS
 export const login = (credentials: Credentials) => async (
@@ -86,10 +85,10 @@ export const createProduct = (product: Product, place_id: number) => async (
   dispatch: Dispatch
 ) => {
   try {
-    const result = await http.post(
-      apiRoutes.products_data,
-      {...product, place: place_id}
-    );
+    const result = await http.post(apiRoutes.products_data, {
+      ...product,
+      place: place_id,
+    });
 
     return dispatch({ type: CREATE_PRODUCT, payload: result });
   } catch (error) {}
@@ -154,9 +153,10 @@ export const createEmployee = (employee: Record<string, any>) => async (
   } catch (error) {}
 };
 
-export const updateEmployee = (id: number, employee: Record<string, any>) => async (
-  dispatch: Dispatch
-) => {
+export const updateEmployee = (
+  id: number,
+  employee: Record<string, any>
+) => async (dispatch: Dispatch) => {
   try {
     const result = await http.patch(
       `${apiRoutes.employee_data}${id}/`,
@@ -198,10 +198,7 @@ export const updateTable = (id: number, table: Record<string, any>) => async (
   dispatch: Dispatch
 ) => {
   try {
-    const result = await http.patch(
-      `${apiRoutes.tables_data}${id}/`,
-      table
-    );
+    const result = await http.patch(`${apiRoutes.tables_data}${id}/`, table);
 
     return dispatch({ type: UPDATE_TABLE, payload: result });
   } catch (error) {}

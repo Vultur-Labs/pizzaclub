@@ -2,7 +2,7 @@
 // It is a reducer for fetch data with the usual actions: PENDING, SUCCESS, ERROR
 import { getData } from "../data";
 
-export default (PENDING_ACTION, SUCCESS_ACTION, ERROR_ACTION, UPDATE_ACTION) =>
+const reducer = (PENDING_ACTION, SUCCESS_ACTION, ERROR_ACTION, UPDATE_ACTION) =>
   function fetchGetDataReducer(
     state = {
       pending: false,
@@ -16,14 +16,14 @@ export default (PENDING_ACTION, SUCCESS_ACTION, ERROR_ACTION, UPDATE_ACTION) =>
         return {
           ...state,
           pending: true,
-          error: null
+          error: null,
         };
       case SUCCESS_ACTION:
         return {
           ...state,
           pending: false,
           data: action.payload,
-          error: null
+          error: null,
         };
       case ERROR_ACTION:
         return {
@@ -43,3 +43,5 @@ export default (PENDING_ACTION, SUCCESS_ACTION, ERROR_ACTION, UPDATE_ACTION) =>
         return state;
     }
   };
+
+export default reducer;

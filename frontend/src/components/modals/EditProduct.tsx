@@ -50,8 +50,13 @@ export const EditProductModal: FC<Props> = ({
         onOk={handleSubmit}
       >
         <Form>
-          <Field name="order_n" label="N° Orden" type="number" component={CustomField} />
-          
+          <Field
+            name="order_n"
+            label="N° Orden"
+            type="number"
+            component={CustomField}
+          />
+
           <Field name="name" label="Nombre" component={CustomField} />
 
           <Field
