@@ -19,6 +19,7 @@ import { getOwnerData } from "../reducers/ownerReducer";
 import { getOrderTables } from "../reducers/staffReducer";
 // import Routes
 import { STAFF_HOME, STAFF_ADD, STAFF_TABLE, STAFF_MENU } from "../routes";
+import logo from "../images/logo.png";
 
 type TableManagerProps = {
   path?: string;
@@ -111,7 +112,7 @@ class StaffHomePage extends Component<Props> {
             <div className="container has-text-centered">
               <Image
                 className="image header-logo"
-                src="/images/logo.png"
+                src={logo}
                 alt={ownerData.name}
               />
               <LogoutButton

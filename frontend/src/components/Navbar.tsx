@@ -10,6 +10,7 @@ import {
   DASHBOARD_EMPLOYEES,
   DASHBOARD_TABLES,
 } from "../routes";
+import logo from "../images/logo.png";
 
 export const Navbar = () => {
   const dispatch = useDispatch();
@@ -19,7 +20,7 @@ export const Navbar = () => {
   return (
     <nav className="navbar has-shadow mb-4 px-3 is-warning">
       <div className="navbar-brand navbar-start">
-        <Logo className="image is-64x64" image="/images/logo.png" alt="" />
+        <Logo className="image is-64x64" image={logo} alt="logo" />
       </div>
 
       <div id="navMenu" className="navbar-menu has-text-weight-bold">

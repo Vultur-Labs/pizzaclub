@@ -49,7 +49,7 @@ export const addTableItem = (items: Record<string, any>[]) => async (
   } catch (error) {}
 };
 
-export const removeTableItem = (order: number, id: number) => async (
+export const removeTableItem = (_order: number, id: number) => async (
   dispatch: Dispatch
 ) => {
   try {

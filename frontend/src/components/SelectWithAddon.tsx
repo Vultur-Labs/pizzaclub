@@ -22,7 +22,7 @@ const validationSchema = Yup.object({
   data: Yup.string().required("Campo requerido"),
 });
 
-export const SelectWithAddon: FC<Props> = ({ options, onOk, ...props }) => (
+export const SelectWithAddon: FC<Props> = ({ options, onOk }) => (
   <Formik<Values>
     initialValues={{ data: options[0]?.value ?? "No Disponible" }}
     validationSchema={validationSchema}

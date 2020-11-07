@@ -1,7 +1,6 @@
 @import "~bulma/css/bulma.css";
 @import "~bulma-tooltip/dist/css/bulma-tooltip.min.css";
 
-@import "./normalize.css";
 @import "./general.css";
 @import "./mainpage.css";
 @import "./menupage.css";

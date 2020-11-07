@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Logo, ButtonLink, GoToButton } from "../components/Common";
 import { MENU, DELIVERY, TAKEAWAY, DASHBOARD } from "../routes";
+import logo from "../images/logo.png";
 
 class MainPage extends Component {
   render() {
@@ -9,7 +10,7 @@ class MainPage extends Component {
         <Logo
           className="image main-logo"
           classImg="is-rounded"
-          image="/images/logo.png"
+          image={logo}
           alt="The Pizza Club"
         />
         <GoToButton className="has-text-warning btn-dashboard" path={DASHBOARD}>

@@ -19,6 +19,7 @@ import { getOrderTables } from "../reducers/staffReducer";
 import { getTables } from "../reducers/dashboardReducer";
 // Import routers
 import { LOCAL_CLIENT, LOCAL_CLIENT_ORDER, INDEX } from "../routes";
+import logo from "../images/logo.png";
 
 type Props = DispatchProp<any> & {
   ownerData: Place;
@@ -44,7 +45,7 @@ class LocalClientPage extends Component<Props> {
             <div className="container has-text-centered">
               <Image
                 className="image header-logo"
-                src="/images/logo.png"
+                src={logo}
                 alt={ownerData.name}
               />
             </div>

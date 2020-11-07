@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Formik, Field, Form, FormikHelpers } from "formik";
+import { Formik, Field, Form } from "formik";
 import { CustomField, GoToButton } from "../components/Common";
 import { connect, DispatchProp } from "react-redux";
 import { login } from "../actions/dashboardActions";
@@ -21,10 +21,7 @@ const validationSchema = Yup.object({
 type Props = DispatchProp<any> & RouteComponentProps & {};
 
 class DashboardLoginPage extends Component<Props> {
-  private handleSubmit = async (
-    values: Values,
-    formikHelpers: FormikHelpers<Values>
-  ) => {
+  private handleSubmit = async (values: Values) => {
     await this.props.dispatch(login(values));
     this.props.history.push(DASHBOARD);
   };
