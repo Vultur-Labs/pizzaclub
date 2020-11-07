@@ -53,16 +53,13 @@ export const TableCard: FC<Props> = ({
           Agregar
         </button>
 
-        <span className="card-footer-item button is-danger">
-          <Confirm
-            title={`Está seguro que quiere cerrar la Mesa 
-                                ${order.table.number}?`}
-            okLabel="Sí"
-            onClick={handleAction(order, close)}
-          >
-            Cerrar
-          </Confirm>
-        </span>
+        <Confirm
+          title={`Está seguro que quiere cerrar la Mesa ${order.table.number}?`}
+          okLabel="Sí"
+          onClick={handleAction(order, close)}
+        >
+          <button className="card-footer-item button is-danger">Cerrar</button>
+        </Confirm>
       </footer>
     </div>
   );

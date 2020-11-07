@@ -55,8 +55,7 @@ export const StaffTableDetail: FC<Props> = ({ order, path = "" }) => {
 
           <GoToButton
             path={`${path + STAFF_ADD}/${order.id}`}
-            className={`button is-success is-fullwidth mt-2
-                        is-size-5 has-text-weight-bold`}
+            className="button is-success is-fullwidth mt-2 is-size-5 has-text-weight-bold"
           >
             <span className="icon">
               <i className="fas fa-plus"></i>
@@ -65,26 +64,21 @@ export const StaffTableDetail: FC<Props> = ({ order, path = "" }) => {
           </GoToButton>
 
           <Confirm
-            title={`Está seguro que quiere cerrar la Mesa 
-                                ${order.table.number}?`}
+            title={`Está seguro que quiere cerrar la Mesa ${order.table.number}?`}
             okLabel="Sí"
             onClick={handleCloseTable(order)}
           >
-            <button
-              className={`button is-danger is-fullwidth mt-2
-                            is-size-5 has-text-weight-bold`}
-            >
+            <button className="button is-danger is-fullwidth mt-2 is-size-5 has-text-weight-bold">
               Cerrar Mesa
             </button>
           </Confirm>
 
           <GoToButton
             path={path}
-            className={`button is-warning is-fullwidth mt-2
-                            is-size-5 has-text-weight-bold`}
+            className="button is-warning is-fullwidth mt-2 is-size-5 has-text-weight-bold"
           >
             <span className="icon">
-              <i className="fas fa-undo"></i>
+              <i className="fas fa-undo" />
             </span>
             <span>Volver</span>
           </GoToButton>

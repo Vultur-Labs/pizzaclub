@@ -70,7 +70,7 @@ class StaffManagerPage extends Component<Props> {
           options={options}
           onOk={this.handleOpenTable(owner, employee)}
         />
-        <h1>Mesas Abiertas</h1>
+        <h1 className="mx-3 my-4">Mesas Abiertas</h1>
         {lodash.isEmpty(orders) ? (
           <p>No hay Mesas Abiertas</p>
         ) : (
