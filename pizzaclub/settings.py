@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import datetime
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -93,12 +94,14 @@ MIN_CUIL_LENGTH = 11
 MIN_PHONE_LENGTH = 7
 MAX_PHONE_LENGTH = 11
 
-DEFAULT_FILE_STORAGE = "minio_storage.storage.MinioMediaStorage"
-MINIO_STORAGE_ENDPOINT = 'minio.prod.deployhub.xyz:443'
-MINIO_STORAGE_ACCESS_KEY = os.getenv('MINIO_STORAGE_ACCESS_KEY')
-MINIO_STORAGE_SECRET_KEY = os.getenv('MINIO_STORAGE_SECRET_KEY')
-MINIO_STORAGE_MEDIA_BUCKET_NAME = os.getenv('MINIO_STORAGE_BUCKET_NAME', 'tustore')
-MINIO_STORAGE_STATIC_BUCKET_NAME = os.getenv('MINIO_STORAGE_BUCKET_NAME', 'tustore')
+# Storage Files
+DEFAULT_FILE_STORAGE =  ("django.core.files.storage.FileSystemStorage" if DEBUG else "minio_storage.storage.MinioMediaStorage")
+
+MINIO_STORAGE_ENDPOINT = "minio.deployhub.xyz:443"
+MINIO_STORAGE_ACCESS_KEY = os.getenv("MINIO_STORAGE_ACCESS_KEY")
+MINIO_STORAGE_SECRET_KEY = os.getenv("MINIO_STORAGE_SECRET_KEY")
+MINIO_STORAGE_MEDIA_BUCKET_NAME = os.getenv("MINIO_STORAGE_BUCKET_NAME", "tustore")
+MINIO_STORAGE_STATIC_BUCKET_NAME = os.getenv("MINIO_STORAGE_BUCKET_NAME", "tustore")
 
 # Global settings for Django REST Framework
 REST_FRAMEWORK = {
@@ -116,4 +119,9 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework_jwt.authentication.JSONWebTokenAuthentication",
     ],
+}
+
+# DJANGO REST-FRAMEWORK JWT CONFIG
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
 }

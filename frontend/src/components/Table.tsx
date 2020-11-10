@@ -6,6 +6,7 @@ type Item = Record<string, any>;
 export enum Align {
   center = "center",
   right = "right",
+  left = "left",
 }
 
 export interface Column {
@@ -46,7 +47,7 @@ export const Table: FC<Props> = ({
 
         <tbody>
           {data.map((item, index) => (
-            <tr key={get(item, dataKey)}>
+            <tr key={`${get(item, dataKey)}-${index}`}>
               {columns.map((column, columnIndex) => {
                 const content =
                   (column.render && column.render(item, column, index)) ??

@@ -9,6 +9,7 @@ import {
 } from "../reducers/ownerReducer";
 //Import Components
 import { Image, InfoItem, SocialNetworkIcon } from "../components/Common";
+import logo from "../images/logo.png";
 
 const Place = (props) => {
   const { data, pending, error, only_name } = props;
@@ -29,7 +30,7 @@ const Place = (props) => {
       <Image
         className="image header-logo"
         imgClass=""
-        src="/images/logo.png"
+        src={logo}
         alt={data.name}
       />
       {/* <div className="header-owner-title">

@@ -9,6 +9,7 @@ ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
 INSTALLED_APPS = [
     'registration.apps.RegistrationConfig',
     'orders.apps.OrdersConfig',
+    'tables.apps.TablesConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -32,16 +33,18 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# DATABASE CONFIG
 import dj_database_url
 
 db_config = dj_database_url.config(conn_max_age=600)
 
 DATABASES = {
-    'default': db_config if db_config['ENGINE'] else {
+    'default': db_config if db_config.get('ENGINE') else {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
@@ -49,7 +52,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
 # Media files for FileFields and ImageFields
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
 
 # Global settings for Django REST Framework

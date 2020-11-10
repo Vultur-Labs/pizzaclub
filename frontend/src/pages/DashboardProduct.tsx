@@ -39,11 +39,17 @@ class DashboardProductsPage extends Component<Props> {
       title: "Tipo",
       width: 200,
       render: (product: Product) =>
-        this.props.types.find((type) => type.id === product.types)?.name,
+        this.props.types.find((type) => type.id === product.types.id)?.name ??
+        "",
     },
     {
       key: "description",
       title: "Descripcion",
+    },
+    {
+      key: "order_n",
+      title: "N° Orden",
+      align: Align.center,
     },
     {
       key: "actions",
@@ -70,8 +76,8 @@ class DashboardProductsPage extends Component<Props> {
           />
 
           <Confirm
-            title="Esta seguro?"
-            okLabel="Si"
+            title={`Está seguro que quiere eliminar ${product.name}?`}
+            okLabel="Sí"
             onClick={this.handleDeleteProduct(product)}
           >
             <button className="button is-danger">
@@ -96,8 +102,8 @@ class DashboardProductsPage extends Component<Props> {
   };
 
   private handleSaveProduct = (product: Product) => {
-    product.place = this.props.place.id;
-    this.props.dispatch(createProduct(product));
+    const place_id = this.props.place.id;
+    this.props.dispatch(createProduct(product, place_id));
   };
 
   private handleDeleteProduct = (product: Product) => () => {

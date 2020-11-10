@@ -6,9 +6,9 @@ from django.utils import timezone
 from pizzaclub.settings import MAX_CUIL_LENGTH, MIN_CUIL_LENGTH
 from pizzaclub.settings import MAX_PHONE_LENGTH, MIN_PHONE_LENGTH
 from registration.models import Employee, Client, Address
-from minio_storage.storage import MinioMediaStorage
+# from minio_storage.storage import MinioMediaStorage
 
-storage = MinioMediaStorage()
+# storage = MinioMediaStorage()
 # Create your models here.
 
 class SizeProductError(Exception):
@@ -90,26 +90,6 @@ class FeatureProduct(models.Model):
     def __str__(self):
         return f'{self.name} ({self.symbol})'
 
-"""
-class ProductImages(models.Model):
-
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to="products/", storage=storage)
-    uploaded_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.image.url}"
-    
-    def save(self, *args, **kwargs):
-        '''
-            Change the name of file to uuid.
-        '''
-        # Get the file extension
-        extension = '.' + self.image.name.split('.')[-1]
-        # Change the name of image
-        self.image.name = '/'.join([str(self.product.id), str(uuid.uuid4().hex + extension)])
-        super(ProductImages, self).save(*args, **kwargs)
-"""
 class Shipping(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
@@ -157,7 +137,7 @@ class Product(models.Model):
     order_n = models.PositiveSmallIntegerField(default=0)
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=100, blank=True)
-    image = models.ImageField(upload_to="products/", storage=storage, blank=True, null=True)
+    image = models.ImageField(upload_to="products/", blank=True, null=True)
     types = models.ForeignKey(TypeProduct, on_delete=models.CASCADE)
     subtype = models.ForeignKey(SubTypeProduct, on_delete=models.SET_NULL, null=True, blank=True)
     presentation = models.ManyToManyField(PresentationProduct, blank=True)
@@ -225,6 +205,9 @@ class PriceList(models.Model):
 
     def __str__(self):
         return str(self.product)
+    
+    def get_product_name(self):
+        return self.product.name
 
     def check_price_gte_zero(self):
         if self.price < 0:
@@ -249,8 +232,8 @@ class PriceList(models.Model):
 
 class Order(models.Model):
     STATUS_CHOICES = [
-        ('shipping', 'shipping'),
-        ('open', 'open'),
+        # ('shipping', 'shipping'),
+        # ('open', 'open'),
         ('cancel', 'cancel'),
         ('pending', 'pending'),
         ('processing', 'processing'),

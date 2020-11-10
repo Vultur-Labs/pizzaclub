@@ -1,4 +1,4 @@
-import {http} from "../services/http";
+import { http } from "../services/http";
 
 export function fetchGetDataPending(actionType) {
   return {
@@ -29,9 +29,10 @@ export default function fetchGetData(
   return (dispatch) => {
     // Inititate the loading state
     dispatch(fetchGetDataPending(pendingAction));
-    http.get(url)
-      .then(res => dispatch(fetchGetDataSuccess(successAction, res)))
-      .catch(error => dispatch(fetchGetDataError(errorAction, error)));
+    http
+      .get(url)
+      .then((res) => dispatch(fetchGetDataSuccess(successAction, res)))
+      .catch((error) => dispatch(fetchGetDataError(errorAction, error)));
   };
 }
 

@@ -1,8 +1,11 @@
 import React, { Component } from "react";
 
+import { TableManager } from "./StaffHome";
+import { DASHBOARD } from "../routes";
+
 class DashboardHomePage extends Component {
   public render() {
-    return <div></div>;
+    return <TableManager path={DASHBOARD} />;
   }
 }
 
