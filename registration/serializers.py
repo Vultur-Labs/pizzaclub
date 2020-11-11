@@ -54,7 +54,8 @@ class EmployeeSerializer(ModelSerializer):
     def create(self, validated_data):
         # Get the User data and create
         user_data = validated_data.pop("user")
-        user = User.objects.create_user(is_employee=True, **user_data)
+        password = self.context.get("request").data.get("user").pop("password")
+        user = User.objects.create_user(is_employee=True, password=password, **user_data)
         # Get the address data and create
         address = Address.objects.create(**validated_data.pop("address"))
         # Create the employee instance

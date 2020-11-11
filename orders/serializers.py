@@ -132,6 +132,11 @@ class OrderItemSerializer(ModelSerializer):
         model = OrderItem
         exclude = ['order']
 
+class OrderWhatsAppItemSerializer(ModelSerializer):
+    class Meta:
+        model = OrderItem
+        exclude = ['order']
+
 class OrderSerializer(ModelSerializer):
     items = OrderItemSerializer(many=True)
     delivery_address = AddressSerializer(allow_null=True)
@@ -140,7 +145,7 @@ class OrderSerializer(ModelSerializer):
         fields = '__all__'
 
 class OrderWhatsAppSerializer(ModelSerializer):
-    items = OrderItemSerializer(many=True)
+    items = OrderWhatsAppItemSerializer(many=True)
     class Meta:
         model = Order
         fields = '__all__'
