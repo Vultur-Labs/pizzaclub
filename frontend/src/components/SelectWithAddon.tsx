@@ -11,23 +11,29 @@ interface SelectOptions {
 
 type Props = {
   options: SelectOptions[];
+  labelNoOptions: string;
   onOk: (data: any) => void;
 };
 
 type Values = {
-  data: number | string;
+  data: string;
 };
 
-const validationSchema = Yup.object({
+const validationSchema = Yup.object().shape({
   data: Yup.string().required("Campo requerido"),
 });
 
-export const SelectWithAddon: FC<Props> = ({ options, onOk }) => (
+export const SelectWithAddon: FC<Props> = ({
+  options,
+  labelNoOptions,
+  onOk,
+}) => (
   <Formik<Values>
-    initialValues={{ data: options[0]?.value ?? "No Disponible" }}
+    initialValues={{ data: "" }}
     validationSchema={validationSchema}
-    onSubmit={async (values, { setSubmitting }) => {
-      await onOk(values);
+    onSubmit={async (values, { setSubmitting, setFieldValue }) => {
+      if (values.data) await onOk(values);
+      setFieldValue("data", "");
       setSubmitting(false);
     }}
   >
@@ -41,10 +47,9 @@ export const SelectWithAddon: FC<Props> = ({ options, onOk }) => (
                 name="data"
                 disabled={isSubmitting || lodash.isEmpty(options)}
               >
+                <option key="-1" value="" label={labelNoOptions} />
                 {options.map(({ value, label }, idx) => (
-                  <option value={value} key={idx}>
-                    {label}
-                  </option>
+                  <option value={value} key={idx} label={String(label)} />
                 ))}
               </Field>
             </div>

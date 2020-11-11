@@ -68,9 +68,10 @@ class StaffManagerPage extends Component<Props> {
       <div className="mt-2">
         <SelectWithAddon
           options={options}
+          labelNoOptions="-----"
           onOk={this.handleOpenTable(owner, employee)}
         />
-        <h1 className="mx-3 my-4">Mesas Abiertas</h1>
+        <h1 className="title mx-3 my-4">Mesas Abiertas</h1>
         {lodash.isEmpty(orders) ? (
           <p>No hay Mesas Abiertas</p>
         ) : (
