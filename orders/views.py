@@ -112,7 +112,7 @@ class OrderWhatsAppViewSet(ModelViewSet):
         # Get the delivery address if there is
         delivery_address = data.pop("delivery_address", None)
         if delivery_address:
-            address = Address.objects.get(address=delivery_address)
+            address, _ = Address.objects.get_or_create(address=delivery_address)
             data["delivery_address"] = address.id
         else:
             address = None
