@@ -6,9 +6,10 @@ type Data = Record<string, any>;
 
 const mapData = (result: AxiosResponse<any>) => result.data;
 
-const handleError = (error: Error & { response: AxiosResponse<any> }) => {
+const handleError = async (error: Error & { response: AxiosResponse<any> }) => {
   if (error.response.status === 401) {
-    store.dispatch(logout() as any);
+    await store.dispatch(logout() as any);
+    window.location.reload(true);
   }
 
   throw error;

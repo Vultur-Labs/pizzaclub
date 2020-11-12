@@ -27,7 +27,7 @@ class Menu extends Component {
   _resetInput = () => this.setState({ inputSearch: "" });
 
   render() {
-    const { types, products, interactive, cartItems } = this.props;
+    const { types, products, interactive, cartItems, local } = this.props;
     const { addToCart, removeToCart, plusQuantity, minusQuantity } = this.props;
     const { inputSearch } = this.state;
     return (
@@ -39,6 +39,9 @@ class Menu extends Component {
             resetInput={this._resetInput}
           />
           {types.map((t) => {
+            // If local is false, no show the types only_local
+            if (!local && t.only_local) return null;
+            // Get the product for the type and match the search bar
             let prod = products.filter(
               (p) =>
                 p.types.id === t.id &&

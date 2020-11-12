@@ -1,16 +1,21 @@
 import React, { Component } from "react";
 import { connect, DispatchProp } from "react-redux";
+
+//Import Components
 import { Align, Table, Column } from "../components/Table";
 import { Confirm } from "../components/Confirm";
 import { Toolbar } from "../components/Toolbar";
 import { ModalTrigger } from "../components/ModalTrigger";
 import { EditEmployeeModal } from "../components/modals/EditEmployee";
+import { Loader } from "../components/Common";
+// Import Actions
 import {
   fetchEmployees,
   createEmployee,
   updateEmployee,
   deleteEmployee,
 } from "../actions/dashboardActions";
+//Import Getters
 import { getEmployees } from "../reducers/dashboardReducer";
 import { Employee } from "../types/employee";
 
@@ -22,6 +27,10 @@ type Props = DispatchProp<any> & {
 class DashboardEmployeesPage extends Component<Props> {
   static defaultProps = {
     employees: [],
+  };
+
+  public state = {
+    loading: false,
   };
 
   private columns: Column[] = [
@@ -104,8 +113,12 @@ class DashboardEmployeesPage extends Component<Props> {
     },
   ];
 
-  public componentDidMount() {
-    this.props.dispatch(fetchEmployees());
+  public async componentDidMount() {
+    if (!this.state.loading) {
+      this.setState({ loading: true });
+      await this.props.dispatch(fetchEmployees());
+      this.setState({ loading: false });
+    }
   }
 
   private handleSaveEmployee = (data: any) => {
@@ -122,6 +135,13 @@ class DashboardEmployeesPage extends Component<Props> {
 
   public render() {
     const { employees } = this.props;
+
+    if (this.state.loading)
+      return (
+        <div className="is-flex is-justify-content-center">
+          <Loader className="image is-128x128" alt="Cargando ..." />
+        </div>
+      );
 
     return (
       <div>

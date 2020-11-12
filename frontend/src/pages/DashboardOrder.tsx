@@ -141,8 +141,12 @@ class DashboardOrdersPage extends Component<Props> {
     },
   ];
 
-  public componentDidMount() {
-    this.props.dispatch(fetchOrders());
+  public async componentDidMount() {
+    if (!this.state.loading) {
+      this.setState({ loading: true });
+      await this.props.dispatch(fetchOrders());
+      this.setState({ loading: false });
+    }
   }
 
   private handleUpdate = (id: number) => async (data: any) => {

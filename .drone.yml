@@ -17,8 +17,8 @@ steps:
   commands:
   - tar -cvf ./ui.tar ./app.definition ./app.dockerfile ./nginx/* ./frontend/build/*
   - tar --exclude='./frontend' -cvf ./server.tar ./*
-  - npx caprover deploy -h $SERVER -p $PASSWORD -a thepizzaclub -t ./ui.tar
-  - npx caprover deploy -h $SERVER -p $PASSWORD -a thepizzaclub-server -t ./server.tar
+  - npx caprover deploy -h $SERVER -p $PASSWORD -a tpc -t ./ui.tar
+  - npx caprover deploy -h $SERVER -p $PASSWORD -a tpc-server -t ./server.tar
   environment:
     SERVER:
       from_secret: SERVER
