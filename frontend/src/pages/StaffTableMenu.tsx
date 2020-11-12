@@ -48,7 +48,7 @@ const StaffTableMenu: FC<Props> = ({ order, path = "" }) => {
 
   return (
     <>
-      <Menu interactive={true} />
+      <Menu interactive={true} local={true} />
 
       <div className="field has-addons">
         <p className="control is-expanded">

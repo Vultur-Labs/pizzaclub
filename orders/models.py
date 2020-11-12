@@ -6,9 +6,6 @@ from django.utils import timezone
 from pizzaclub.settings import MAX_CUIL_LENGTH, MIN_CUIL_LENGTH
 from pizzaclub.settings import MAX_PHONE_LENGTH, MIN_PHONE_LENGTH
 from registration.models import Employee, Client, Address
-# from minio_storage.storage import MinioMediaStorage
-
-# storage = MinioMediaStorage()
 # Create your models here.
 
 class SizeProductError(Exception):
@@ -33,6 +30,7 @@ class TypeProduct(models.Model):
     order_n = models.PositiveSmallIntegerField(default=0)
     name = models.CharField(max_length=20)
     subtype = models.ManyToManyField(SubTypeProduct, blank=True)
+    only_local = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
 

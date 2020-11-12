@@ -1,16 +1,21 @@
 import React, { Component } from "react";
 import { connect, DispatchProp } from "react-redux";
+
+// Import Components
 import { Align, Table, Column } from "../components/Table";
 import { Confirm } from "../components/Confirm";
 import { Toolbar } from "../components/Toolbar";
 import { ModalTrigger } from "../components/ModalTrigger";
 import { EditTableModal } from "../components/modals/EditTable";
+import { Loader } from "../components/Common";
+// Import Actions
 import {
   fetchTables,
   createTable,
   updateTable,
   deleteTable,
 } from "../actions/dashboardActions";
+// Import Types
 import { Table as TableLocal } from "../types/table";
 
 type Props = DispatchProp<any> & {
@@ -21,6 +26,10 @@ type Props = DispatchProp<any> & {
 class DashboardTables extends Component<Props> {
   static defaultProps = {
     tables: [],
+  };
+
+  public state = {
+    loading: false,
   };
 
   private columns: Column[] = [
@@ -83,8 +92,12 @@ class DashboardTables extends Component<Props> {
     },
   ];
 
-  public componentDidMount() {
-    this.props.dispatch(fetchTables());
+  public async componentDidMount() {
+    if (!this.state.loading) {
+      this.setState({ loading: true });
+      await this.props.dispatch(fetchTables());
+      this.setState({ loading: false });
+    }
   }
 
   private handleSaveTable = (owner: number) => (data: any) => {
@@ -101,6 +114,13 @@ class DashboardTables extends Component<Props> {
 
   public render() {
     const { tables, owner_id } = this.props;
+
+    if (this.state.loading)
+      return (
+        <div className="is-flex is-justify-content-center">
+          <Loader className="image is-128x128" alt="Cargando ..." />
+        </div>
+      );
 
     return (
       <div>

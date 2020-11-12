@@ -112,7 +112,7 @@ class LocalClientPage extends Component<Props> {
 
                 <Route exact path={`${LOCAL_CLIENT}/${table}`}>
                   <>
-                    <Menu interactive={false} />
+                    <Menu interactive={false} local={true} />
                     <GoToButton
                       path={`${LOCAL_CLIENT}/consumos/${tableId}`}
                       className={`button is-info is-fullwidth mt-2
