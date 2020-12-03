@@ -101,6 +101,12 @@ DEFAULT_FILE_STORAGE = (
     else "b2_storage.storage.B2Storage"
 )
 
+BACKBLAZEB2_ACCOUNT_ID = os.getenv("BACKBLAZEB2_APP_KEY_ID")
+BACKBLAZEB2_APP_KEY_ID = os.getenv("BACKBLAZEB2_APP_KEY_ID")
+BACKBLAZEB2_APP_KEY = os.getenv("BACKBLAZEB2_APP_KEY")
+BACKBLAZEB2_BUCKET_NAME = os.getenv("BACKBLAZEB2_BUCKET_NAME")
+BACKBLAZEB2_BUCKET_ID = os.getenv("BACKBLAZEB2_BUCKET_ID")
+
 # Global settings for Django REST Framework
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
