@@ -14,7 +14,7 @@ import { getTypesData, getProductsData } from "../reducers/showcaseReducer";
 import { getCartItems } from "../reducers/cartReducer";
 // Import Components
 import { SearchProduct } from "../components/Common";
-import { TypeProduct, Product } from "../components/Products";
+import { TypeProduct, Product, SubTypeProduct } from "../components/Products";
 
 class Menu extends Component {
   state = {
@@ -49,31 +49,52 @@ class Menu extends Component {
             );
 
             return (
-              <TypeProduct
-                key={t.id}
-                id={t.id}
-                name={t.name}
-                subtype={t.subtype}
-              >
-                {/* Pass the product as children */}
-                {prod.map((p) => {
-                  //Pass the item of product if there is in the cart
-                  let item = cartItems.filter((i) => i.product.id === p.id);
-                  return (
-                    <Product
-                      key={p.id}
-                      interactive={interactive}
-                      data={p}
-                      item={item}
-                      {...{
-                        addToCart,
-                        removeToCart,
-                        plusQuantity,
-                        minusQuantity,
-                      }}
-                    />
-                  );
-                })}
+              <TypeProduct key={t.id} id={t.id} name={t.name}>
+                {/* Pass the subtypes and  product as children */}
+                {!!t.subtype.length
+                  ? t.subtype.map((s) => (
+                      <SubTypeProduct key={s.id} name={s.name} id={s.id}>
+                        {prod.map((p) => {
+                          //Pass the item of product if there is in the cart
+                          if (p.subtype !== s.id) return null;
+                          let item = cartItems.filter(
+                            (i) => i.product.id === p.id
+                          );
+                          return (
+                            <Product
+                              key={p.id}
+                              interactive={interactive}
+                              data={p}
+                              item={item}
+                              {...{
+                                addToCart,
+                                removeToCart,
+                                plusQuantity,
+                                minusQuantity,
+                              }}
+                            />
+                          );
+                        })}
+                      </SubTypeProduct>
+                    ))
+                  : prod.map((p) => {
+                      //Pass the item of product if there is in the cart
+                      let item = cartItems.filter((i) => i.product.id === p.id);
+                      return (
+                        <Product
+                          key={p.id}
+                          interactive={interactive}
+                          data={p}
+                          item={item}
+                          {...{
+                            addToCart,
+                            removeToCart,
+                            plusQuantity,
+                            minusQuantity,
+                          }}
+                        />
+                      );
+                    })}
               </TypeProduct>
             );
           })}

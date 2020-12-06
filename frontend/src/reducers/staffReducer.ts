@@ -6,7 +6,8 @@ export const OPEN_TABLE = "OPEN_TABLE";
 export const ADD_TABLEITEM = "ADD_TABLEITEM";
 export const REMOVE_TABLEITEM = "REMOVE_TABLEITEM";
 export const CLOSE_TABLE = "CLOSE_TABLE";
-export const SET_DELIVERED = "SET_DELIVERED";
+export const SET_STATUS_ITEM = "SET_STATUS_ITEM";
+export const SET_COMMENT = "SET_COMMENT";
 
 type State = {
   orders: OrderTable[];
@@ -45,17 +46,6 @@ export const staffReducer: Reducer<State> = (
         orders,
       };
 
-    // case REMOVE_TABLEITEM:
-    //   orders = state.orders.map(o => {
-    //     if (o.id === payload.id) return payload;
-    //     return o;
-    //   });
-
-    //   return {
-    //     ...state,
-    //     orders
-    //   };
-
     case CLOSE_TABLE:
       orders = state.orders.filter(({ id }) => id !== payload.id);
 
@@ -64,11 +54,11 @@ export const staffReducer: Reducer<State> = (
         orders,
       };
 
-    case SET_DELIVERED:
+    case SET_STATUS_ITEM:
       orders = state.orders.map((o) => {
         if (o.id === payload.order) {
           const itemIndex = o.items.findIndex((i) => i.id === payload.id);
-          o.items[itemIndex].is_delivered = payload.is_delivered;
+          o.items[itemIndex].status = payload.status;
         }
         return o;
       });
@@ -76,6 +66,12 @@ export const staffReducer: Reducer<State> = (
       return {
         ...state,
         orders,
+      };
+
+    case SET_COMMENT:
+      return {
+        ...state,
+        orders: state.orders.map((o) => (o.id === payload.id ? payload : o)),
       };
 
     default:

@@ -1,22 +1,34 @@
 import React, { Component, FC } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
-import { faCheckSquare, faClock } from "@fortawesome/free-solid-svg-icons";
+// import {
+//   faCheckSquare,
+//   faClock,
+//   faUtensils,
+// } from "@fortawesome/free-solid-svg-icons";
 
 // Import Types
-import { OrderTable, TableItem } from "../types/table";
+import {
+  OrderTable,
+  TableItem,
+  statusMap,
+  statusMapToClassIcon,
+  statusMapToIcon,
+  statusMapToNext,
+} from "../types/table";
 // Import Components
 import { PriceItem, CartItem } from "./Cart";
 import { Confirm } from "./Confirm";
+import { EditComment } from "./EditComment";
 
 type DeliveredIconProps = {
-  className: string;
+  className?: string;
   icon: IconProp;
-  onClick: () => void;
+  onClick?: () => void;
 };
 
-const IconDelivered: FC<DeliveredIconProps> = ({
-  className,
+export const IconDelivered: FC<DeliveredIconProps> = ({
+  className = "",
   icon,
   onClick,
   ...props
@@ -28,29 +40,18 @@ const IconDelivered: FC<DeliveredIconProps> = ({
 
 type PropsItem = {
   item: TableItem;
-  changeDelivered?: (status: boolean) => void;
+  changeStatus?: (status: string) => void;
   removeItem?: (item: TableItem) => void;
 };
 
-const TableItemInfo: FC<PropsItem> = ({
-  item,
-  changeDelivered,
-  removeItem,
-}) => {
-  const { is_delivered } = item;
-  const icon = is_delivered ? (
+const TableItemInfo: FC<PropsItem> = ({ item, changeStatus, removeItem }) => {
+  const { status } = item;
+  const icon = (
     <IconDelivered
-      className="icon has-text-success has-tooltip-right"
-      icon={faCheckSquare}
-      data-tooltip="Entregado"
-      onClick={() => changeDelivered && changeDelivered(false)}
-    />
-  ) : (
-    <IconDelivered
-      className="icon has-text-danger has-tooltip-right"
-      icon={faClock}
-      data-tooltip="No Entregado"
-      onClick={() => changeDelivered && changeDelivered(true)}
+      className={statusMapToClassIcon[status]}
+      icon={statusMapToIcon[status]}
+      data-tooltip={statusMap[status]}
+      onClick={() => changeStatus && changeStatus(statusMapToNext[status])}
     />
   );
 
@@ -88,17 +89,22 @@ const TableItemInfo: FC<PropsItem> = ({
 
 type Props = {
   order: OrderTable;
-  changeDelivered: (id: number, status: boolean) => void;
+  changeStatusItem: (id: number, status: string) => void;
   removeTableItem: (item: TableItem) => void;
+  saveCommentOrder: (data: string) => void;
 };
 
 export class OrderShower extends Component<Props> {
-  private handleDelivered = (item: TableItem) => async (status: boolean) => {
-    await this.props.changeDelivered(item.id, status);
+  private handleStatusItem = (item: TableItem) => async (status: string) => {
+    await this.props.changeStatusItem(item.id, status);
   };
 
   private handleRemoveItem = async (item: TableItem) => {
     await this.props.removeTableItem(item);
+  };
+
+  private handleSaveComment = async (data: string) => {
+    await this.props.saveCommentOrder(data);
   };
 
   public render() {
@@ -109,7 +115,7 @@ export class OrderShower extends Component<Props> {
           <TableItemInfo
             key={i.id}
             item={i}
-            changeDelivered={this.handleDelivered(i)}
+            changeStatus={this.handleStatusItem(i)}
             removeItem={this.handleRemoveItem}
           />
         ))}
@@ -120,6 +126,12 @@ export class OrderShower extends Component<Props> {
           classItem="control is-size-4"
           text="Total"
           price={order.total}
+        />
+
+        <EditComment
+          label="Comentatios:"
+          value={order.comment}
+          onOk={this.handleSaveComment}
         />
       </div>
     );

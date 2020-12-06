@@ -7,7 +7,7 @@ import lodash from "lodash";
 import { Place } from "../types/place";
 import { OrderTable, Table } from "../types/table";
 // Import Components
-import { Image, GoToButton } from "../components/Common";
+import { Image, GoToButton, Comment } from "../components/Common";
 import Menu from "../containers/Menu";
 import { PriceItem, CartItem } from "../components/Cart";
 //Import Actions
@@ -91,6 +91,12 @@ class LocalClientPage extends Component<Props> {
                               classItem="control is-size-4"
                               text="Total"
                               price={order.total}
+                            />,
+                            <Comment
+                              classContainer="my-4"
+                              classTitle="has-text-weight-bold"
+                              classContent=""
+                              comment={order.comment}
                             />,
                           ]
                         )}

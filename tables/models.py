@@ -4,6 +4,8 @@ from orders.models import Place, PriceList
 from registration.models import Employee
 
 # Create your models here.
+
+
 class Table(models.Model):
     number = models.PositiveSmallIntegerField(default=0)
     is_open = models.BooleanField(default=False)
@@ -23,28 +25,31 @@ class Table(models.Model):
         self.is_open = False
         self.save()
 
+
 class OrderTable(models.Model):
     STATUS_CHOICES = [
         ('open', 'open'),
         ('cancel', 'cancel'),
         ('close', 'close')
-        ]
+    ]
 
     owner = models.ForeignKey(Place, on_delete=models.CASCADE)
-    table = models.ForeignKey(Table, 
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True
-        )
+    table = models.ForeignKey(Table,
+                              on_delete=models.SET_NULL,
+                              null=True,
+                              blank=True
+                              )
     employee = models.ForeignKey(
         Employee,
         on_delete=models.SET_NULL,
         null=True,
         blank=True
-        )
+    )
     date = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=7, choices=STATUS_CHOICES, default='open')
+    status = models.CharField(
+        max_length=7, choices=STATUS_CHOICES, default='open')
     total = models.FloatField(default=0)
+    comment = models.TextField(default="")
 
     def __str__(self):
         return str(self.id)
@@ -57,7 +62,7 @@ class OrderTable(models.Model):
         self.table.close()
         self.status = "close"
         self.save()
-    
+
     def cancel(self):
         self.table.close()
         self.status = "cancel"
@@ -71,13 +76,22 @@ class OrderTable(models.Model):
         self.total = total
         super(OrderTable, self).save(*args, **kwargs)
 
+
 class TableItem(models.Model):
-    order = models.ForeignKey(OrderTable, on_delete=models.CASCADE, related_name='items')
+    STATUS_CHOICES = [
+        ('delivered', 'delivered'),
+        ('prepearing', 'prepearing'),
+        ('asked', 'asked')
+    ]
+
+    order = models.ForeignKey(
+        OrderTable, on_delete=models.CASCADE, related_name='items')
     product = models.ForeignKey(PriceList, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
     total = models.FloatField(default=0)
-    is_delivered = models.BooleanField(default=False)
-    
+    status = models.CharField(
+        max_length=10, choices=STATUS_CHOICES, default='asked')
+
     def __str__(self):
         return f"#{self.id}"
 
