@@ -14,10 +14,10 @@ export const statusMap: Record<string, string> = {
   asked: "Pedido",
 };
 
-export const statusMapToClassIcon: Record<string, string> = {
-  prepearing: "icon has-text-warning has-tooltip-right",
-  delivered: "icon has-text-success has-tooltip-right",
-  asked: "icon has-text-danger has-tooltip-right",
+export const statusMapToClassButton: Record<string, string> = {
+  prepearing: "button is-small is-warning has-tooltip-right",
+  delivered: "button is-small is-success has-tooltip-right",
+  asked: "button is-small is-danger has-tooltip-right",
 };
 
 export const statusMapToIcon: Record<string, IconProp> = {

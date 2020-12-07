@@ -5,7 +5,7 @@ import { Confirm } from "./Confirm";
 import {
   OrderTable,
   statusMapToIcon,
-  statusMapToClassIcon,
+  statusMapToClassButton,
 } from "../types/table";
 
 type Props = {
@@ -50,13 +50,13 @@ export const TableCard: FC<Props> = ({
                 .map((c) => (
                   <span
                     key={`${order.id}-${c}`}
-                    className="has-text-weight-bold"
+                    className="is-flex is-align-items-center has-text-weight-bold"
                   >
                     <IconDelivered
                       icon={statusMapToIcon[c]}
-                      className={statusMapToClassIcon[c]}
+                      className={statusMapToClassButton[c]}
                     />
-                    {counter[c]}
+                    <span className="ml-2">{counter[c]}</span>
                   </span>
                 ))}
             </div>

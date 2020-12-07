@@ -12,7 +12,7 @@ import {
   OrderTable,
   TableItem,
   statusMap,
-  statusMapToClassIcon,
+  statusMapToClassButton,
   statusMapToIcon,
   statusMapToNext,
 } from "../types/table";
@@ -27,15 +27,12 @@ type DeliveredIconProps = {
   onClick?: () => void;
 };
 
-export const IconDelivered: FC<DeliveredIconProps> = ({
-  className = "",
-  icon,
-  onClick,
-  ...props
-}) => (
-  <span {...props} className={className} onClick={onClick}>
-    <FontAwesomeIcon icon={icon} />
-  </span>
+export const IconDelivered: FC<DeliveredIconProps> = ({ icon, ...props }) => (
+  <button {...props}>
+    <span className="icon">
+      <FontAwesomeIcon icon={icon} />
+    </span>
+  </button>
 );
 
 type PropsItem = {
@@ -48,7 +45,7 @@ const TableItemInfo: FC<PropsItem> = ({ item, changeStatus, removeItem }) => {
   const { status } = item;
   const icon = (
     <IconDelivered
-      className={statusMapToClassIcon[status]}
+      className={statusMapToClassButton[status]}
       icon={statusMapToIcon[status]}
       data-tooltip={statusMap[status]}
       onClick={() => changeStatus && changeStatus(statusMapToNext[status])}
@@ -129,7 +126,7 @@ export class OrderShower extends Component<Props> {
         />
 
         <EditComment
-          label="Comentatios:"
+          label="Comentarios:"
           value={order.comment}
           onOk={this.handleSaveComment}
         />

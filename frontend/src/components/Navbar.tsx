@@ -49,7 +49,7 @@ export const Navbar = () => {
       <div id="navMenu" className="navbar-menu has-text-weight-bold">
         <div className="navbar-start">
           <Link className="navbar-item brand-text" to={DASHBOARD}>
-            The Pizza Club
+            <span className="mr-2">The Pizza Club</span>
             {!!counterTable && (
               <span className="tag is-danger">{counterTable}</span>
             )}
