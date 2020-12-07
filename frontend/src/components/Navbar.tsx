@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -23,6 +23,7 @@ import logo from "../images/logo.png";
 
 export const Navbar = () => {
   const dispatch = useDispatch();
+  const [show, setShow] = useState(false);
   const place = useSelector((state: any) => getPlace(state));
   const tables = useSelector((state: any) => getOrderTables(state));
   const counterTable = tables.reduce(
@@ -42,27 +43,38 @@ export const Navbar = () => {
   }, [dispatch]);
 
   const handleLogout = useCallback(() => dispatch(logout()), [dispatch]);
+  const showMenu = useCallback(() => setShow(!show), [show, setShow]);
+  const hideMenu = useCallback(() => setShow(false), [setShow]);
 
   return (
-    <nav className="navbar has-shadow mb-4 px-3 is-warning">
-      <div className="navbar-brand navbar-start">
-        <Logo className="image is-64x64" image={logo} alt="logo" />
+    <nav
+      className="navbar has-shadow mb-4 is-warning"
+      role="navigation"
+      aria-label="main navigation"
+    >
+      <div className="navbar-brand">
+        <Logo className="image is-64x64 mx-3" image={logo} alt="logo" />
+        <a
+          role="button"
+          className={`navbar-burger ${show ? "is-active" : ""}`}
+          aria-label="menu"
+          aria-expanded="false"
+          data-target="navMenu"
+          onClick={showMenu}
+        >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </a>
       </div>
 
-      <a
-        role="button"
-        className="navbar-burger"
-        aria-label="menu"
-        aria-expanded="false"
-        data-target="navMenu"
+      <div
+        id="navMenu"
+        className={`navbar-menu is-expanded has-text-weight-bold has-background-warning ${
+          show ? "is-active" : ""
+        }`}
       >
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-      </a>
-
-      <div id="navMenu" className="navbar-menu has-text-weight-bold">
-        <div className="navbar-start">
+        <div className="navbar-start" onClick={hideMenu}>
           <Link className="navbar-item brand-text" to={DASHBOARD}>
             <span className="is-capitalized">{place.name}</span>
             {!!counterTable && (
@@ -81,13 +93,14 @@ export const Navbar = () => {
           <Link className="navbar-item" to={DASHBOARD_EMPLOYEES}>
             Empleados
           </Link>
+          <hr className="navbar-divider" />
 
           <Link className="navbar-item" to={DASHBOARD_TABLES}>
             Mesas
           </Link>
         </div>
 
-        <div className="navbar-end">
+        <div className="navbar-end mx-3">
           <span className="navbar-item">
             <div className="field">
               <p className="control">
