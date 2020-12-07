@@ -5,7 +5,8 @@ import {
   CLOSE_TABLE,
   ADD_TABLEITEM,
   REMOVE_TABLEITEM,
-  SET_DELIVERED,
+  SET_STATUS_ITEM,
+  SET_COMMENT,
 } from "../reducers/staffReducer";
 import { apiRoutes, http } from "../services/http";
 
@@ -59,15 +60,26 @@ export const removeTableItem = (_order: number, id: number) => async (
   } catch (error) {}
 };
 
-export const setDeliveredTableItem = (
-  id: number,
-  is_delivered: boolean
-) => async (dispatch: Dispatch) => {
+export const setStatusTableItem = (id: number, status: string) => async (
+  dispatch: Dispatch
+) => {
   try {
     const payload = await http.patch(`${apiRoutes.staff_table}${id}/`, {
-      is_delivered,
+      status,
     });
 
-    return dispatch({ type: SET_DELIVERED, payload });
+    return dispatch({ type: SET_STATUS_ITEM, payload });
+  } catch (error) {}
+};
+
+export const setCommentOrderTable = (id: number, comment: string) => async (
+  dispatch: Dispatch
+) => {
+  try {
+    const payload = await http.patch(`${apiRoutes.tableorder}${id}/`, {
+      comment,
+    });
+
+    return dispatch({ type: SET_COMMENT, payload });
   } catch (error) {}
 };

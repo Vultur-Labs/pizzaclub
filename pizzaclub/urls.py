@@ -17,6 +17,9 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from django.conf.urls import url
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token
+from django.conf.urls.static import static
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.conf import settings
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -26,3 +29,8 @@ urlpatterns = [
     url(r"^api-token-auth/", obtain_jwt_token),
     url(r"^api-token-refresh/", refresh_jwt_token),
 ]
+
+urlpatterns += staticfiles_urlpatterns()
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL,
+                          document_root=settings.MEDIA_ROOT)
