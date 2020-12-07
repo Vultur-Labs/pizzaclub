@@ -61,11 +61,10 @@ export const apiRoutes = {
   owner_data: "/orders/owner/",
   employee_data: "/accounts/employees/",
   types_data: "/orders/types/",
+  subtypes_data: "/orders/subtypes/",
   products_data: "/orders/products/",
   orders: "/orders/",
   tables_data: "/tables/",
   tableorder: "/tables/tableorder/",
-  // add_tableitem: "/tables/new_item/",
-  // remove_tableitem: "/tables/remove_item/",
   staff_table: "/tables/staff/",
 };

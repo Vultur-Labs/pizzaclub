@@ -1,14 +1,22 @@
 import { Dispatch } from "redux";
-import { Product } from "../types/product";
+
+// Import Actions
 import {
   DASHBOARD_LOGIN,
-  FETCH_TYPES,
+  DASHBOARD_LOGOUT,
   FETCH_PRODUCT,
   FETCH_PRODUCTS,
   CREATE_PRODUCT,
   UPDATE_PRODUCT,
   DELETE_PRODUCT,
-  DASHBOARD_LOGOUT,
+  FETCH_TYPES,
+  CREATE_TYPE,
+  UPDATE_TYPE,
+  DELETE_TYPE,
+  FETCH_SUBTYPES,
+  CREATE_SUBTYPE,
+  UPDATE_SUBTYPE,
+  DELETE_SUBTYPE,
   FETCH_ORDERS,
   UPDATE_ORDER,
   FETCH_PLACE,
@@ -21,8 +29,12 @@ import {
   UPDATE_TABLE,
   DELETE_TABLE,
 } from "../reducers/dashboardReducer";
+// Import Services
 import { apiRoutes, http } from "../services/http";
+// Import Types
 import { Credentials } from "../types/credentials";
+import { Product } from "../types/product";
+import { ProductType, ProductSubType } from "../types/product-type";
 
 // LOGIN ACTIONS
 export const login = (credentials: Credentials) => async (
@@ -61,6 +73,81 @@ export const fetchTypes = () => async (dispatch: Dispatch) => {
     const types = await http.get(apiRoutes.types_data);
 
     return dispatch({ type: FETCH_TYPES, payload: types });
+  } catch (error) {}
+};
+
+export const createType = (type: ProductType, place_id: number) => async (
+  dispatch: Dispatch
+) => {
+  try {
+    const result = await http.post(apiRoutes.types_data, {
+      ...type,
+      place: place_id,
+    });
+
+    return dispatch({ type: CREATE_TYPE, payload: result });
+  } catch (error) {}
+};
+
+export const updateType = (id: number, type: ProductType) => async (
+  dispatch: Dispatch
+) => {
+  try {
+    const result = await http.patch(`${apiRoutes.types_data}${id}/`, type);
+
+    return dispatch({ type: UPDATE_TYPE, payload: result });
+  } catch (error) {}
+};
+
+export const deleteType = (id: number) => async (dispatch: Dispatch) => {
+  try {
+    await http.delete(`${apiRoutes.types_data}${id}/`);
+
+    return dispatch({ type: DELETE_TYPE, payload: id });
+  } catch (error) {}
+};
+
+// SUBTYPES ACTIONS
+export const fetchSubTypes = () => async (dispatch: Dispatch) => {
+  try {
+    const types = await http.get(apiRoutes.subtypes_data);
+
+    return dispatch({ type: FETCH_SUBTYPES, payload: types });
+  } catch (error) {}
+};
+
+export const createSubType = (
+  subtype: ProductSubType,
+  place_id: number
+) => async (dispatch: Dispatch) => {
+  try {
+    const result = await http.post(apiRoutes.subtypes_data, {
+      ...subtype,
+      place: place_id,
+    });
+
+    return dispatch({ type: CREATE_SUBTYPE, payload: result });
+  } catch (error) {}
+};
+
+export const updateSubType = (id: number, subtype: ProductSubType) => async (
+  dispatch: Dispatch
+) => {
+  try {
+    const result = await http.patch(
+      `${apiRoutes.subtypes_data}${id}/`,
+      subtype
+    );
+
+    return dispatch({ type: UPDATE_SUBTYPE, payload: result });
+  } catch (error) {}
+};
+
+export const deleteSubType = (id: number) => async (dispatch: Dispatch) => {
+  try {
+    await http.delete(`${apiRoutes.subtypes_data}${id}/`);
+
+    return dispatch({ type: DELETE_SUBTYPE, payload: id });
   } catch (error) {}
 };
 

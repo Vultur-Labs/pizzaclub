@@ -8,11 +8,14 @@ from pizzaclub.settings import MAX_PHONE_LENGTH, MIN_PHONE_LENGTH
 from registration.models import Employee, Client, Address
 # Create your models here.
 
+
 class SizeProductError(Exception):
     pass
 
+
 class PresentationProductError(Exception):
     pass
+
 
 class SubTypeProduct(models.Model):
     order_n = models.PositiveSmallIntegerField(default=0)
@@ -25,6 +28,7 @@ class SubTypeProduct(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class TypeProduct(models.Model):
     order_n = models.PositiveSmallIntegerField(default=0)
@@ -39,9 +43,10 @@ class TypeProduct(models.Model):
 
     def __str__(self):
         return self.name
-    
+
     def is_subtype(self, subtype_id):
         return self.subtype.filter(pk=subtype_id).exists()
+
 
 class PresentationProduct(models.Model):
     '''
@@ -59,6 +64,7 @@ class PresentationProduct(models.Model):
     def __str__(self):
         return self.name
 
+
 class SizeProduct(models.Model):
     '''
     Save the diferent size type for products.
@@ -74,6 +80,7 @@ class SizeProduct(models.Model):
     def __str__(self):
         return self.name
 
+
 class FeatureProduct(models.Model):
     '''
     This models save information about special features of products,
@@ -88,6 +95,7 @@ class FeatureProduct(models.Model):
     def __str__(self):
         return f'{self.name} ({self.symbol})'
 
+
 class Shipping(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
@@ -95,6 +103,7 @@ class Shipping(models.Model):
 
     def __str__(self):
         return str(self.cost)
+
 
 class Place(models.Model):
     name = models.CharField(max_length=30)
@@ -126,6 +135,7 @@ class Place(models.Model):
     def __str__(self):
         return self.name
 
+
 class Product(models.Model):
     '''
     This models save the data of products and the relation
@@ -137,7 +147,8 @@ class Product(models.Model):
     description = models.CharField(max_length=100, blank=True)
     image = models.ImageField(upload_to="products/", blank=True, null=True)
     types = models.ForeignKey(TypeProduct, on_delete=models.CASCADE)
-    subtype = models.ForeignKey(SubTypeProduct, on_delete=models.SET_NULL, null=True, blank=True)
+    subtype = models.ForeignKey(
+        SubTypeProduct, on_delete=models.SET_NULL, null=True, blank=True)
     presentation = models.ManyToManyField(PresentationProduct, blank=True)
     size = models.ManyToManyField(SizeProduct, blank=True)
     feature = models.ManyToManyField(FeatureProduct, blank=True)
@@ -145,11 +156,14 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     last_modified = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        ordering = ['order_n', 'pk']
+
     def __str__(self):
         if self.subtype:
             return f"{self.name} ({self.types.name}:{self.subtype.name})"
         return f"{self.name} ({self.types.name})"
-    
+
     def is_size(self, size_id):
         return self.size.filter(pk=size_id).exists()
 
@@ -161,17 +175,22 @@ class Product(models.Model):
             raise ValueError(f"Subtype must belong to Type of Product")
 
     def save(self, *args, **kwargs):
-        if self.subtype: self.check_subtype()
+        if self.subtype:
+            self.check_subtype()
         super(Product, self).save(*args, **kwargs)
+
 
 class PriceList(models.Model):
     '''
     This model generate the list of prices for products,
     taking into account the size and presentation.
     '''
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='prices')
-    presentation = models.ForeignKey(PresentationProduct, on_delete=models.SET_NULL, null=True, blank=True)
-    size = models.ForeignKey(SizeProduct, on_delete=models.SET_NULL, null=True, blank=True)
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, related_name='prices')
+    presentation = models.ForeignKey(
+        PresentationProduct, on_delete=models.SET_NULL, null=True, blank=True)
+    size = models.ForeignKey(
+        SizeProduct, on_delete=models.SET_NULL, null=True, blank=True)
     price = models.FloatField(default=0)
     is_active = models.BooleanField(default=True)
     is_available = models.BooleanField(default=True)
@@ -183,27 +202,27 @@ class PriceList(models.Model):
             models.UniqueConstraint(
                 fields=['product', 'presentation', 'size'],
                 name='unique_price'
-                ),
+            ),
             models.UniqueConstraint(
                 fields=['product', 'size'],
                 name='unique_price_without_presentation',
-                condition=Q(presentation__isnull = True)
-                ),
+                condition=Q(presentation__isnull=True)
+            ),
             models.UniqueConstraint(
                 fields=['product', 'presentation'],
                 name='unique_price_without_size',
-                condition=Q(size__isnull = True)
-                ),
+                condition=Q(size__isnull=True)
+            ),
             models.UniqueConstraint(
                 fields=['product'],
                 name='unique_price_without_presentation_and_size',
-                condition=Q(presentation__isnull = True) & Q(size__isnull = True)
-                ),
-            ]
+                condition=Q(presentation__isnull=True) & Q(size__isnull=True)
+            ),
+        ]
 
     def __str__(self):
         return str(self.product)
-    
+
     def get_product_name(self):
         return self.product.name
 
@@ -216,17 +235,21 @@ class PriceList(models.Model):
             raise SizeProductError('Size Product not valid.')
 
     def check_presentation(self):
-        if not self.product.is_presentation(self.presentation.id): 
+        if not self.product.is_presentation(self.presentation.id):
             raise PresentationProductError('Presentation Product not valid.')
 
     def save(self, *args, **kwargs):
         # Check price, size and presentation
         self.check_price_gte_zero()
-        if self.size: self.check_size()
-        if self.presentation: self.check_presentation()
+        if self.size:
+            self.check_size()
+        if self.presentation:
+            self.check_presentation()
         # If the Product is not active, the PriceProduct must be inactive too.
-        if not self.product.is_active: self.is_active = False
+        if not self.product.is_active:
+            self.is_active = False
         super(PriceList, self).save(*args, **kwargs)
+
 
 class Order(models.Model):
     STATUS_CHOICES = [
@@ -237,8 +260,8 @@ class Order(models.Model):
         ('processing', 'processing'),
         ('delivering', 'delivering'),
         ('ready', 'ready')
-        ]
-    
+    ]
+
     ORDER_TYPES = [
         ('whatsapp', 'whatsapp'),
         ('phone', 'phone'),
@@ -256,12 +279,16 @@ class Order(models.Model):
     order_type = models.CharField(max_length=10, choices=ORDER_TYPES)
     date = models.DateTimeField(auto_now_add=True)
     client = models.ForeignKey(Client, on_delete=models.SET_NULL, null=True)
-    employee = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='pending')
+    employee = models.ForeignKey(
+        Employee, on_delete=models.SET_NULL, null=True)
+    status = models.CharField(
+        max_length=10, choices=STATUS_CHOICES, default='pending')
     table = models.PositiveSmallIntegerField(null=True)
     delivery_mode = models.CharField(max_length=8, choices=DELIVERY_CHOICES)
-    delivery_address = models.ForeignKey(Address, on_delete=models.SET_NULL, null=True, blank=True)
-    shipping = models.ForeignKey(Shipping, on_delete=models.SET_NULL, null=True)
+    delivery_address = models.ForeignKey(
+        Address, on_delete=models.SET_NULL, null=True, blank=True)
+    shipping = models.ForeignKey(
+        Shipping, on_delete=models.SET_NULL, null=True)
     comment = models.TextField(blank=True, null=True)
     total = models.FloatField(default=0)
     is_delete = models.BooleanField(default=False)
@@ -277,7 +304,8 @@ class Order(models.Model):
 
     def save(self, *args, **kwargs):
         # Set the value of shipping
-        if self.delivery_mode == 'delivery': self.shipping = Shipping.objects.last()
+        if self.delivery_mode == 'delivery':
+            self.shipping = Shipping.objects.last()
         shipping_cost = self.shipping.cost if self.shipping else 0.0
         # Calculate the total
         total = 0
@@ -286,19 +314,22 @@ class Order(models.Model):
         self.total = total + shipping_cost
         super(Order, self).save(*args, **kwargs)
 
+
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='items')
+    order = models.ForeignKey(
+        Order, on_delete=models.CASCADE, related_name='items')
     product = models.ForeignKey(PriceList, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=1)
     unitary_price = models.FloatField(default=0)
     discount = models.FloatField(default=0.0)
     total = models.FloatField(default=0)
-    
+
     def __str__(self):
         return f"#{self.id}"
-    
+
     def check_discount(self):
-        if self.discount > self.total: raise ValueError('Discount is greater than Total')
+        if self.discount > self.total:
+            raise ValueError('Discount is greater than Total')
 
     def save(self, *args, **kwargs):
         self.unitary_price = self.product.price
@@ -306,4 +337,3 @@ class OrderItem(models.Model):
         #self.total_cost = self.quantity*self.unitary_cost
         self.check_discount()
         super(OrderItem, self).save(*args, **kwargs)
- 

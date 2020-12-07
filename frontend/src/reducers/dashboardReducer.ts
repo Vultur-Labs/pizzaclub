@@ -1,6 +1,6 @@
 import { Reducer } from "redux";
 import { Account } from "../types/account";
-import { ProductType } from "../types/product-type";
+import { ProductType, ProductSubType } from "../types/product-type";
 import { Product } from "../types/product";
 import { Place } from "../types/place";
 import { Employee } from "../types/employee";
@@ -12,6 +12,13 @@ export const DASHBOARD_LOGIN = "DASHBOARD_LOGIN";
 export const DASHBOARD_LOGOUT = "DASHBOARD_LOGOUT";
 export const FETCH_PLACE = "FETCH_PLACE";
 export const FETCH_TYPES = "FETCH_TYPES";
+export const CREATE_TYPE = "CREATE_TYPE";
+export const UPDATE_TYPE = "UPDATE_TYPE";
+export const DELETE_TYPE = "DELETE_TYPE";
+export const FETCH_SUBTYPES = "FETCH_SUBTYPES";
+export const CREATE_SUBTYPE = "CREATE_SUBTYPE";
+export const UPDATE_SUBTYPE = "UPDATE_SUBTYPE";
+export const DELETE_SUBTYPE = "DELETE_SUBTYPE";
 export const FETCH_PRODUCTS = "FETCH_PRODUCTS";
 export const FETCH_PRODUCT = "FETCH_PRODUCT";
 export const CREATE_PRODUCT = "CREATE_PRODUCT";
@@ -31,6 +38,7 @@ export const DELETE_TABLE = "DELETE_TABLE";
 type State = {
   account: Partial<Account>;
   types: ProductType[];
+  subtypes: ProductSubType[];
   products: Product[];
   product: Partial<Product>;
   orders: Partial<OrderPagination>;
@@ -42,6 +50,7 @@ type State = {
 const initialState: State = {
   account: {},
   types: [],
+  subtypes: [],
   products: [],
   product: {},
   orders: {},
@@ -55,6 +64,7 @@ export const dashboardReducer: Reducer<State> = (
   { type, payload }
 ) => {
   switch (type) {
+    // LOGIN AND LOGOUT ACTIONS
     case DASHBOARD_LOGIN:
       return {
         ...state,
@@ -66,23 +76,17 @@ export const dashboardReducer: Reducer<State> = (
         ...state,
         account: {},
       };
-
+    // PLACE DATA
     case FETCH_PLACE:
       return {
         ...state,
         place: payload ?? [],
       };
-
+    // PRODUCTS ACTIONS
     case FETCH_PRODUCTS:
       return {
         ...state,
         products: payload ?? [],
-      };
-
-    case FETCH_TYPES:
-      return {
-        ...state,
-        types: payload ?? [],
       };
 
     case FETCH_PRODUCT:
@@ -116,7 +120,57 @@ export const dashboardReducer: Reducer<State> = (
         products:
           state.products.filter((product) => product.id !== payload) ?? [],
       };
+    // TYPES ACTIONS
+    case FETCH_TYPES:
+      return {
+        ...state,
+        types: payload ?? [],
+      };
 
+    case CREATE_TYPE:
+      return {
+        ...state,
+        types: [...state.types, payload],
+      };
+
+    case UPDATE_TYPE:
+      return {
+        ...state,
+        types: state.types.map((t) => (t.id === payload.id ? payload : t)),
+      };
+
+    case DELETE_TYPE:
+      return {
+        ...state,
+        types: state.types.filter((t) => t.id !== payload) ?? [],
+      };
+    // SUBTYPES ACTIONS
+    case FETCH_SUBTYPES:
+      return {
+        ...state,
+        subtypes: payload ?? [],
+      };
+
+    case CREATE_SUBTYPE:
+      return {
+        ...state,
+        subtypes: [...state.subtypes, payload],
+      };
+
+    case UPDATE_SUBTYPE:
+      return {
+        ...state,
+        subtypes: state.subtypes.map((t) =>
+          t.id === payload.id ? payload : t
+        ),
+      };
+
+    case DELETE_SUBTYPE:
+      return {
+        ...state,
+        subtypes: state.types.filter((t) => t.id !== payload) ?? [],
+      };
+    // ORDERS ACTIONS
     case FETCH_ORDERS:
       return {
         ...state,
@@ -136,6 +190,7 @@ export const dashboardReducer: Reducer<State> = (
         orders,
       };
 
+    // EMPLOYEES ACTIONS
     case FETCH_EMPLOYEES:
       return {
         ...state,
@@ -166,7 +221,7 @@ export const dashboardReducer: Reducer<State> = (
         ...state,
         employees: state.employees.filter((e) => e.user.id !== payload) ?? [],
       };
-
+    // TABLES ACTIONS
     case FETCH_TABLES:
       return {
         ...state,
@@ -213,6 +268,7 @@ export const dashboardReducer: Reducer<State> = (
   }
 };
 
+export const getPlace = (state: any) => state.dashboard.place;
 export const getTables = (state: any) => state.dashboard.tables;
 export const getEmployees = (state: any) => state.dashboard.employees;
 export const getAccount = (state: any) => state.dashboard.account;
@@ -223,3 +279,6 @@ export const getOrdersCurrent = (state: any) => state.dashboard.orders.current;
 export const getOrdersNext = (state: any) => state.dashboard.orders.next;
 export const getOrdersPrevious = (state: any) =>
   state.dashboard.orders.previous;
+export const getProducts = (state: any) => state.dashboard.products;
+export const getTypesProduct = (state: any) => state.dashboard.types;
+export const getSubTypesProduct = (state: any) => state.dashboard.subtypes;

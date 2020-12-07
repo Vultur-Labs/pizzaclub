@@ -95,9 +95,9 @@ class TableItem(models.Model):
     def __str__(self):
         return f"#{self.id}"
 
-    def delivered(self):
-        self.is_delivered = True
-        self.save()
+    # def delivered(self):
+    #     self.is_delivered = True
+    #     self.save()
 
     def save(self, *args, **kwargs):
         self.total = self.quantity*self.product.price

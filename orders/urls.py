@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import OrderViewSet, OrderWhatsAppViewSet, ProductViewSet
+from .views import OrderViewSet, OrderWhatsAppViewSet, ProductViewSet, TypesViewSet, SubTypesViewSet
 from . import views
 
 app_name = "orders"
@@ -31,10 +31,34 @@ product_detail = ProductViewSet.as_view(
     }
 )
 
+types_list = TypesViewSet.as_view({"get": "list", "post": "create"})
+types_detail = TypesViewSet.as_view(
+    {
+        "get": "retrieve",
+        "put": "update",
+        "patch": "partial_update",
+        "delete": "destroy",
+    }
+)
+
+subtypes_list = SubTypesViewSet.as_view({"get": "list", "post": "create"})
+subtypes_detail = SubTypesViewSet.as_view(
+    {
+        "get": "retrieve",
+        "put": "update",
+        "patch": "partial_update",
+        "delete": "destroy",
+    }
+)
+
 urlpatterns = [
     path("products/", product_list),
     path("products/<int:pk>/", product_detail),
-    path("types/", views.get_types),
+    # path("types/", views.get_types),
+    path("types/<int:pk>/", types_detail),
+    path("types/", types_list),
+    path("subtypes/<int:pk>/", subtypes_detail),
+    path("subtypes/", subtypes_list),
     path("owner/", views.get_owner),
     path("whatsapp/", order_whatsapp),
     path("<int:pk>/", order_detail),

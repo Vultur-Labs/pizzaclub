@@ -8,20 +8,22 @@ import { Logo } from "./Common";
 import {
   DASHBOARD,
   DASHBOARD_ORDERS,
-  // DASHBOARD_PRODUCTS,
+  DASHBOARD_PRODUCTS,
   DASHBOARD_EMPLOYEES,
   DASHBOARD_TABLES,
 } from "../routes";
 // Import Actions
-import { logout } from "../actions/dashboardActions";
+import { logout, fetchPlace } from "../actions/dashboardActions";
 import { fetchOrderTable } from "../actions/staffActions";
 // Import Getters
 import { getOrderTables } from "../reducers/staffReducer";
+import { getPlace } from "../reducers/dashboardReducer";
 // Import Statics
 import logo from "../images/logo.png";
 
 export const Navbar = () => {
   const dispatch = useDispatch();
+  const place = useSelector((state: any) => getPlace(state));
   const tables = useSelector((state: any) => getOrderTables(state));
   const counterTable = tables.reduce(
     (a, t) => (t.items.some((i) => i.status !== "delivered") ? a + 1 : a),
@@ -29,6 +31,7 @@ export const Navbar = () => {
   );
 
   useEffect(() => {
+    dispatch(fetchPlace());
     dispatch(fetchOrderTable());
     // Set an interval of one minute to update the OrderTable data
     const interval = setInterval(() => {
@@ -46,10 +49,22 @@ export const Navbar = () => {
         <Logo className="image is-64x64" image={logo} alt="logo" />
       </div>
 
+      <a
+        role="button"
+        className="navbar-burger"
+        aria-label="menu"
+        aria-expanded="false"
+        data-target="navMenu"
+      >
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+
       <div id="navMenu" className="navbar-menu has-text-weight-bold">
         <div className="navbar-start">
           <Link className="navbar-item brand-text" to={DASHBOARD}>
-            The Pizza Club
+            <span className="is-capitalized">{place.name}</span>
             {!!counterTable && (
               <span className="tag is-danger">{counterTable}</span>
             )}
@@ -59,9 +74,9 @@ export const Navbar = () => {
             Ordenes
           </Link>
 
-          {/* <Link className="navbar-item" to={DASHBOARD_PRODUCTS}>
-              Productos
-            </Link> */}
+          <Link className="navbar-item" to={DASHBOARD_PRODUCTS}>
+            Productos
+          </Link>
 
           <Link className="navbar-item" to={DASHBOARD_EMPLOYEES}>
             Empleados

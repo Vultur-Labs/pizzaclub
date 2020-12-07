@@ -10,7 +10,7 @@ from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from .models import Order, OrderItem, Place, PriceList, Product, TypeProduct
+from .models import Order, OrderItem, Place, PriceList, Product, TypeProduct, SubTypeProduct
 from .serializers import (
     OrderItemSerializer,
     OrderSerializer,
@@ -19,6 +19,7 @@ from .serializers import (
     PriceSerializer,
     ProductSerializer,
     TypeSerializer,
+    SubTypeSerializer,
     OwnerSerializer
 )
 from registration.serializers import AddressSerializer
@@ -86,6 +87,7 @@ class OrderViewSet(ModelViewSet):
     def perform_create(self, serializer):
         return serializer.save()
 
+
 class OrderWhatsAppViewSet(ModelViewSet):
     """
     A simple ViewSet for viewing and editing accounts.
@@ -112,7 +114,8 @@ class OrderWhatsAppViewSet(ModelViewSet):
         # Get the delivery address if there is
         delivery_address = data.pop("delivery_address", None)
         if delivery_address:
-            address, _ = Address.objects.get_or_create(address=delivery_address)
+            address, _ = Address.objects.get_or_create(
+                address=delivery_address)
             data["delivery_address"] = address.id
         else:
             address = None
@@ -176,7 +179,47 @@ class OrderWhatsAppViewSet(ModelViewSet):
         )
         return iri_to_uri(url)
 
+
 class ProductViewSet(ModelViewSet):
     queryset = Product.objects.filter(is_active=True)
     serializer_class = ProductSerializer
 
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        if self.action in ["list", "retrieve"]:
+            permission_classes = [AllowAny]
+        else:
+            permission_classes = [IsAdminUser]
+        return [permission() for permission in permission_classes]
+
+
+class TypesViewSet(ModelViewSet):
+    queryset = TypeProduct.objects.all()
+    serializer_class = TypeSerializer
+
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        if self.action in ["list", "retrieve"]:
+            permission_classes = [AllowAny]
+        else:
+            permission_classes = [IsAdminUser]
+        return [permission() for permission in permission_classes]
+
+
+class SubTypesViewSet(ModelViewSet):
+    queryset = SubTypeProduct.objects.all()
+    serializer_class = SubTypeSerializer
+
+    def get_permissions(self):
+        """
+        Instantiates and returns the list of permissions that this view requires.
+        """
+        if self.action in ["list", "retrieve"]:
+            permission_classes = [AllowAny]
+        else:
+            permission_classes = [IsAdminUser]
+        return [permission() for permission in permission_classes]

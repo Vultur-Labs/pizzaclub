@@ -1,25 +1,39 @@
 import React, { Component } from "react";
 import { connect, DispatchProp } from "react-redux";
+
+// Import Components
 import { Align, Table, Column } from "../components/Table";
 import { ModalTrigger } from "../components/ModalTrigger";
 import { Confirm } from "../components/Confirm";
 import { Toolbar } from "../components/Toolbar";
 import { EditProductModal } from "../components/modals/EditProduct";
+// Import Actions
 import {
   createProduct,
   deleteProduct,
   updateProduct,
   fetchProducts,
   fetchTypes,
+  fetchSubTypes,
+  fetchPlace,
 } from "../actions/dashboardActions";
+// Import Getters
+import {
+  getPlace,
+  getProducts,
+  getTypesProduct,
+  getSubTypesProduct,
+} from "../reducers/dashboardReducer";
+// Import Types
 import { Product } from "../types/product";
-import { ProductType } from "../types/product-type";
+import { ProductType, ProductSubType } from "../types/product-type";
 import { Place } from "../types/place";
 
 type Props = DispatchProp<any> & {
   place: Place;
   products: Product[];
   types: ProductType[];
+  subtypes: ProductSubType[];
 };
 
 class DashboardProductsPage extends Component<Props> {
@@ -92,8 +106,10 @@ class DashboardProductsPage extends Component<Props> {
   ];
 
   public componentDidMount() {
+    this.props.dispatch(fetchPlace());
     this.props.dispatch(fetchProducts());
     this.props.dispatch(fetchTypes());
+    this.props.dispatch(fetchSubTypes());
   }
 
   private handleEditProduct = (product: Product) => {
@@ -138,9 +154,10 @@ class DashboardProductsPage extends Component<Props> {
 }
 
 const mapStateToProps = (state: any) => ({
-  place: state.dashboard.place,
-  products: state.dashboard.products,
-  types: state.dashboard.types,
+  place: getPlace(state),
+  products: getProducts(state),
+  types: getTypesProduct(state),
+  subtypes: getSubTypesProduct(state),
 });
 
 export default connect(mapStateToProps)(DashboardProductsPage);

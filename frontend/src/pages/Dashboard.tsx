@@ -3,13 +3,13 @@ import { Route, Switch, useHistory } from "react-router-dom";
 import {
   DASHBOARD,
   DASHBOARD_ORDERS,
-  // DASHBOARD_PRODUCTS,
+  DASHBOARD_PRODUCTS,
   DASHBOARD_EMPLOYEES,
   DASHBOARD_TABLES,
   STAFF_HOME,
 } from "../routes";
 import DashboardHomePage from "./DashboardHome";
-// import DashboardProductsPage from "./DashboardProduct";
+import DashboardProductsPage from "./DashboardProduct";
 import DashboardOrdersPage from "./DashboardOrder";
 import DashboardEmployeesPage from "./DashboardEmployees";
 import DashboardTablesPage from "./DashboardTables";
@@ -40,9 +40,9 @@ const DashboardPage: FC = () => {
         <div className="columns">
           <div className="column">
             <Switch>
-              {/* <Route path={DASHBOARD_PRODUCTS}>
+              <Route path={DASHBOARD_PRODUCTS}>
                 <DashboardProductsPage />
-              </Route> */}
+              </Route>
               <Route path={DASHBOARD_ORDERS}>
                 <DashboardOrdersPage />
               </Route>
