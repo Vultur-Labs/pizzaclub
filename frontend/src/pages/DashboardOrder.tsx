@@ -55,7 +55,7 @@ class DashboardOrdersPage extends Component<Props> {
       align: Align.center,
       width: 200,
       render: (order: Order) =>
-        order.date ? dayjs(order.date).format("hh:mm DD/MM/YYYY") : "",
+        order.date ? dayjs(order.date).format("HH:mm DD/MM/YYYY") : "",
     },
     {
       key: "items",

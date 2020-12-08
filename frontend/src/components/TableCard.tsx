@@ -1,7 +1,12 @@
 import React, { FC } from "react";
 
+import { IconDelivered } from "./OrderComponents";
 import { Confirm } from "./Confirm";
-import { OrderTable } from "../types/table";
+import {
+  OrderTable,
+  statusMapToIcon,
+  statusMapToClassButton,
+} from "../types/table";
 
 type Props = {
   title: string;
@@ -21,12 +26,41 @@ export const TableCard: FC<Props> = ({
   const handleAction = (order: OrderTable, func: any) => () => {
     if (func && typeof func === "function") func(order);
   };
+  // Create an of like status: (number of items)
+  // Exclude delivered status
+  const counter = order.items.reduce(
+    (a, c) =>
+      c.status === "delivered"
+        ? { ...a }
+        : a[c.status]
+        ? { ...a, [c.status]: a[c.status] + 1 }
+        : { ...a, [c.status]: 1 },
+    {}
+  );
 
   return (
     <div className="card mx-2 my-3 has-background-grey-lighter">
       <div className="card-content">
         <div className="content level">
           <div className="level-left">
+            <div className="level-item">
+              {/* Counter Icons for Status of Items */}
+              {Object.keys(counter)
+                .sort()
+                .map((c) => (
+                  <span
+                    key={`${order.id}-${c}`}
+                    className="is-flex is-align-items-center has-text-weight-bold"
+                  >
+                    <IconDelivered
+                      icon={statusMapToIcon[c]}
+                      className={statusMapToClassButton[c]}
+                    />
+                    <span className="ml-2">{counter[c]}</span>
+                  </span>
+                ))}
+            </div>
+
             <div className="level-item has-text-centered">
               <p className="title">{title}</p>
             </div>

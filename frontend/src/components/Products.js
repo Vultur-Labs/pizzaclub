@@ -36,30 +36,17 @@ export class TypeProduct extends Component {
   }
 }
 
-// export const SubTypeProduct = (props) => {
-//   const {products, name, id} = props;
-//   const prod = products.filter(p => p.subtype == id);
-//   return (
-//     <div className="product-type" data-id={id}>
-//       <div className="product-type-title" onClick={this.hideProducts}>
-//         <div>
-//           <span className="icon main-option--icon">
-//             <i className="fas fa-book-open"></i>
-//           </span>
-//           <span>{name}</span>
-//         </div>
-
-//         <span className={show ? "icon" : "icon rotate-cc-90"}>
-//           <i className="fas fa-caret-down"></i>
-//         </span>
-//       </div>
-//       <div className={show ? "product-shower" : "inactive"}>
-//         {/* {prod} */}
-//         {children}
-//       </div>
-//     </div>
-//   );
-// }
+export const SubTypeProduct = (props) => {
+  const { children, name, id } = props;
+  return (
+    <div className="product-type" data-id={id}>
+      <div className="product-type-title">
+        <span>{name}</span>
+      </div>
+      <div className="product-shower">{children}</div>
+    </div>
+  );
+};
 
 export function QuantityWidget(props) {
   const { name, quantity, increment, decrement } = props;
@@ -163,7 +150,7 @@ const ProductSizePriceView = (props) => {
   const { item_id, widget, interactive, quantity, items } = props;
   const { increment, decrement, select, genIds } = props;
   if (!prices[0]) return null;
-
+  console.log(props);
   return (
     <div className="product-card">
       <div className="product-card-info">
@@ -186,7 +173,7 @@ const ProductSizePriceView = (props) => {
                 <SizeTag className="product-size-tag" size={s.name} />
                 <PriceTag
                   className="product-price-tag"
-                  price={price.price}
+                  price={price ? price.price : null}
                   counter={counter}
                   onClick={select.bind(null, i_id)}
                 />
@@ -239,7 +226,7 @@ const ProductPresentationPriceView = (props) => {
               />
               <PriceTag
                 className="product-price-tag"
-                price={price.price}
+                price={price ? price.price : null}
                 counter={counter}
                 onClick={select.bind(null, i_id)}
               />
@@ -317,7 +304,7 @@ const FullProductView = (props) => {
                 <PriceTag
                   key={s.id}
                   className="product-price-tag"
-                  price={!price ? null : price.price}
+                  price={price ? price.price : null}
                   counter={counter}
                   onClick={price ? select.bind(null, i_id) : null}
                 />

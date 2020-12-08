@@ -75,16 +75,33 @@ class StaffManagerPage extends Component<Props> {
         {lodash.isEmpty(orders) ? (
           <p>No hay Mesas Abiertas</p>
         ) : (
-          orders.map((o) => (
-            <TableCard
-              key={o.id}
-              title={`Mesa ${o.table.number}`}
-              order={o}
-              detailView={this.handleDetailTable}
-              add={this.handleGoToAddItem}
-              close={this.handleCloseTable}
-            />
-          ))
+          orders
+            .sort((a, b) => {
+              //Sort the orders by the number of items is asked and prepearing status
+              const a_items = a.items.reduce(
+                (acc, cur) => ({ ...acc, [cur.status]: acc[cur.status] + 1 }),
+                { asked: 0, prepearing: 0, delivered: 0 }
+              );
+              const b_items = b.items.reduce(
+                (acc, cur) => ({ ...acc, [cur.status]: acc[cur.status] + 1 }),
+                { asked: 0, prepearing: 0, delivered: 0 }
+              );
+
+              if (a_items.asked > b_items.asked) return -1;
+              if (a_items.asked < b_items.asked) return 1;
+              if (a_items.prepearing >= b_items.prepearing) return -1;
+              return 1;
+            })
+            .map((o) => (
+              <TableCard
+                key={o.id}
+                title={`Mesa ${o.table.number}`}
+                order={o}
+                detailView={this.handleDetailTable}
+                add={this.handleGoToAddItem}
+                close={this.handleCloseTable}
+              />
+            ))
         )}
       </div>
     );

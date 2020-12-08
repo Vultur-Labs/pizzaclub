@@ -9,8 +9,9 @@ import { OrderShower } from "../components/OrderComponents";
 //Import Actions
 import {
   closeTable,
-  setDeliveredTableItem,
+  setStatusTableItem,
   removeTableItem,
+  setCommentOrderTable,
 } from "../actions/staffActions";
 //Import Types
 import { OrderTable, TableItem } from "../types/table";
@@ -34,12 +35,16 @@ export const StaffTableDetail: FC<Props> = ({ order, path = "" }) => {
     dispatch(closeTable(order.id));
   };
 
-  const handleDeliveredTableItem = (item_id: number, is_delivered: boolean) => {
-    dispatch(setDeliveredTableItem(item_id, is_delivered));
+  const handleStatusTableItem = (item_id: number, status: string) => {
+    dispatch(setStatusTableItem(item_id, status));
   };
 
   const handleRemoveTableItem = (item: TableItem) => {
     dispatch(removeTableItem(item.order, item.id));
+  };
+
+  const handleSaveComment = (order_id: number) => (comment: string) => {
+    dispatch(setCommentOrderTable(order_id, comment));
   };
 
   if (!order) return <div>Loading...</div>;
@@ -49,8 +54,9 @@ export const StaffTableDetail: FC<Props> = ({ order, path = "" }) => {
         <div className="column">
           <OrderShower
             order={order}
-            changeDelivered={handleDeliveredTableItem}
+            changeStatusItem={handleStatusTableItem}
             removeTableItem={handleRemoveTableItem}
+            saveCommentOrder={handleSaveComment(order.id)}
           />
 
           <GoToButton

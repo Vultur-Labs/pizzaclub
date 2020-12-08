@@ -9,6 +9,7 @@ tableorder_list = OrderTableViewSet.as_view({"get": "list", "post": "open"})
 tableorder_detail = OrderTableViewSet.as_view(
     {
         "get": "retrieve",
+        "patch": "partial_update",
         "delete": "destroy",
         "post": "close"
     }
@@ -38,9 +39,6 @@ staff_table_detail = TableItemView.as_view(
 )
 
 urlpatterns = [
-    #path("items/<int:owner>/<int:order_id>/", views.get_tableitems),
-    # path("new_item/", views.new_item),
-    # path("remove_item/<int:pk>/", views.remove_item),
     path("tableorder/<int:pk>/", tableorder_detail),
     path("tableorder/", tableorder_list),
     path("staff/<int:pk>/", staff_table_detail),

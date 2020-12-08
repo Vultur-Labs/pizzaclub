@@ -1,8 +1,10 @@
-import React, { useCallback } from "react";
-import { useDispatch } from "react-redux";
+import React, { useCallback, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { logout } from "../actions/dashboardActions";
+
+// Import Components
 import { Logo } from "./Common";
+// Import Routes
 import {
   DASHBOARD,
   DASHBOARD_ORDERS,
@@ -10,10 +12,31 @@ import {
   DASHBOARD_EMPLOYEES,
   DASHBOARD_TABLES,
 } from "../routes";
+// Import Actions
+import { logout } from "../actions/dashboardActions";
+import { fetchOrderTable } from "../actions/staffActions";
+// Import Getters
+import { getOrderTables } from "../reducers/staffReducer";
+// Import Statics
 import logo from "../images/logo.png";
 
 export const Navbar = () => {
   const dispatch = useDispatch();
+  const tables = useSelector((state: any) => getOrderTables(state));
+  const counterTable = tables.reduce(
+    (a, t) => (t.items.some((i) => i.status !== "delivered") ? a + 1 : a),
+    0
+  );
+
+  useEffect(() => {
+    dispatch(fetchOrderTable());
+    // Set an interval of one minute to update the OrderTable data
+    const interval = setInterval(() => {
+      dispatch(fetchOrderTable());
+    }, 60 * 1000);
+    // Clear the interval when unmount the component
+    return () => clearInterval(interval);
+  }, [dispatch]);
 
   const handleLogout = useCallback(() => dispatch(logout()), [dispatch]);
 
@@ -26,7 +49,10 @@ export const Navbar = () => {
       <div id="navMenu" className="navbar-menu has-text-weight-bold">
         <div className="navbar-start">
           <Link className="navbar-item brand-text" to={DASHBOARD}>
-            The Pizza Club
+            <span className="mr-2">The Pizza Club</span>
+            {!!counterTable && (
+              <span className="tag is-danger">{counterTable}</span>
+            )}
           </Link>
 
           <Link className="navbar-item" to={DASHBOARD_ORDERS}>

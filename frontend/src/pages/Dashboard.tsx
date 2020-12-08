@@ -27,9 +27,9 @@ const DashboardPage: FC = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (account?.is_staff) {
-      router.push(DASHBOARD);
-    } else if (account?.is_table_manager) router.push(STAFF_HOME);
+    if (account?.is_table_manager) {
+      router.push(STAFF_HOME);
+    }
   }, [account, router]);
 
   return (

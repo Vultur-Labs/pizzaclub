@@ -179,3 +179,16 @@ export const Loader = ({
     </figure>
   );
 };
+
+export const Comment = ({
+  title = "Comentarios:",
+  comment = "",
+  classContainer = "",
+  classTitle = "",
+  classContent = "",
+}) => (
+  <div className={classContainer}>
+    <p className={classTitle}>{title}</p>
+    <p className={classContent}>{comment}</p>
+  </div>
+);
