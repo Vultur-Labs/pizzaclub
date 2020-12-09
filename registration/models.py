@@ -9,10 +9,12 @@ from pizzaclub.settings import MAX_PHONE_LENGTH, MIN_PHONE_LENGTH
 import secrets
 import datetime
 # Create your models here.
+
+
 class Address(models.Model):
     address = models.CharField(max_length=100)
     lat = models.DecimalField(max_digits=9, decimal_places=7, default=0)
-    lon= models.DecimalField(max_digits=9, decimal_places=7, default=0)
+    lon = models.DecimalField(max_digits=9, decimal_places=7, default=0)
     elev = models.DecimalField(max_digits=9, decimal_places=2, default=0)
 
     class Meta:
@@ -20,6 +22,7 @@ class Address(models.Model):
 
     def __str__(self):
         return self.address
+
 
 class User(AbstractUser):
     '''
@@ -32,7 +35,7 @@ class User(AbstractUser):
     token_valid = models.BooleanField(default=True)
 
     def is_table_manager(self):
-        return self.is_employee and self.is_active
+        return (self.is_employee and not (self.is_staff or self.is_superuser))
 
     def generate_token(self):
         return secrets.token_urlsafe()
@@ -51,7 +54,7 @@ class User(AbstractUser):
 
         # Return True if the token is correct and is_valid
         res = (token == self.token) and self.token_valid
-        
+
         # Set the token invalid
         self.token_valid = False
 
@@ -66,8 +69,10 @@ class User(AbstractUser):
         self.token_valid = True
         super(User, self).save(*args, **kwargs)
 
+
 class Employee(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, primary_key=True)
     dni = models.CharField(
         max_length=MAX_DNI_LENGTH,
         unique=True,
@@ -93,11 +98,12 @@ class Employee(models.Model):
             MaxLengthValidator(MAX_PHONE_LENGTH),
             RegexValidator(regex=r'^\d+$')
         ])
-    address = models.ForeignKey(Address, null=True, blank=True, on_delete=models.SET_NULL)
+    address = models.ForeignKey(
+        Address, null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return self.user.get_full_name()
-    
+
     def perform_delete(self):
         if not (self.user.is_staff or self.user.is_superuser):
             self.user.delete()
@@ -111,6 +117,7 @@ class Employee(models.Model):
         # Save instance
         super(Employee, self).save(*args, **kwargs)
 
+
 class Client(models.Model):
     name = models.CharField(max_length=30)
     email = models.EmailField()
@@ -122,6 +129,6 @@ class Client(models.Model):
             RegexValidator(regex=r'^\d+$')
         ])
     address = models.ManyToManyField(Address)
-    
+
     def __str__(self):
         return self.name
